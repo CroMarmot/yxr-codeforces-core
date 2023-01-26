@@ -3,7 +3,7 @@
 auto generate from code
 
 ```bash
-sphinx-apidoc -o docs/ . -f
+sphinx-apidoc -f -o docs/ . tests setup.py
 ```
 
 This will force overwriting

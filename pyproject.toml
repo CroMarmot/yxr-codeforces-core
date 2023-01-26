@@ -2,14 +2,13 @@
 requires = [
   "setuptools>=61.0",
   "wheel",
-  "aiohttp",
 ]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "yxr-codeforces-core"
 description = "Simple Codeforces core api"
-dynamic = ["version", "dependencies"]
+dynamic = ["version"]
 authors = [
   { name="YeXiaoRain", email="yexiaorain@gmail.com" }
 ]
@@ -21,21 +20,40 @@ classifiers = [
 ]
 keywords = ["codeforces", "api", "yxr"]
 license = { file="LICENSE" }
-
+dependencies = [
+  "aiohttp",
+  "pyaes",
+  "requests",
+  "beautifulsoup4",
+  "lxml",
+  "dataclasses-json",
+]
 [project.urls]
 "Homepage" = "https://github.com/CroMarmot/yxr-codeforces-core"
 "Bug Tracker" = "https://github.com/CroMarmot/yxr-codeforces-core/issues"
 
 [project.optional-dependencies]
-tests = [
-  'build',
-  'coverage >= 6',
-  'pytest >= 7',
+doc = [
+  "sphinx ~= 5.3",
+  "sphinx-autobuild",
+  "furo",
+  "myst-parser",
+]
+
+dev = [
+  "types-beautifulsoup4",
+  "yapf",
+  "toml",
+]
+
+test = [
+  'pytest >= 6',
+  'pytest-cov',
+  "pytest-asyncio >= 0.20",
 ]
 
 [tool.setuptools.dynamic]
 version = {attr = "codeforces_core.__version__"}
-dependencies = {file = ["requirements.txt"]}
 
 [tool.setuptools.packages.find]
 where = ["."] # default "."
