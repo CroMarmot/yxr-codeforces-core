@@ -3,7 +3,7 @@
   <head><meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
-<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" />
+<link rel="index" title="Index" href="genindex.html" /><link rel="search" title="Search" href="search.html" /><link rel="next" title="codeforces_core.interfaces package" href="codeforces_core.interfaces.html" /><link rel="prev" title="yxr-codeforces-core" href="modules.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
         <title>codeforces_core package - yxr-codeforces-core 0.0.1 documentation</title>
@@ -155,7 +155,7 @@
 </form>
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1 has-children"><a class="reference internal" href="dev/index.html">Developer</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="dev/00_install.html">Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev/01_doc.html">Doc</a></li>
@@ -163,6 +163,13 @@
 <li class="toctree-l2"><a class="reference internal" href="dev/03_lint.html">Lint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev/04_autotest.html">Auto Test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev/05_rst_examples.html">rst Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current has-children"><a class="reference internal" href="modules.html">yxr-codeforces-core</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul class="current">
+<li class="toctree-l2 current has-children current-page"><a class="current reference internal" href="#">codeforces_core package</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="codeforces_core.interfaces.html">codeforces_core.interfaces package</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -239,7 +246,7 @@
 <span id="codeforces-core-account-module"></span><h2>codeforces_core.account module<a class="headerlink" href="#module-codeforces_core.account" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="codeforces_core.account.LoginResult">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.account.</span></span><span class="sig-name descname"><span class="pre">LoginResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csrf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftaa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bfaa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usmc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codeforces_core/account.html#LoginResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#codeforces_core.account.LoginResult" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.account.</span></span><span class="sig-name descname"><span class="pre">LoginResult</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">html</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csrf</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ftaa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bfaa</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">uc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">usmc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">success</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codeforces_core/account.html#LoginResult"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#codeforces_core.account.LoginResult" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="codeforces_core.account.LoginResult.bfaa">
@@ -272,6 +279,11 @@
 <dd></dd></dl>
 
 <dl class="py attribute">
+<dt class="sig sig-object py" id="codeforces_core.account.LoginResult.success">
+<span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#codeforces_core.account.LoginResult.success" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
 <dt class="sig sig-object py" id="codeforces_core.account.LoginResult.uc">
 <span class="sig-name descname"><span class="pre">uc</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#codeforces_core.account.LoginResult.uc" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
@@ -285,14 +297,21 @@
 
 <dl class="py function">
 <dt class="sig sig-object py" id="codeforces_core.account.async_login">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.account.</span></span><span class="sig-name descname"><span class="pre">async_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ahh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">passwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#codeforces_core.account.LoginResult" title="codeforces_core.account.LoginResult"><span class="pre">LoginResult</span></a></span></span><a class="reference internal" href="_modules/codeforces_core/account.html#async_login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#codeforces_core.account.async_login" title="Permalink to this definition">#</a></dt>
-<dd><p>not check if already logged in, that will be slow, just post request and return response html</p>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.account.</span></span><span class="sig-name descname"><span class="pre">async_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">passwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/enter?back=%2F'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#codeforces_core.account.LoginResult" title="codeforces_core.account.LoginResult"><span class="pre">LoginResult</span></a></span></span><a class="reference internal" href="_modules/codeforces_core/account.html#async_login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#codeforces_core.account.async_login" title="Permalink to this definition">#</a></dt>
+<dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> for login request, and  <a class="reference internal" href="#codeforces_core.account.is_user_logged_in" title="codeforces_core.account.is_user_logged_in"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_user_logged_in()</span></code></a> for login check</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handle</strong> – Codeforces handle</p></li>
+<li><p><strong>password</strong> – Codeforces password</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>if it is successful post and logged</p>
+</dd>
+</dl>
+<p>Examples:</p>
 </dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="codeforces_core.account.async_login_wrap">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.account.</span></span><span class="sig-name descname"><span class="pre">async_login_wrap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ahh</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">passwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="_modules/codeforces_core/account.html#async_login_wrap"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#codeforces_core.account.async_login_wrap" title="Permalink to this definition">#</a></dt>
-<dd></dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="codeforces_core.account.extract_channel">
@@ -305,8 +324,8 @@
 <dd></dd></dl>
 
 </section>
-<section id="codeforces-core-config-module">
-<h2>codeforces_core.config module<a class="headerlink" href="#codeforces-core-config-module" title="Permalink to this heading">#</a></h2>
+<section id="module-codeforces_core.config">
+<span id="codeforces-core-config-module"></span><h2>codeforces_core.config module<a class="headerlink" href="#module-codeforces_core.config" title="Permalink to this heading">#</a></h2>
 </section>
 <section id="module-codeforces_core.constants">
 <span id="codeforces-core-constants-module"></span><h2>codeforces_core.constants module<a class="headerlink" href="#module-codeforces_core.constants" title="Permalink to this heading">#</a></h2>
@@ -318,7 +337,7 @@
 <span id="codeforces-core-httphelper-module"></span><h2>codeforces_core.httphelper module<a class="headerlink" href="#module-codeforces_core.httphelper" title="Permalink to this heading">#</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="codeforces_core.httphelper.HttpHelper">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.httphelper.</span></span><span class="sig-name descname"><span class="pre">HttpHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cookie_jar_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codeforces_core/httphelper.html#HttpHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#codeforces_core.httphelper.HttpHelper" title="Permalink to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.httphelper.</span></span><span class="sig-name descname"><span class="pre">HttpHelper</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cookie_jar_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{'Accept':</span> <span class="pre">'*/*',</span> <span class="pre">'Accept-Encoding':</span> <span class="pre">'gzip',</span> <span class="pre">'User-Agent':</span> <span class="pre">'Mozilla/5.0</span> <span class="pre">(X11;</span> <span class="pre">Linux</span> <span class="pre">x86_64)</span> <span class="pre">AppleWebKit/537.36</span> <span class="pre">(KHTML,</span> <span class="pre">like</span> <span class="pre">Gecko)</span> <span class="pre">Chrome/108.0.0.0</span> <span class="pre">Safari/537.36'}</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/codeforces_core/httphelper.html#HttpHelper"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#codeforces_core.httphelper.HttpHelper" title="Permalink to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><code class="xref py py-class docutils literal notranslate"><span class="pre">AioHttpHelperInterface</span></code></a></p>
 <dl class="py method">
 <dt class="sig sig-object py" id="codeforces_core.httphelper.HttpHelper.async_get">
@@ -358,6 +377,11 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="codeforces_core.httphelper.HttpHelper.get_tokens">
 <span class="sig-name descname"><span class="pre">get_tokens</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/codeforces_core/httphelper.html#HttpHelper.get_tokens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#codeforces_core.httphelper.HttpHelper.get_tokens" title="Permalink to this definition">#</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="codeforces_core.httphelper.HttpHelper.headers">
+<span class="sig-name descname"><span class="pre">headers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{}</span></em><a class="headerlink" href="#codeforces_core.httphelper.HttpHelper.headers" title="Permalink to this definition">#</a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -549,8 +573,26 @@
       <footer>
         
         <div class="related-pages">
-          
-          
+          <a class="next-page" href="codeforces_core.interfaces.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">codeforces_core.interfaces package</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="modules.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">yxr-codeforces-core</div>
+                
+              </div>
+            </a>
         </div>
         <div class="bottom-of-page">
           <div class="left-details">
@@ -592,17 +634,17 @@
 <li><a class="reference internal" href="#codeforces_core.account.LoginResult.ftaa"><code class="docutils literal notranslate"><span class="pre">LoginResult.ftaa</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.account.LoginResult.html"><code class="docutils literal notranslate"><span class="pre">LoginResult.html</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.account.LoginResult.pc"><code class="docutils literal notranslate"><span class="pre">LoginResult.pc</span></code></a></li>
+<li><a class="reference internal" href="#codeforces_core.account.LoginResult.success"><code class="docutils literal notranslate"><span class="pre">LoginResult.success</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.account.LoginResult.uc"><code class="docutils literal notranslate"><span class="pre">LoginResult.uc</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.account.LoginResult.usmc"><code class="docutils literal notranslate"><span class="pre">LoginResult.usmc</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#codeforces_core.account.async_login"><code class="docutils literal notranslate"><span class="pre">async_login()</span></code></a></li>
-<li><a class="reference internal" href="#codeforces_core.account.async_login_wrap"><code class="docutils literal notranslate"><span class="pre">async_login_wrap()</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.account.extract_channel"><code class="docutils literal notranslate"><span class="pre">extract_channel()</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.account.is_user_logged_in"><code class="docutils literal notranslate"><span class="pre">is_user_logged_in()</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#codeforces-core-config-module">codeforces_core.config module</a></li>
+<li><a class="reference internal" href="#module-codeforces_core.config">codeforces_core.config module</a></li>
 <li><a class="reference internal" href="#module-codeforces_core.constants">codeforces_core.constants module</a></li>
 <li><a class="reference internal" href="#codeforces-core-contest-module">codeforces_core.contest module</a></li>
 <li><a class="reference internal" href="#module-codeforces_core.httphelper">codeforces_core.httphelper module</a><ul>
@@ -615,6 +657,7 @@
 <li><a class="reference internal" href="#codeforces_core.httphelper.HttpHelper.cookie_jar_path"><code class="docutils literal notranslate"><span class="pre">HttpHelper.cookie_jar_path</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.httphelper.HttpHelper.create_form"><code class="docutils literal notranslate"><span class="pre">HttpHelper.create_form()</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.httphelper.HttpHelper.get_tokens"><code class="docutils literal notranslate"><span class="pre">HttpHelper.get_tokens()</span></code></a></li>
+<li><a class="reference internal" href="#codeforces_core.httphelper.HttpHelper.headers"><code class="docutils literal notranslate"><span class="pre">HttpHelper.headers</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.httphelper.HttpHelper.load_cookie_jar"><code class="docutils literal notranslate"><span class="pre">HttpHelper.load_cookie_jar()</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.httphelper.HttpHelper.load_tokens"><code class="docutils literal notranslate"><span class="pre">HttpHelper.load_tokens()</span></code></a></li>
 <li><a class="reference internal" href="#codeforces_core.httphelper.HttpHelper.open_session"><code class="docutils literal notranslate"><span class="pre">HttpHelper.open_session()</span></code></a></li>

@@ -11,7 +11,7 @@ Welcome to yxr-codeforces-core's documentation!
    :caption: Contents:
 
    dev/index
-
+   modules
 
 
 Indices and tables
