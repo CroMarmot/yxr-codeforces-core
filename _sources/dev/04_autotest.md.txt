@@ -2,26 +2,26 @@
 
 ```bash
 pytest test/unit
-# config e2e before
+# config `tests/e2e/e2e_test_config.py` before run command
 pytest test/e2e
 ```
 
 ## Coverage test
 
 ```bash
-coverage run -m pytest
+python -m pytest --cov-report html --cov=codeforces_core tests/
+# or
+python -m pytest --cov-report html --cov=codeforces_core tests/unit
+# or
+python -m pytest --cov-report html --cov=codeforces_core tests/e2e
 ```
 
-## Coverage report
-
-```bash
-coverage html
-```
+the output is at `htmlcov`
 
 ## Static type test
 
 ```bash
-mypy codeforces_core 
+mypy codeforces_core
 ```
 
 ## Static gen
