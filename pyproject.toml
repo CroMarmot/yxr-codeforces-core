@@ -1,0 +1,59 @@
+[build-system]
+requires = [
+  "setuptools>=61.0",
+  "wheel",
+  "aiohttp",
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yxr-codeforces-core"
+description = "Simple Codeforces core api"
+dynamic = ["version", "dependencies"]
+authors = [
+  { name="YeXiaoRain", email="yexiaorain@gmail.com" }
+]
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: MIT License",
+]
+keywords = ["codeforces", "api", "yxr"]
+license = { file="LICENSE" }
+
+[project.urls]
+"Homepage" = "https://github.com/CroMarmot/yxr-codeforces-core"
+"Bug Tracker" = "https://github.com/CroMarmot/yxr-codeforces-core/issues"
+
+[project.optional-dependencies]
+tests = [
+  'build',
+  'coverage >= 6',
+  'pytest >= 7',
+]
+
+[tool.setuptools.dynamic]
+version = {attr = "codeforces_core.__version__"}
+dependencies = {file = ["requirements.txt"]}
+
+[tool.setuptools.packages.find]
+where = ["."] # default "."
+include = ["codeforces_core"] # ["*"] by default
+exclude = ["TODO.md", "tests", "docs"] # empty by default
+namespaces = true # true by default
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q"
+testpaths = [
+  "tests",
+]
+
+[tool.yapf]
+based_on_style = "pep8"
+column_limit = 120
+indent_width = 2
+
+[tool.mypy]
+strict_optional = false
