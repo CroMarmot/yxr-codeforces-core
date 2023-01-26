@@ -4,12 +4,14 @@
 
 ### Changed
 
-- New project
-- use aiohttp
-- remove requirement.txt
-- extract http as class and make it injectable
-- add auto doc
-- add auto test(e2e, unit, coverage report)
+- New project based from github.com/zshchun/cftools and github.com/cromarmot/yxr-atcoder-core
+- Use aiohttp
+- Remove requirement.txt
+- Extract http as class and make it injectable
+- Add type hint
+- Structured function result
+- Add auto doc
+- Add auto test(e2e, unit, coverage report)
 
 ### Features
 
