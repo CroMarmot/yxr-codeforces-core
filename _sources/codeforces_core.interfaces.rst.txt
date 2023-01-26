@@ -1,0 +1,29 @@
+codeforces\_core.interfaces package
+===================================
+
+Submodules
+----------
+
+codeforces\_core.interfaces.AioHttpHelper module
+------------------------------------------------
+
+.. automodule:: codeforces_core.interfaces.AioHttpHelper
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.interfaces.Conf module
+---------------------------------------
+
+.. automodule:: codeforces_core.interfaces.Conf
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: codeforces_core.interfaces
+   :members:
+   :undoc-members:
+   :show-inheritance:

@@ -1,0 +1,101 @@
+codeforces\_core package
+========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   codeforces_core.interfaces
+
+Submodules
+----------
+
+codeforces\_core.account module
+-------------------------------
+
+.. automodule:: codeforces_core.account
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.config module
+------------------------------
+
+.. automodule:: codeforces_core.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.constants module
+---------------------------------
+
+.. automodule:: codeforces_core.constants
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.contest module
+-------------------------------
+
+.. automodule:: codeforces_core.contest
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.httphelper module
+----------------------------------
+
+.. automodule:: codeforces_core.httphelper
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.judge module
+-----------------------------
+
+.. automodule:: codeforces_core.judge
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.problem module
+-------------------------------
+
+.. automodule:: codeforces_core.problem
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.submit module
+------------------------------
+
+.. automodule:: codeforces_core.submit
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.ui module
+--------------------------
+
+.. automodule:: codeforces_core.ui
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.util module
+----------------------------
+
+.. automodule:: codeforces_core.util
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+Module contents
+---------------
+
+.. automodule:: codeforces_core
+   :members:
+   :undoc-members:
+   :show-inheritance:

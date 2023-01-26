@@ -1,0 +1,7 @@
+yxr-codeforces-core
+===================
+
+.. toctree::
+   :maxdepth: 4
+
+   codeforces_core
