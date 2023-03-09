@@ -41,6 +41,7 @@ doc = [
 ]
 
 dev = [
+  "yxr-codeforces-core[test,doc]",
   "types-beautifulsoup4",
   "yapf",
   "toml",
