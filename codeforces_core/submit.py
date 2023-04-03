@@ -18,7 +18,7 @@ def submit(_http: AioHttpHelper, cid: str, level: str, filename: str, lang_id: s
   return asyncio.run(async_submit(_http=_http, cid=cid, level=level, filename=filename, lang_id=lang_id))
 
 
-async def async_submit(_http: _http, cid: str, level: str, filename: str, lang_id:str) -> None:
+async def async_submit(_http: _http, cid: str, level: str, filename: str, lang_id: str) -> None:
   if not cid or not level:
     print("[!] Invalid contestID or level")
     return

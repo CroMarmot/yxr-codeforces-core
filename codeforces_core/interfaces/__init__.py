@@ -1,3 +1,1 @@
-__all__ = (
-    "AioHttpHelper",
-)
+__all__ = ("AioHttpHelper", )

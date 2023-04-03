@@ -3,8 +3,9 @@ from typing import Tuple
 from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
 from random import choice
 from lxml import html
+from .constants import CF_HOST
 
-default_login_url = "/enter?back=%2F"
+default_login_url = CF_HOST + "/enter?back=%2F"
 
 
 @dataclass

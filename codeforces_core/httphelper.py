@@ -149,6 +149,7 @@ class HttpHelper(AioHttpHelperInterface):
     if headers == None: headers = default_headers
     if csrf and 'csrf' in self.tokens:
       headers = add_header({'X-Csrf-Token': self.tokens['csrf']})
+    # TODO remove the feature
     if url.startswith('/'): url = CF_HOST + url
     result = None
     try:
@@ -169,6 +170,8 @@ class HttpHelper(AioHttpHelperInterface):
     if headers == None: headers = default_headers
     if csrf and 'csrf' in self.tokens:
       headers = add_header({'X-Csrf-Token': self.tokens['csrf']})
+
+    # TODO remove the feature
     if url.startswith('/'): url = CF_HOST + url
     result = None
     try:

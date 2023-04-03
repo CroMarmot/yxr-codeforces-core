@@ -3,7 +3,7 @@
 # from . import __version__
 # from os import makedirs, path, environ
 # from datetime import timezone, timedelta
-# 
+#
 # DEFAULT_CONFIG = {
 #     'contest_dir': './.cache/codeforces',
 #     'cache_dir': './.cache/.cf/cache',
@@ -69,7 +69,7 @@
 #      79: "C# 10, .NET SDK 6.0",
 #      80: "Clang++20 Diagnostics",
 # }
-# 
+#
 # base_dir = environ["HOME"] + "/.cf"
 # cookie_path = base_dir + '/cookies'
 # token_path = base_dir + '/tokens.json'
@@ -77,7 +77,7 @@
 # config_path = base_dir + "/config.toml"
 # tz_msk = timezone(timedelta(hours=3))
 # conf = None
-# 
+#
 # def loads():
 #     global conf, db
 #     if path.isfile(config_path):
@@ -89,7 +89,7 @@
 #         if not path.isdir(path.expanduser(d)):
 #             makedirs(path.expanduser(d))
 #     db_path = path.expanduser(conf['database'])
-# 
+#
 #     if not path.isfile(db_path):
 #         db = sqlite3.connect(db_path)
 #         cur = db.cursor()
@@ -102,7 +102,7 @@
 #         db.commit()
 #     else:
 #         db = sqlite3.connect(db_path)
-# 
+#
 # if not conf:
 #     loads()
-# 
+#
