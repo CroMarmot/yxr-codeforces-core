@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>codeforces_core.util - yxr-codeforces-core 0.0.1 documentation</title>
+        <title>codeforces_core.websocket - yxr-codeforces-core 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -209,50 +209,98 @@
           </label>
         </div>
         <article role="main">
-          <h1>Source code for codeforces_core.util</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">getcwd</span><span class="p">,</span> <span class="n">sep</span>
-<span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
+          <h1>Source code for codeforces_core.websocket</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">time</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">from</span> <span class="nn">codeforces_core.account</span> <span class="kn">import</span> <span class="n">extract_channel</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.constants</span> <span class="kn">import</span> <span class="n">CF_HOST</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="guess_cid"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.util.guess_cid">[docs]</a><span class="k">def</span> <span class="nf">guess_cid</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-  <span class="k">if</span> <span class="s1">&#39;cid&#39;</span> <span class="ow">in</span> <span class="n">args</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">cid</span><span class="p">:</span>
-    <span class="n">cid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">cid</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s1">&#39;level&#39;</span> <span class="ow">in</span> <span class="n">args</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">level</span><span class="p">:</span>
-      <span class="n">level</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">level</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="n">cid</span><span class="p">,</span> <span class="n">level</span> <span class="o">=</span> <span class="n">get_cwd_info</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">cid</span><span class="p">,</span> <span class="n">level</span></div>
+<span class="c1"># return (end watch?, transform result)</span>
+<div class="viewcode-block" id="display_ws"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.websocket.display_ws">[docs]</a><span class="k">def</span> <span class="nf">display_ws</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+  <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="n">result</span></div>
 
 
-<div class="viewcode-block" id="get_cwd_info"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.util.get_cwd_info">[docs]</a><span class="k">def</span> <span class="nf">get_cwd_info</span><span class="p">():</span>
-  <span class="n">p</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">getcwd</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
-  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">()</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z]&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
-    <span class="n">cid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
-    <span class="n">level</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-  <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">():</span>
-    <span class="n">cid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="n">cid</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
-  <span class="k">return</span> <span class="n">cid</span><span class="p">,</span> <span class="n">level</span></div>
+<span class="c1"># {&#39;id&#39;: 1, &#39;channel&#39;: &#39;34f1ec4b729022e4b48f8d24b65c857805a90469&#39;, &#39;text&#39;: {&#39;t&#39;: &#39;s&#39;, &#39;d&#39;: [5973356517882654806, 200631363, 1777, 1746206, &#39;TESTS&#39;, None, &#39;OK&#39;, 86, 86, 3198, 7884800, 148217099, &#39;21220&#39;, &#39;04.04.2023 5:57:08&#39;, &#39;04.04.2023 5:57:08&#39;, 2147483647, 73, 0]}}</span>
+<span class="c1"># 总的ws, 无法获得当前题目的 通过百分比</span>
+<div class="viewcode-block" id="create_ws_task"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.websocket.create_ws_task">[docs]</a><span class="k">def</span> <span class="nf">create_ws_task</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">ws_handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Task</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method will use ``http`` to create common websocket, and ``ws_handler`` to handle each ws message</span>
+
+<span class="sd">    this websocket cannot receive a submission running percentage, use :py:func:`create_contest_ws_task()` instead</span>
+
+<span class="sd">    :param http: AioHttpHelperInterface </span>
+<span class="sd">    :param ws_handler: function to handler messages </span>
+
+<span class="sd">    :returns: the task which run ws</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    .. code-block::</span>
+
+<span class="sd">        import asyncio</span>
+<span class="sd">        from codeforces_core.httphelper import HttpHelper</span>
+<span class="sd">        from codeforces_core.account import async_login</span>
+<span class="sd">        from codeforces_core.websocket import create_ws_task, display_ws</span>
+<span class="sd">        from codeforces_core.submit import async_submit</span>
+
+<span class="sd">        async def demo():</span>
+<span class="sd">          # http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
+<span class="sd">          http = HttpHelper(token_path=&#39;&#39;, cookie_jar_path=&#39;&#39;)</span>
+<span class="sd">          await http.open_session()</span>
+<span class="sd">          result = await async_login(http=http, handle=&#39;&lt;handle&gt;&#39;, passwd=&#39;&lt;password&gt;&#39;)</span>
+<span class="sd">          assert(result.success)</span>
+<span class="sd">          task = create_ws_task(http, ws_handler=display_ws)</span>
+<span class="sd">          # submit code in webpage</span>
+<span class="sd">          try:</span>
+<span class="sd">            result = await asyncio.wait_for(task, timeout=60)</span>
+<span class="sd">            print(&quot;ws is done, result:&quot;, task.result())</span>
+<span class="sd">          except asyncio.TimeoutError:</span>
+<span class="sd">            pass</span>
+<span class="sd">          await http.close_session()</span>
+
+<span class="sd">        asyncio.run(demo())</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">epoch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># s -&gt; ms</span>
+  <span class="n">token</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">get_tokens</span><span class="p">()</span>
+  <span class="n">ws_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;wss://pubsub.codeforces.com/ws/</span><span class="si">{</span><span class="n">token</span><span class="p">[</span><span class="s1">&#39;uc&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">token</span><span class="p">[</span><span class="s1">&#39;usmc&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">?_=</span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2">&amp;tag=&amp;time=&amp;eventid=&quot;</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">ws_url</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">websockets</span><span class="p">(</span><span class="n">ws_url</span><span class="p">,</span> <span class="n">ws_handler</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="pop_element"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.util.pop_element">[docs]</a><span class="k">def</span> <span class="nf">pop_element</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
-  <span class="n">text</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">text</span>
-  <span class="n">t</span><span class="o">.</span><span class="n">getparent</span><span class="p">()</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
-  <span class="k">return</span> <span class="n">text</span></div>
+<span class="c1"># https://codeforces.com/contest/&lt;contestid&gt;/my 会多出两个 meta</span>
+<span class="c1">#    &lt;meta name=&quot;cc&quot; content=&quot;xxx&quot;/&gt;</span>
+<span class="c1">#    &lt;meta name=&quot;pc&quot; content=&quot;yyy&quot;/&gt;</span>
+<span class="c1"># 这两个可以监听 题目测试时 的通过 百分比 变化</span>
+<div class="viewcode-block" id="create_contest_ws_task"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.websocket.create_contest_ws_task">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">create_contest_ws_task</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contestid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                 <span class="n">ws_handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Task</span><span class="p">:</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This method will use ``http`` to create contest specific websocket, and ``ws_handler`` to handle each ws message</span>
 
+<span class="sd">    :param http: AioHttpHelperInterface </span>
+<span class="sd">    :param contestid: contest id in the url</span>
+<span class="sd">    :param ws_handler: function to handler messages </span>
 
-<div class="viewcode-block" id="show_message"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.util.show_message">[docs]</a><span class="k">def</span> <span class="nf">show_message</span><span class="p">(</span><span class="n">resp</span><span class="p">):</span>
-  <span class="n">doc</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">lines</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//script[@type=&quot;text/javascript&quot; and not(@src)]&#39;</span><span class="p">):</span>
-    <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
-      <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Codeforces.showMessage(&quot;&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span></div>
+<span class="sd">    :returns: the task which run ws</span>
+
+<span class="sd">    Examples:</span>
+
+<span class="sd">    See docstring of :py:func:`codeforces_core.submit.async_submit()`</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">epoch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># s -&gt; ms</span>
+  <span class="n">html_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CF_HOST</span><span class="si">}</span><span class="s2">/contest/</span><span class="si">{</span><span class="n">contestid</span><span class="si">}</span><span class="s2">/my&quot;</span><span class="p">)</span>
+  <span class="n">uc</span><span class="p">,</span> <span class="n">usmc</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">pc</span> <span class="o">=</span> <span class="n">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">)</span>
+  <span class="k">assert</span> <span class="n">cc</span> <span class="ow">and</span> <span class="n">pc</span>
+  <span class="n">ws_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;wss://pubsub.codeforces.com/ws/s_</span><span class="si">{</span><span class="n">pc</span><span class="si">}</span><span class="s2">/s_</span><span class="si">{</span><span class="n">cc</span><span class="si">}</span><span class="s2">?_=</span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2">&amp;tag=&amp;time=&amp;eventid=&quot;</span>
+  <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;ws_url:&quot;</span><span class="p">,</span> <span class="n">ws_url</span><span class="p">)</span>
+  <span class="k">return</span> <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">websockets</span><span class="p">(</span><span class="n">ws_url</span><span class="p">,</span> <span class="n">ws_handler</span><span class="p">))</span></div>
 </pre></div>
         </article>
       </div>

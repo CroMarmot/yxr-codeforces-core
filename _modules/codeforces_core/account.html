@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
         <title>codeforces_core.account - yxr-codeforces-core 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -155,7 +155,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../dev/index.html">Developer</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../user/index.html">User</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../user/00_install.html">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../user/01_examples.html">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../dev/index.html">Developer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/00_install.html">Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/01_doc.html">Doc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/02_debug.html">Debug</a></li>
@@ -164,8 +169,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../dev/05_rst_examples.html">rst Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">yxr-codeforces-core</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../codeforces_core.html">codeforces_core package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">yxr-codeforces-core</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../codeforces_core.html">codeforces_core package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../codeforces_core.interfaces.html">codeforces_core.interfaces package</a></li>
 </ul>
 </li>
@@ -207,11 +212,13 @@
           <h1>Source code for codeforces_core.account</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
-<span class="kn">from</span> <span class="nn">codeforces_core.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
 
-<span class="n">default_login_url</span> <span class="o">=</span> <span class="s2">&quot;/enter?back=</span><span class="si">%2F</span><span class="s2">&quot;</span>
+<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">CF_HOST</span>
+<span class="kn">from</span> <span class="nn">.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
+
+<span class="n">default_login_url</span> <span class="o">=</span> <span class="n">CF_HOST</span> <span class="o">+</span> <span class="s2">&quot;/enter?back=</span><span class="si">%2F</span><span class="s2">&quot;</span>
 
 
 <div class="viewcode-block" id="LoginResult"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.account.LoginResult">[docs]</a><span class="nd">@dataclass</span>
@@ -220,10 +227,10 @@
   <span class="n">csrf</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
   <span class="n">ftaa</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
   <span class="n">bfaa</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-  <span class="n">uc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+  <span class="n">uc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># user channel ?</span>
   <span class="n">usmc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-  <span class="n">cc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-  <span class="n">pc</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+  <span class="c1"># cc: str = &#39;&#39;  # contest channel? TODO remove, 这个和 contest相关, 不应该和login在一起</span>
+  <span class="c1"># pc: str = &#39;&#39;  # remove same reason</span>
   <span class="n">success</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
@@ -247,7 +254,7 @@
   <span class="k">return</span> <span class="kc">True</span>
 
 
-<div class="viewcode-block" id="extract_channel"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.account.extract_channel">[docs]</a><span class="k">def</span> <span class="nf">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="extract_channel"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.account.extract_channel">[docs]</a><span class="k">def</span> <span class="nf">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
   <span class="n">doc</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">html_data</span><span class="p">)</span>
   <span class="n">uc</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//meta[@name=&quot;uc&quot;]&#39;</span><span class="p">)</span>
   <span class="n">uc</span> <span class="o">=</span> <span class="n">uc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">uc</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
@@ -260,7 +267,8 @@
   <span class="k">return</span> <span class="n">uc</span><span class="p">,</span> <span class="n">usmc</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">pc</span></div>
 
 
-<div class="viewcode-block" id="async_login"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.account.async_login">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_login</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span>
+<span class="c1"># TODO 已经登陆账号A, 再调用登陆账号B是不行的, 这个逻辑应该是由外部控制，调用时应该确保未登录状态</span>
+<div class="viewcode-block" id="async_login"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.account.async_login">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_login</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span>
                       <span class="n">handle</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                       <span class="n">passwd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                       <span class="n">login_url</span><span class="o">=</span><span class="n">default_login_url</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LoginResult</span><span class="p">:</span>
@@ -285,8 +293,12 @@
 <span class="sd">          http = HttpHelper(token_path=&#39;&#39;, cookie_jar_path=&#39;&#39;)</span>
 <span class="sd">          await http.open_session()</span>
 <span class="sd">          result = await async_login(http=http, handle=&#39;&lt;handle&gt;&#39;, passwd=&#39;&lt;password&gt;&#39;)</span>
-<span class="sd">          await http.close_session()</span>
 <span class="sd">          assert(result.success)</span>
+
+<span class="sd">          html_data = await http.async_get(&#39;https://codeforces.com&#39;)</span>
+<span class="sd">          assert(is_user_logged_in(html_data))</span>
+
+<span class="sd">          await http.close_session()</span>
 
 <span class="sd">        asyncio.run(demo())</span>
 <span class="sd">  &quot;&quot;&quot;</span>
@@ -326,8 +338,8 @@
                      <span class="n">bfaa</span><span class="o">=</span><span class="n">bfaa</span><span class="p">,</span>
                      <span class="n">uc</span><span class="o">=</span><span class="n">uc</span><span class="p">,</span>
                      <span class="n">usmc</span><span class="o">=</span><span class="n">usmc</span><span class="p">,</span>
-                     <span class="n">cc</span><span class="o">=</span><span class="n">cc</span><span class="p">,</span>
-                     <span class="n">pc</span><span class="o">=</span><span class="n">pc</span><span class="p">,</span>
+                     <span class="c1"># cc=cc,</span>
+                     <span class="c1"># pc=pc,</span>
                      <span class="n">success</span><span class="o">=</span><span class="n">success</span><span class="p">)</span></div>
 </pre></div>
         </article>

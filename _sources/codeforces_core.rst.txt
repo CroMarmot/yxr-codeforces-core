@@ -92,6 +92,14 @@ codeforces\_core.util module
    :undoc-members:
    :show-inheritance:
 
+codeforces\_core.websocket module
+---------------------------------
+
+.. automodule:: codeforces_core.websocket
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 Module contents
 ---------------
 

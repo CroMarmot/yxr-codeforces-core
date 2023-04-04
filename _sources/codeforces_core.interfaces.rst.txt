@@ -12,14 +12,6 @@ codeforces\_core.interfaces.AioHttpHelper module
    :undoc-members:
    :show-inheritance:
 
-codeforces\_core.interfaces.Conf module
----------------------------------------
-
-.. automodule:: codeforces_core.interfaces.Conf
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 Module contents
 ---------------
 

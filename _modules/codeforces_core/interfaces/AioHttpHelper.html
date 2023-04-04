@@ -4,10 +4,10 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../../genindex.html" /><link rel="search" title="Search" href="../../../search.html" />
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2022.12.07 -->
+    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
         <title>codeforces_core.interfaces.AioHttpHelper - yxr-codeforces-core 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=91d0f0d1c444bdcb17a68e833c7a53903343c195" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
     
     
@@ -155,7 +155,12 @@
 <div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
   <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../dev/index.html">Developer</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../user/index.html">User</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../user/00_install.html">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../user/01_examples.html">Examples</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../dev/index.html">Developer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../dev/00_install.html">Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../dev/01_doc.html">Doc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../dev/02_debug.html">Debug</a></li>
@@ -164,8 +169,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../dev/05_rst_examples.html">rst Examples</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">yxr-codeforces-core</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../../codeforces_core.html">codeforces_core package</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../modules.html">yxr-codeforces-core</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../codeforces_core.html">codeforces_core package</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../codeforces_core.interfaces.html">codeforces_core.interfaces package</a></li>
 </ul>
 </li>
@@ -206,8 +211,9 @@
         <article role="main">
           <h1>Source code for codeforces_core.interfaces.AioHttpHelper</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">abstractmethod</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Protocol</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Protocol</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">import</span> <span class="nn">aiohttp</span>
+<span class="kn">import</span> <span class="nn">json</span>
 
 
 <div class="viewcode-block" id="AioHttpHelperInterface"><a class="viewcode-back" href="../../../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface">[docs]</a><span class="k">class</span> <span class="nc">AioHttpHelperInterface</span><span class="p">(</span><span class="n">Protocol</span><span class="p">):</span>
@@ -232,8 +238,17 @@
   <span class="k">async</span> <span class="k">def</span> <span class="nf">open_session</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">token_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
+<div class="viewcode-block" id="AioHttpHelperInterface.get_tokens"><a class="viewcode-back" href="../../../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface.get_tokens">[docs]</a>  <span class="nd">@abstractmethod</span>
+  <span class="k">async</span> <span class="k">def</span> <span class="nf">get_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
 <div class="viewcode-block" id="AioHttpHelperInterface.close_session"><a class="viewcode-back" href="../../../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface.close_session">[docs]</a>  <span class="nd">@abstractmethod</span>
   <span class="k">async</span> <span class="k">def</span> <span class="nf">close_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+  <span class="c1"># TODO move call back out</span>
+<div class="viewcode-block" id="AioHttpHelperInterface.websockets"><a class="viewcode-back" href="../../../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface.websockets">[docs]</a>  <span class="nd">@abstractmethod</span>
+  <span class="k">async</span> <span class="k">def</span> <span class="nf">websockets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
     <span class="k">raise</span> <span class="ne">NotImplementedError</span></div></div>
 </pre></div>
         </article>
