@@ -1,4 +1,5 @@
-from typing import Any, Dict
+import logging
+from typing import Any, Callable, Dict, Tuple
 
 # from . import config
 from .constants import CF_HOST
@@ -23,6 +24,8 @@ default_headers = {
 # session: aiohttp.ClientSession = None
 # tokens = {}
 # cookie_jar = None
+
+logger = logging.getLogger(__name__)
 
 
 class RCPCRedirectionError(Exception):
@@ -97,9 +100,13 @@ class HttpHelper(AioHttpHelperInterface):
   headers = {}  # TODO
 
   def __init__(self, cookie_jar_path: str = '', token_path: str = '', headers=default_headers) -> None:
+    # if path is empty string then won't save to any file, just store in memory
     self.cookie_jar_path = cookie_jar_path
+    # if path is empty string then won't save to any file, just store in memory
     self.token_path = token_path
     self.headers = headers
+    # TODO support cf mirror site?
+    self.host = CF_HOST
 
   @staticmethod
   def load_tokens(token_path: str) -> Dict[str, Any]:
@@ -150,7 +157,7 @@ class HttpHelper(AioHttpHelperInterface):
     if csrf and 'csrf' in self.tokens:
       headers = add_header({'X-Csrf-Token': self.tokens['csrf']})
     # TODO remove the feature
-    if url.startswith('/'): url = CF_HOST + url
+    if url.startswith('/'): url = self.host + url
     result = None
     try:
       async with self.session.get(url, headers=headers) as response:
@@ -172,7 +179,7 @@ class HttpHelper(AioHttpHelperInterface):
       headers = add_header({'X-Csrf-Token': self.tokens['csrf']})
 
     # TODO remove the feature
-    if url.startswith('/'): url = CF_HOST + url
+    if url.startswith('/'): url = self.host + url
     result = None
     try:
       async with self.session.post(url, headers=headers, data=data) as response:
@@ -220,20 +227,26 @@ class HttpHelper(AioHttpHelperInterface):
       form.add_field(k, v)
     return form
 
+  # callback return (end watch?, transform result)
+  async def websockets(self, url: str, callback: Callable[[Any], Tuple[bool, Any]]) -> Any:
+    try:
+      async with self.session.ws_connect(url) as ws:
+        ret = []
+        async for msg in ws:
+          if msg.type == aiohttp.WSMsgType.TEXT:
+            js = json.loads(msg.data)
+            js['text'] = json.loads(js['text'])
 
-# async def websockets(url, callback):
-#   async with session.ws_connect(url) as ws:
-#     finished = 2
-#     ret = []
-#     async for msg in ws:
-#       if msg.type == aiohttp.WSMsgType.TEXT:
-#         js = json.loads(msg.data)
-#         js['text'] = json.loads(js['text'])
-#         ret += [js]
-#         finished = js['text']['d'][17]
-#         if finished == 0:
-#           break
-#       else:
-#         break
-#     return await callback(ret)
-#
+            endwatch, obj = callback(js)
+            ret.append(obj)
+            if endwatch:
+              return ret
+
+          else:
+            logger.error('wrong msg type?', msg.type)
+            break
+        return ret
+    except Exception as e:
+      logger.error(e)
+      # session closed?
+      return False

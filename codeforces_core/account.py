@@ -1,9 +1,10 @@
 from dataclasses import dataclass
 from typing import Tuple
-from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
 from random import choice
 from lxml import html
+
 from .constants import CF_HOST
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
 
 default_login_url = CF_HOST + "/enter?back=%2F"
 
@@ -14,10 +15,10 @@ class LoginResult:
   csrf: str = ''
   ftaa: str = ''
   bfaa: str = ''
-  uc: str = ''
+  uc: str = ''  # user channel ?
   usmc: str = ''
-  cc: str = ''
-  pc: str = ''
+  # cc: str = ''  # contest channel? TODO remove, 这个和 contest相关, 不应该和login在一起
+  # pc: str = ''  # remove same reason
   success: bool = False
 
 
@@ -41,7 +42,7 @@ def check_login(html_data: str) -> bool:
   return True
 
 
-def extract_channel(html_data) -> Tuple[str, str, str, str]:
+def extract_channel(html_data: str) -> Tuple[str, str, str, str]:
   doc = html.fromstring(html_data)
   uc = doc.xpath('.//meta[@name="uc"]')
   uc = uc[0].get('content') if len(uc) > 0 else None
@@ -54,6 +55,7 @@ def extract_channel(html_data) -> Tuple[str, str, str, str]:
   return uc, usmc, cc, pc
 
 
+# TODO 已经登陆账号A, 再调用登陆账号B是不行的, 这个逻辑应该是由外部控制，调用时应该确保未登录状态
 async def async_login(http: AioHttpHelperInterface,
                       handle: str,
                       passwd: str,
@@ -79,8 +81,12 @@ async def async_login(http: AioHttpHelperInterface,
           http = HttpHelper(token_path='', cookie_jar_path='')
           await http.open_session()
           result = await async_login(http=http, handle='<handle>', passwd='<password>')
-          await http.close_session()
           assert(result.success)
+
+          html_data = await http.async_get('https://codeforces.com')
+          assert(is_user_logged_in(html_data))
+
+          await http.close_session()
 
         asyncio.run(demo())
   """
@@ -120,6 +126,6 @@ async def async_login(http: AioHttpHelperInterface,
                      bfaa=bfaa,
                      uc=uc,
                      usmc=usmc,
-                     cc=cc,
-                     pc=pc,
+                     # cc=cc,
+                     # pc=pc,
                      success=success)

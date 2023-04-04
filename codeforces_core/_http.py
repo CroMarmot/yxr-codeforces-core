@@ -133,7 +133,6 @@ async def async_urlsopen(urls):
 
 async def on_request_start(session, trace_request_ctx, params):
   trace_request_ctx.start = asyncio.get_event_loop().time()
-  print(session)
   print("[*] Request start : {}".format(params))
 
 

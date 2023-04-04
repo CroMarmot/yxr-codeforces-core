@@ -10,6 +10,7 @@ Welcome to yxr-codeforces-core's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   user/index
    dev/index
    modules
 

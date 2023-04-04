@@ -1,6 +1,7 @@
 from abc import abstractmethod
-from typing import Any, Dict, Protocol
+from typing import Any, Callable, Dict, Protocol, Tuple
 import aiohttp
+import json
 
 
 class AioHttpHelperInterface(Protocol):
@@ -26,5 +27,14 @@ class AioHttpHelperInterface(Protocol):
     raise NotImplementedError
 
   @abstractmethod
+  async def get_tokens(self) -> Any:
+    raise NotImplementedError
+
+  @abstractmethod
   async def close_session(self) -> None:
+    raise NotImplementedError
+
+  # TODO move call back out
+  @abstractmethod
+  async def websockets(self, url: str, callback: Callable[[Any], Tuple[bool, Any]]) -> Any:
     raise NotImplementedError

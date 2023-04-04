@@ -1,36 +1,75 @@
 import asyncio
-from typing import Any
-from time import time
+from collections import defaultdict
+from dataclasses import dataclass, field
+import logging
 from os import path
+from typing import Any, List, Tuple
 from lxml import html
 
-from .ui import BLUE, GREEN, RED, redraw
-from . import config
-from . import contest
+# from .ui import BLUE, GREEN, RED, redraw
 from . import account
-from . import _http
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
 
-from .interfaces.Conf import ConfInterface
-from .interfaces.AioHttpHelper import AioHttpHelper
-
-
-def submit(_http: AioHttpHelper, cid: str, level: str, filename: str, lang_id: str):
-  return asyncio.run(async_submit(_http=_http, cid=cid, level=level, filename=filename, lang_id=lang_id))
+logger = logging.getLogger(__name__)
 
 
-async def async_submit(_http: _http, cid: str, level: str, filename: str, lang_id: str) -> None:
+# return (contestid, html_text of contest/<contest id>/my )
+async def async_submit(http: AioHttpHelperInterface, cid: str, level: str, filename: str,
+                       lang_id: str) -> Tuple[str, str]:
+  """
+    This method will use ``http`` to post submit
+
+    :param http: AioHttpHelperInterface 
+    :param ws_handler: function to handler messages 
+
+    :returns: the task which run ws
+
+    Examples:
+
+    .. code-block::
+
+        import asyncio
+        from codeforces_core.httphelper import HttpHelper
+        from codeforces_core.account import async_login
+        from codeforces_core.websocket import create_contest_ws_task
+        from codeforces_core.submit import async_submit, display_contest_ws
+
+        async def demo():
+          # http = HttpHelper(token_path='/tmp/cache_token', cookie_jar_path='/tmp/cache_cookie_jar')
+          http = HttpHelper(token_path='', cookie_jar_path='')
+          await http.open_session()
+          result = await async_login(http=http, handle='<handle>', passwd='<password>')
+          assert(result.success)
+
+          print('before submit')
+          submit_id, resp = await async_submit(http, cid='1777', level='F', filename='F.cpp', lang_id='73')
+          print('submit id:',submit_id)
+
+          # connect websocket before submit sometimes cannot receive message
+          contest_task = create_contest_ws_task(http, contestid='1777', ws_handler=display_contest_ws)
+          print("contest ws created");
+
+          try:
+            result = await asyncio.wait_for(contest_task, timeout=30)
+            print("ws is done, result:", result)
+          except asyncio.TimeoutError:
+            pass
+          await http.close_session()
+
+        asyncio.run(demo())
+
+  """
+
+
+
   if not cid or not level:
-    print("[!] Invalid contestID or level")
-    return
+    logger.error("[!] Invalid contestID or level")
+    return '', ''
   if not path.isfile(filename):
-    print("[!] File not found : {}".format(filename))
-    return
+    logger.error("[!] File not found : {}".format(filename))
+    return '', ''
 
-  print("[+] Submit {} {} : {}".format(cid, level.upper(), filename))
-  epoch = int(time() * 1000)
-  await _http.open_session()
-  token = _http.get_tokens()
-  ws_url = "wss://pubsub.codeforces.com/ws/{}/{}?_={}&tag=&time=&eventid=".format(token['uc'], token['usmc'], epoch)
+  token = http.get_tokens()
   submit_form = {
       'csrf_token': token['csrf'],
       'ftaa': token['ftaa'],
@@ -39,61 +78,39 @@ async def async_submit(_http: _http, cid: str, level: str, filename: str, lang_i
       'submittedProblemIndex': level,
       'programTypeId': lang_id,
   }
-  try:
-    task = asyncio.create_task(_http.websockets(ws_url, display_submit_result))
-    url = '/contest/{}/problem/{}?csrf_token={}'.format(cid, level.upper(), token['csrf'])
-    form = _http.create_form(submit_form)
-    form.add_field('sourceFile', open(filename, 'rb'), filename=filename)
-    resp = await _http.async_post(url, form)
-    if not account.is_user_logged_in(resp):
-      print("Login required")
-      return
-    doc = html.fromstring(resp)
-    for e in doc.xpath('.//span[@class="error for__sourceFile"]'):
-      if e.text == 'You have submitted exactly the same code before':
-        print("[!] " + e.text)
-        return
+  url = '/contest/{}/problem/{}?csrf_token={}'.format(cid, level.upper(), token['csrf'])
+  form = http.create_form(submit_form)
+  form.add_field('sourceFile', open(filename, 'rb'), filename=filename)
+  resp = await http.async_post(url, form)  # 正常是 302 -> https://codeforces.com/contest/<contest id>/my
+  if not account.is_user_logged_in(resp):
+    logger.error("Login required")
+    return '', resp
+  doc = html.fromstring(resp)
+  for e in doc.xpath('.//span[@class="error for__sourceFile"]'):
+    if e.text == 'You have submitted exactly the same code before':
+      logger.error("[!] " + e.text)
+      return '', resp
 
-    status = parse_submit_status(resp)
-    assert status[0]['url'].split('/')[-1] == level.upper()
-    submit_id = status[0]['id']
-    done, pending = await asyncio.wait([task], timeout=5, return_when=asyncio.FIRST_COMPLETED)
-    if task in done:
-      accepted = done.pop().result()
-      if accepted:
-        if not contest.is_contest_running(cid):
-          await asyncio.sleep(2)
-        await contest.async_get_solved_count()
-    else:
-      task.cancel()
-      print("Waiting...")
-      while True:
-        status_url = '/contest/{}/my'.format(cid, token['csrf'])
-        resp = await _http.async_get(status_url)
-        status = parse_submit_status(resp)
-        status = [st for st in status if st['id'] == submit_id][0]
-        if ' '.join(status['verdict'].split()[:2]) in [
-            'Wrong answer', 'Runtime error', 'Time limit', 'Hacked', 'Idleness limit', 'Memory limit'
-        ]:
-          print(RED("[+] [{}] {}".format(status['id'], status['verdict'])))
-          print(RED("[+] {} ms, {} KB".format(status['time'], status['mem'])))
-          break
-        elif status['verdict'].startswith('Accepted') or status['verdict'].startswith('Pretests passed'):
-          print(GREEN("[+] [{}] {}".format(status['id'], status['verdict'])))
-          print(GREEN("[+] {} ms, {} KB".format(status['time'], status['mem'])))
-          if not contest.is_contest_running(cid):
-            await asyncio.sleep(2)
-          await contest.async_get_solved_count()
-          break
-        else:
-          redraw("Status:", status['verdict'].strip())
-        await asyncio.sleep(2)
-  finally:
-    await _http.close_session()
+  status = parse_submit_status(resp)[0]
+  assert status.url.split('/')[-1] == level.upper()
+  return status.id, resp
 
 
-def parse_submit_status(html_page):
-  ret = []
+# TODO move oiterminal code to here use dataclass
+@dataclass
+class SubmissionPageResult:
+  id: str = ''
+  url: str = ''
+  verdict: str = ''
+  time_ms: str = ''
+  mem_bytes: str = ''
+
+
+# status_url = f'/contest/{cid}/my'
+# resp = await http.async_get(status_url)
+# status = parse_submit_status(resp)
+def parse_submit_status(html_page) -> List[SubmissionPageResult]:
+  ret: List[SubmissionPageResult] = []
   doc = html.fromstring(html_page)
   tr = doc.xpath('.//table[@class="status-frame-datatable"]/tr[@data-submission-id]')
   for t in tr:
@@ -103,40 +120,56 @@ def parse_submit_status(html_page):
     verdict = ''.join(td[5].itertext()).strip()
     prog_time = td[6].text.strip().replace('\xa0', ' ').split()[0]
     prog_mem = td[7].text.strip().replace('\xa0', ' ').split()[0]
-    ret.append({'id': submission_id, 'url': url, 'verdict': verdict, 'time': prog_time, 'mem': prog_mem})
+    ret.append(SubmissionPageResult(id=submission_id, url=url, verdict=verdict, time_ms=prog_time, mem_bytes=prog_mem))
   return ret
 
 
-async def display_submit_result(result):
-  accepted = False
-  for r in result:
-    d = r['text']['d']
-    submit_id = d[1]
-    cid = d[2]
-    title = d[4]  # "TESTS"
-    msg = d[6]
-    passed = d[7]
-    testcases = d[8]
-    ms = d[9]
-    mem = d[10]
-    date1 = d[13]
-    date2 = d[14]
-    lang_id = d[16]
-    if msg == "OK":
-      color = GREEN
-      msg = 'Accepted'
-      accepted = True
-    elif msg == "WRONG_ANSWER":
-      msg = 'Wrong Answer'
-      color = RED
-    elif msg == "TIME_LIMIT_EXCEEDED":
-      msg = 'Time Limit Exceed'
-      color = RED
-    elif msg == "RUNTIME_ERROR":
-      msg = 'Runtime Error'
-      color = BLUE
-    else:
-      color = lambda msg: msg
-    print(color("[+] [{}] {}".format(submit_id, msg)))
-    print(color("[+] Test Cases {}/{}, {} ms, {} KB".format(passed, testcases, ms, mem // 1024)))
-  return accepted
+@dataclass
+class SubmissionWSResult:
+  source: Any = field(default_factory=lambda: defaultdict(dict))
+  submit_id: int = 0
+  cid: int = 0
+  title: str = ''
+  msg: str = ''
+  passed: int = 0
+  testcases: int = 0
+  ms: int = 0
+  mem: int = 0
+  date1: str = ''
+  date2: str = ''
+  lang_id: int = 0
+
+
+# TODO 两个不同的ws(公共的和针对题目的) 似乎返回结构不同
+def transform_submission(data: Any) -> SubmissionWSResult:
+  d = data['text']['d']
+  return SubmissionWSResult(
+      source=data,
+      # [5973095143352889425, ???? data-a
+      submit_id=d[1],  # 200625609,
+      cid=d[2],  # 1777,
+      # 1746206, ??
+      title=d[4],  # 'TESTS',
+      # None,
+      msg=d[6],  # 'TESTING', 'OK'
+      passed=d[7],  # 0, ??
+      testcases=d[8],  # 81, ?? 在测试过程中 这个值会增长,而d[7]一直是0,直到'OK'
+      ms=d[9],  # 0,
+      mem=d[10],  # 0, Bytes
+      # 148217099,
+      # '215020',
+      date1=d[13],  # '04.04.2023 3:21:48',
+      date2=d[14],  # '04.04.2023 3:21:48',
+      # 2147483647,
+      lang_id=d[16],  # 73,
+      # 0]
+  )
+
+
+# return (end watch?, transform result)
+def display_contest_ws(result: Any) -> Tuple[bool, Any]:
+  parsed_data = transform_submission(result)
+  print(parsed_data)
+  if parsed_data.msg != 'TESTING':
+    return True, parsed_data
+  return False, parsed_data
