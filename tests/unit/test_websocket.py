@@ -23,7 +23,7 @@ async def test_websocket():
     return False, data
 
   await mahh.open_session()
-  task = create_contest_ws_task(http=mahh, contestid='1777', ws_handler=ws_checker)
+  task = create_contest_ws_task(http=mahh, contest_id='1777', ws_handler=ws_checker)
   res = await task
   assert len(res) == 8
   assert res[

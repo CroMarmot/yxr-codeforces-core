@@ -5,8 +5,8 @@
 # from sys import exit
 # from time import time
 # import subprocess
-# 
-# 
+#
+#
 # def compile_code(src_path, run_path):
 #   # TODO support other languages
 #   # TODO support template strings
@@ -20,15 +20,15 @@
 #       print(proc.stderr.decode())
 #     print(RED("[!] Compile error!"))
 #     exit(1)
-# 
-# 
+#
+#
 # def test(args):
 #   cid, level = guess_cid(args)
 #   if not cid or not level:
 #     print("[!] Invalid contestID or level")
 #     return
 #   prob_dir = problem.prepare_problem_dir(cid, level)
-# 
+#
 #   if args.input:
 #     filename = args.input
 #   else:
@@ -99,4 +99,4 @@
 #   else:
 #     print(ac_text, RED("Wrong Answer"))
 #   unlink(run_path)
-# 
+#

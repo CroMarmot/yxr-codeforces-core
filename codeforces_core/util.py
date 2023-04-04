@@ -3,7 +3,8 @@ from os import path, getcwd, sep
 from lxml import html
 
 
-def guess_cid(args):
+@DeprecationWarning
+def guess_contest_id(args):
   if 'cid' in args and args.cid:
     cid = int(args.cid)
     if 'level' in args and args.level:

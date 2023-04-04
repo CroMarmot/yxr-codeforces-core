@@ -25,18 +25,17 @@ def test_extract_channel():
 
 @pytest.mark.asyncio
 async def test_async_login():
-  from codeforces_core.constants import CF_HOST
   from codeforces_core.account import async_login
   from ..helper.MockAioHttpHelper import BEFORE_ASYNC_GET, BEFORE_UPDATE_TOKENS, BEFORE_ASYNC_POST
   mahh = MockAioHttpHelper()
 
   def async_get_checker(url) -> None:
-    assert url == CF_HOST + '/enter?back=%2F'
+    assert url == '/enter?back=%2F'
 
   mahh.add_listener(BEFORE_ASYNC_GET, async_get_checker)
 
   def async_post_checker(url, post_data) -> None:
-    assert url == CF_HOST + '/enter?back=%2F'
+    assert url == '/enter?back=%2F'
     assert post_data['csrf_token'] == '1f6e9a1ae9fab8aeed525b0f8a19881b'
     assert post_data['action'] == 'enter'
     # assert ftaa is random

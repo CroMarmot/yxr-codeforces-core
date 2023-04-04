@@ -4,7 +4,6 @@ from time import time
 from typing import Any, Callable, Tuple
 
 from codeforces_core.account import extract_channel
-from codeforces_core.constants import CF_HOST
 from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
 
 logger = logging.getLogger(__name__)
@@ -63,17 +62,17 @@ def create_ws_task(http: AioHttpHelperInterface, ws_handler: Callable[[Any], boo
   return asyncio.create_task(http.websockets(ws_url, ws_handler))
 
 
-# https://codeforces.com/contest/<contestid>/my 会多出两个 meta
+# https://codeforces.com/contest/<contest_id>/my 会多出两个 meta
 #    <meta name="cc" content="xxx"/>
 #    <meta name="pc" content="yyy"/>
 # 这两个可以监听 题目测试时 的通过 百分比 变化
-async def create_contest_ws_task(http: AioHttpHelperInterface, contestid: str,
+async def create_contest_ws_task(http: AioHttpHelperInterface, contest_id: str,
                                  ws_handler: Callable[[Any], bool]) -> asyncio.Task:
   """
     This method will use ``http`` to create contest specific websocket, and ``ws_handler`` to handle each ws message
 
     :param http: AioHttpHelperInterface 
-    :param contestid: contest id in the url
+    :param contest_id: contest id in the url
     :param ws_handler: function to handler messages 
 
     :returns: the task which run ws
@@ -83,7 +82,7 @@ async def create_contest_ws_task(http: AioHttpHelperInterface, contestid: str,
     See docstring of :py:func:`codeforces_core.submit.async_submit()`
   """
   epoch = int(time() * 1000)  # s -> ms
-  html_data = await http.async_get(f"{CF_HOST}/contest/{contestid}/my")
+  html_data = await http.async_get(f"/contest/{contest_id}/my")
   uc, usmc, cc, pc = extract_channel(html_data)
   assert cc and pc
   ws_url = f"wss://pubsub.codeforces.com/ws/s_{pc}/s_{cc}?_={epoch}&tag=&time=&eventid="

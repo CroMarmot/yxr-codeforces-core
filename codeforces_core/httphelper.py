@@ -99,14 +99,14 @@ class HttpHelper(AioHttpHelperInterface):
   tokens = {}
   headers = {}  # TODO
 
-  def __init__(self, cookie_jar_path: str = '', token_path: str = '', headers=default_headers) -> None:
+  def __init__(self, cookie_jar_path: str = '', token_path: str = '', headers=default_headers, host=CF_HOST) -> None:
     # if path is empty string then won't save to any file, just store in memory
     self.cookie_jar_path = cookie_jar_path
     # if path is empty string then won't save to any file, just store in memory
     self.token_path = token_path
     self.headers = headers
     # TODO support cf mirror site?
-    self.host = CF_HOST
+    self.host = host
 
   @staticmethod
   def load_tokens(token_path: str) -> Dict[str, Any]:

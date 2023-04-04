@@ -8,6 +8,27 @@ codeforces\_core.account module
    :noindex:
    :members: async_login, is_user_logged_in
 
+codeforces\_core.contest_list module
+------------------------------------
+
+.. automodule:: codeforces_core.contest_list
+   :noindex:
+   :members: async_list_contest
+
+codeforces\_core.contest_register module
+----------------------------------------
+
+.. automodule:: codeforces_core.contest_register
+   :noindex:
+   :members: async_register
+
+codeforces\_core.contest_meta module
+------------------------------------
+
+.. automodule:: codeforces_core.contest_meta
+   :noindex:
+   :members: async_contest_meta
+
 codeforces\_core.submit module
 ------------------------------
 

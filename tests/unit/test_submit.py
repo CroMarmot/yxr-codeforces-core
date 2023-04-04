@@ -50,7 +50,7 @@ async def test_submit():
 
   await mahh.open_session()
   submit_id, resp = await async_submit(http=mahh,
-                                       cid='1777',
+                                       contest_id='1777',
                                        level='F',
                                        filename='tests/unit/mock/main.cpp',
                                        lang_id='73')
@@ -67,7 +67,7 @@ def test_transform_submission():
       r'{"id": 11, "channel": "s_d3dd4b58d7fa6daf07e56129caa438cdebe15779", "text": {"t": "s", "d": [5973095027388772356, 200625609, 1777, 1746206, "TESTS", null, "TESTING", 0, 4, 0, 0, 148217099, "215020", "04.04.2023 3:21:48", "04.04.2023 3:21:48", 2147483647, 73, 0]}}'
   )
   parsed_data = transform_submission(data)
-  assert parsed_data.cid == 1777
+  assert parsed_data.contest_id == 1777
   assert parsed_data.date1 == '04.04.2023 3:21:48'
   assert parsed_data.date2 == '04.04.2023 3:21:48'
   assert parsed_data.lang_id == 73

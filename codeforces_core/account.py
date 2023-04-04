@@ -3,10 +3,9 @@ from typing import Tuple
 from random import choice
 from lxml import html
 
-from .constants import CF_HOST
 from .interfaces.AioHttpHelper import AioHttpHelperInterface
 
-default_login_url = CF_HOST + "/enter?back=%2F"
+default_login_url = "/enter?back=%2F"
 
 
 @dataclass
@@ -120,12 +119,13 @@ async def async_login(http: AioHttpHelperInterface,
   else:
     success = False
 
-  return LoginResult(html=html_data,
-                     csrf=csrf_token,
-                     ftaa=ftaa,
-                     bfaa=bfaa,
-                     uc=uc,
-                     usmc=usmc,
-                     # cc=cc,
-                     # pc=pc,
-                     success=success)
+  return LoginResult(
+      html=html_data,
+      csrf=csrf_token,
+      ftaa=ftaa,
+      bfaa=bfaa,
+      uc=uc,
+      usmc=usmc,
+      # cc=cc,
+      # pc=pc,
+      success=success)

@@ -1,4 +1,3 @@
-import asyncio
 from collections import defaultdict
 from dataclasses import dataclass, field
 import logging
@@ -13,8 +12,8 @@ from .interfaces.AioHttpHelper import AioHttpHelperInterface
 logger = logging.getLogger(__name__)
 
 
-# return (contestid, html_text of contest/<contest id>/my )
-async def async_submit(http: AioHttpHelperInterface, cid: str, level: str, filename: str,
+# return (contest_id, html_text of contest/<contest id>/my )
+async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str, filename: str,
                        lang_id: str) -> Tuple[str, str]:
   """
     This method will use ``http`` to post submit
@@ -42,11 +41,11 @@ async def async_submit(http: AioHttpHelperInterface, cid: str, level: str, filen
           assert(result.success)
 
           print('before submit')
-          submit_id, resp = await async_submit(http, cid='1777', level='F', filename='F.cpp', lang_id='73')
+          submit_id, resp = await async_submit(http, contest_id='1777', level='F', filename='F.cpp', lang_id='73')
           print('submit id:',submit_id)
 
           # connect websocket before submit sometimes cannot receive message
-          contest_task = create_contest_ws_task(http, contestid='1777', ws_handler=display_contest_ws)
+          contest_task = create_contest_ws_task(http, contest_id='1777', ws_handler=display_contest_ws)
           print("contest ws created");
 
           try:
@@ -60,9 +59,7 @@ async def async_submit(http: AioHttpHelperInterface, cid: str, level: str, filen
 
   """
 
-
-
-  if not cid or not level:
+  if not contest_id or not level:
     logger.error("[!] Invalid contestID or level")
     return '', ''
   if not path.isfile(filename):
@@ -78,7 +75,7 @@ async def async_submit(http: AioHttpHelperInterface, cid: str, level: str, filen
       'submittedProblemIndex': level,
       'programTypeId': lang_id,
   }
-  url = '/contest/{}/problem/{}?csrf_token={}'.format(cid, level.upper(), token['csrf'])
+  url = '/contest/{}/problem/{}?csrf_token={}'.format(contest_id, level.upper(), token['csrf'])
   form = http.create_form(submit_form)
   form.add_field('sourceFile', open(filename, 'rb'), filename=filename)
   resp = await http.async_post(url, form)  # 正常是 302 -> https://codeforces.com/contest/<contest id>/my
@@ -106,7 +103,7 @@ class SubmissionPageResult:
   mem_bytes: str = ''
 
 
-# status_url = f'/contest/{cid}/my'
+# status_url = f'/contest/{contest_id}/my'
 # resp = await http.async_get(status_url)
 # status = parse_submit_status(resp)
 def parse_submit_status(html_page) -> List[SubmissionPageResult]:
@@ -128,7 +125,7 @@ def parse_submit_status(html_page) -> List[SubmissionPageResult]:
 class SubmissionWSResult:
   source: Any = field(default_factory=lambda: defaultdict(dict))
   submit_id: int = 0
-  cid: int = 0
+  contest_id: int = 0
   title: str = ''
   msg: str = ''
   passed: int = 0
@@ -147,7 +144,7 @@ def transform_submission(data: Any) -> SubmissionWSResult:
       source=data,
       # [5973095143352889425, ???? data-a
       submit_id=d[1],  # 200625609,
-      cid=d[2],  # 1777,
+      contest_id=d[2],  # 1777,
       # 1746206, ??
       title=d[4],  # 'TESTS',
       # None,

@@ -1,12 +1,12 @@
-from . import _http
+from . import unused_http
 from . import config
-from . import contest
-from .ui import *
-from .util import guess_cid, pop_element
+from . import contest_meta
+# from .ui import *
+from .util import guess_contest_id, pop_element
 from time import time, sleep
 from os import listdir, path, sep, makedirs
 from lxml import html, etree
-from .config import conf
+# from .config import conf
 import asyncio
 
 
@@ -79,9 +79,9 @@ async def async_parse_problems(args):
     print("[!] Invalid contestID")
     return
   url = "/contest/{}/problems".format(cid)
-  await _http.open_session()
-  resp = await _http.async_get(url)
-  await _http.close_session()
+  await unused_http.open_session()
+  resp = await unused_http.async_get(url)
+  await unused_http.close_session()
   doc = html.fromstring(resp)
   probs = doc.xpath('.//div[@class="problemindexholder"]')
   for p in probs:
@@ -139,7 +139,7 @@ async def async_parse_problems(args):
 
 
 def generate_source(args):
-  cid, level = guess_cid(args)
+  cid, level = guess_contest_id(args)
   if not cid or not level:
     print("[!] Invalid contestID or level")
     return
