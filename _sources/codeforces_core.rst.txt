@@ -20,14 +20,6 @@ codeforces\_core.account module
    :undoc-members:
    :show-inheritance:
 
-codeforces\_core.config module
-------------------------------
-
-.. automodule:: codeforces_core.config
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 codeforces\_core.constants module
 ---------------------------------
 
@@ -104,46 +96,6 @@ codeforces\_core.submit module
 ------------------------------
 
 .. automodule:: codeforces_core.submit
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-codeforces\_core.unused\_contest module
----------------------------------------
-
-.. automodule:: codeforces_core.unused_contest
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-codeforces\_core.unused\_http module
-------------------------------------
-
-.. automodule:: codeforces_core.unused_http
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-codeforces\_core.unused\_judge module
--------------------------------------
-
-.. automodule:: codeforces_core.unused_judge
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-codeforces\_core.unused\_problem module
----------------------------------------
-
-.. automodule:: codeforces_core.unused_problem
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-codeforces\_core.unused\_ui module
-----------------------------------
-
-.. automodule:: codeforces_core.unused_ui
    :members:
    :undoc-members:
    :show-inheritance:

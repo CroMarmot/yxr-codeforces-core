@@ -210,37 +210,8 @@
         </div>
         <article role="main">
           <h1>Source code for codeforces_core.util</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">getcwd</span><span class="p">,</span> <span class="n">sep</span>
-<span class="kn">import</span> <span class="nn">bs4</span>
+<span></span><span class="kn">import</span> <span class="nn">bs4</span>
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
-
-
-<span class="nd">@DeprecationWarning</span>
-<span class="k">def</span> <span class="nf">guess_contest_id</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
-  <span class="k">if</span> <span class="s1">&#39;cid&#39;</span> <span class="ow">in</span> <span class="n">args</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">cid</span><span class="p">:</span>
-    <span class="n">cid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">cid</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s1">&#39;level&#39;</span> <span class="ow">in</span> <span class="n">args</span> <span class="ow">and</span> <span class="n">args</span><span class="o">.</span><span class="n">level</span><span class="p">:</span>
-      <span class="n">level</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">level</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="n">cid</span><span class="p">,</span> <span class="n">level</span> <span class="o">=</span> <span class="n">get_cwd_info</span><span class="p">()</span>
-  <span class="k">return</span> <span class="n">cid</span><span class="p">,</span> <span class="n">level</span>
-
-
-<div class="viewcode-block" id="get_cwd_info"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.util.get_cwd_info">[docs]</a><span class="k">def</span> <span class="nf">get_cwd_info</span><span class="p">():</span>
-  <span class="n">p</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">normpath</span><span class="p">(</span><span class="n">getcwd</span><span class="p">())</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="p">)</span>
-  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">()</span> <span class="ow">and</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[a-z]&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
-    <span class="n">cid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">])</span>
-    <span class="n">level</span> <span class="o">=</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-  <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">p</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">isnumeric</span><span class="p">():</span>
-    <span class="n">cid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
-  <span class="k">else</span><span class="p">:</span>
-    <span class="n">cid</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="n">level</span> <span class="o">=</span> <span class="kc">None</span>
-  <span class="k">return</span> <span class="n">cid</span><span class="p">,</span> <span class="n">level</span></div>
 
 
 <div class="viewcode-block" id="pop_element"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.util.pop_element">[docs]</a><span class="k">def</span> <span class="nf">pop_element</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
