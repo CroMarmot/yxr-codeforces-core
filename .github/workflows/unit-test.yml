@@ -18,6 +18,9 @@ jobs:
       run: |
         pip install .
         pip install .[test]
+    - name: type test
+      run: |
+        mypy --ignore-missing-imports codeforces_core
     - name: unit test
       run: |
         pytest tests/unit

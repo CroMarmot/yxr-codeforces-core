@@ -6,15 +6,15 @@ import aiohttp
 class AioHttpHelperInterface(Protocol):
 
   @abstractmethod
-  def create_form(form_data: Dict[str, Any]) -> aiohttp.FormData:
+  def create_form(self, form_data: Dict[str, Any]) -> aiohttp.FormData:
     raise NotImplementedError
 
   @abstractmethod
-  async def async_get(url: str) -> str:
+  async def async_get(self, url: str, **kwargs) -> str:
     raise NotImplementedError
 
   @abstractmethod
-  async def async_post(url: str, post_data: Dict[str, Any]) -> str:
+  async def async_post(self, url: str, data: Any, **kwargs) -> str:
     raise NotImplementedError
 
   @abstractmethod
@@ -22,11 +22,11 @@ class AioHttpHelperInterface(Protocol):
     raise NotImplementedError
 
   @abstractmethod
-  async def open_session(self, cookie_jar_path: str, token_path: str) -> aiohttp.ClientSession:
+  async def open_session(self) -> aiohttp.ClientSession:
     raise NotImplementedError
 
   @abstractmethod
-  async def get_tokens(self) -> Any:
+  def get_tokens(self) -> Any:
     raise NotImplementedError
 
   @abstractmethod

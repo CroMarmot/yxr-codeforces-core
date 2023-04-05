@@ -6,6 +6,7 @@ import bs4
 from lxml import html
 
 from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
+from codeforces_core.util import soup_find_bs4Tag
 
 
 class E_STATUS(str, Enum):
@@ -144,7 +145,9 @@ async def async_contest_meta(http: AioHttpHelperInterface, contest_id: str) -> C
   url = f"/contest/{contest_id}"
   resp = await http.async_get(url)
   soup = BeautifulSoup(resp, 'lxml')
-  title = soup.find('meta', property="og:title")['content'][len('Dashboard -'):-len('- Codeforces')].strip()
+  ogtitle = soup_find_bs4Tag(soup, 'meta', property="og:title")['content']
+  assert isinstance(ogtitle, str)
+  title = ogtitle[len('Dashboard -'):-len('- Codeforces')].strip()
   problems = parse_problems(resp)
   for problem in problems:
     problem.contest_id = contest_id

@@ -42,15 +42,17 @@ doc = [
 
 dev = [
   "yxr-codeforces-core[test,doc]",
-  "types-beautifulsoup4",
   "yapf",
   "toml",
 ]
 
 test = [
+  "types-beautifulsoup4",
+  # "lxml-stubs", to many type error
   'pytest >= 6',
   'pytest-cov',
   "pytest-asyncio >= 0.20",
+  "mypy", # 0.982
 ]
 
 [tool.setuptools.dynamic]

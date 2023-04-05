@@ -17,7 +17,7 @@ def display_ws(result: Any) -> Tuple[bool, Any]:
 
 # {'id': 1, 'channel': '34f1ec4b729022e4b48f8d24b65c857805a90469', 'text': {'t': 's', 'd': [5973356517882654806, 200631363, 1777, 1746206, 'TESTS', None, 'OK', 86, 86, 3198, 7884800, 148217099, '21220', '04.04.2023 5:57:08', '04.04.2023 5:57:08', 2147483647, 73, 0]}}
 # 总的ws, 无法获得当前题目的 通过百分比
-def create_ws_task(http: AioHttpHelperInterface, ws_handler: Callable[[Any], bool]) -> asyncio.Task:
+def create_ws_task(http: AioHttpHelperInterface, ws_handler: Callable[[Any], Tuple[bool, Any]]) -> asyncio.Task:
   """
     This method will use ``http`` to create common websocket, and ``ws_handler`` to handle each ws message
 
@@ -67,7 +67,7 @@ def create_ws_task(http: AioHttpHelperInterface, ws_handler: Callable[[Any], boo
 #    <meta name="pc" content="yyy"/>
 # 这两个可以监听 题目测试时 的通过 百分比 变化
 async def create_contest_ws_task(http: AioHttpHelperInterface, contest_id: str,
-                                 ws_handler: Callable[[Any], bool]) -> asyncio.Task:
+                                 ws_handler: Callable[[Any], Tuple[bool, Any]]) -> asyncio.Task:
   """
     This method will use ``http`` to create contest specific websocket, and ``ws_handler`` to handle each ws message
 

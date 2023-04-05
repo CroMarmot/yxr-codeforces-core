@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Callable, Dict, Tuple
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
 # from . import config
 from .constants import CF_HOST
@@ -39,65 +39,18 @@ def add_header(newhdr, headers=default_headers) -> Dict[str, str]:
   return headers
 
 
-# def get(url, headers=None, csrf=False):
-#   resp = asyncio.run(async_get(url, headers, csrf))
-#   if resp:
-#     return resp[0]
-#   else:
-#     return None
-#
-#
-# def post(url, data, headers=None, csrf=False):
-#   resp = asyncio.run(async_post(url, data, headers, csrf))
-#   if resp:
-#     return resp[0]
-#   else:
-#     return None
-#
-#
-# def GET(url, headers=None, csrf=False):
-#   return {'method': async_get, 'url': url, 'headers': headers, 'csrf': csrf}
-#
-#
-# def POST(url, data, headers=None, csrf=False):
-#   return {'method': async_post, 'url': url, 'data': data, 'headers': headers, 'csrf': csrf}
-
-# def urlsopen(urls):
-#   return asyncio.run(async_urlsopen(urls))
-#
-#
-# async def async_urlsopen(urls):
-#   tasks = []
-#   for u in urls:
-#     if u['method'] == async_get:
-#       tasks += [async_get(u['url'], u['headers'], u['csrf'])]
-#     elif u['method'] == async_post:
-#       tasks += [async_post(u['url'], u['data'], u['headers'], u['csrf'])]
-#   return await asyncio.gather(*tasks)
-#
-#
-# async def on_request_start(session, trace_request_ctx, params):
-#   trace_request_ctx.start = asyncio.get_event_loop().time()
-#   print(session)
-#   print("[*] Request start : {}".format(params))
-
-
-async def on_request_chunk_sent(session, trace_request_ctx, params):
-  print("[*] Request sent chunk : {}".format(params.chunk))
-
-
 async def on_request_end(session, trace_request_ctx, params):
   elapsed = asyncio.get_event_loop().time() - trace_request_ctx.start
   print("[*] Request end : {}".format(elapsed))
 
 
 class HttpHelper(AioHttpHelperInterface):
-  session = {}
+  session: Optional[aiohttp.ClientSession] = None
   cookie_jar_path = ''
-  cookie_jar = None
+  cookie_jar: Optional[aiohttp.CookieJar] = None
   token_path = ''
-  tokens = {}
-  headers = {}  # TODO
+  tokens: Any = {}
+  headers: Any = {}  # TODO
 
   def __init__(self, cookie_jar_path: str = '', token_path: str = '', headers=default_headers, host=CF_HOST) -> None:
     # if path is empty string then won't save to any file, just store in memory
@@ -128,22 +81,13 @@ class HttpHelper(AioHttpHelperInterface):
   async def open_session(self) -> aiohttp.ClientSession:
     self.cookie_jar = HttpHelper.load_cookie_jar(self.cookie_jar_path)
     self.tokens = HttpHelper.load_tokens(self.token_path)
-    # if config.conf['trace_requests']:
-    #   cfg = aiohttp.TraceConfig()
-    #   cfg.on_request_start.append(on_request_start)
-    #   cfg.on_request_chunk_sent.append(on_request_chunk_sent)
-    #   cfg.on_request_end.append(on_request_end)
-    #   trace_config = [cfg]
-    # else:
-    #   trace_config = []
-    trace_config = []
-    self.session = await aiohttp.ClientSession(cookie_jar=self.cookie_jar, trace_configs=trace_config).__aenter__()
+    self.session = await aiohttp.ClientSession(cookie_jar=self.cookie_jar).__aenter__()
     return self.session
 
   async def close_session(self) -> None:
     await self.session.__aexit__(None, None, None)
     self.tokens = {}
-    self.cookie_jar = {}
+    self.cookie_jar = None
     self.session = None
 
   def update_tokens(self, csrf: str, ftaa: str, bfaa: str, uc: str, usmc: str) -> None:

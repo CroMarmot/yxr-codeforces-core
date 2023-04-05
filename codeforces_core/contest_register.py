@@ -16,7 +16,7 @@ class RegisterResultMsg(str, Enum):
 @dataclass
 class RegisterResult:
   title: str = ''
-  msg: RegisterResultMsg = ''  # example: already register, TODO 有些比赛会 None
+  msg: RegisterResultMsg = RegisterResultMsg.Empty  # example: already register, TODO 有些比赛会 None
 
 
 # TODO 统一参数命名
@@ -63,7 +63,7 @@ async def async_register(http: AioHttpHelperInterface, contest_id: str) -> Regis
   token = http.get_tokens()
   resp = await http.async_post(
       url,
-      form=http.create_form({
+      data=http.create_form({
           'csrf_token': token['csrf'],
           'action': 'formSubmitted',
           'takePartAs': 'personal',  # Take part as individual participant

@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 
 # return (contest_id, html_text of contest/<contest id>/my )
 async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str, filename: str,
-                        lang_id: str) -> Tuple[str, str]:
+                       lang_id: str) -> Tuple[str, str]:
   """
     This method will use ``http`` to post submit
 

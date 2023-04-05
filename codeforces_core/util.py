@@ -1,5 +1,6 @@
 import re
 from os import path, getcwd, sep
+import bs4
 from lxml import html
 
 
@@ -42,3 +43,10 @@ def show_message(resp):
     for l in lines.text.splitlines():
       if l.find('Codeforces.showMessage("') != -1:
         return l.split('"')[1]
+
+
+# for mypy type check
+def soup_find_bs4Tag(soup: bs4.Tag, *args, **kwargs) -> bs4.Tag:
+  result = soup.find(*args, **kwargs)
+  assert isinstance(result, bs4.Tag)
+  return result

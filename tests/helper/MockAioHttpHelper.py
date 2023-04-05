@@ -65,10 +65,10 @@ class MockAioHttpHelper(AioHttpHelperInterface):
     print(url)
     assert (False)
 
-  async def async_post(self, url: str, post_data: Dict[str, Any]) -> str:
+  async def async_post(self, url: str, data: Dict[str, Any]) -> str:
     if BEFORE_ASYNC_POST in self.listeners:
       for fn in self.listeners[BEFORE_ASYNC_POST]:
-        fn(url, post_data)
+        fn(url, data)
 
     for k, v in POST_MOCK_LIST.items():
       if re.match(k, url):

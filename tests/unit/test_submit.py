@@ -50,10 +50,10 @@ async def test_submit():
 
   await mahh.open_session()
   submit_id, resp = await async_submit(http=mahh,
-                                        contest_id='1777',
-                                        level='F',
-                                        filename='tests/unit/mock/main.cpp',
-                                        lang_id='73')
+                                       contest_id='1777',
+                                       level='F',
+                                       filename='tests/unit/mock/main.cpp',
+                                       lang_id='73')
   assert submit_id == '200627167'
 
   assert get_tokens_called

@@ -11,7 +11,6 @@ from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
 logger = logging.getLogger(__name__)
 
 
-
 @dataclass
 class CodeforcesUser:
   name: str
@@ -35,8 +34,8 @@ class ContestListItem:
   Div: List[str]
 
 
-def parse_div(title: str) -> str:
-  r = []
+def parse_div(title: str) -> List[str]:
+  r: List[str] = []
   if 'Div.' in title:
     r += ['D']
     for i in range(1, 5):
@@ -66,7 +65,7 @@ def ddhhmm2seconds(length: str) -> int:
 def is_contest_running(item: ContestListItem) -> bool:
   start = item.start
   end = start + ddhhmm2seconds(item.length)
-  now = datetime.now()  # local time zone
+  now = int(datetime.now().timestamp())  # local time zone
   return now >= start and now < end
 
 
@@ -76,7 +75,7 @@ class ContestList:
   history: List[ContestListItem]
 
 
-def parse_contest_list(raw_contests: str, upcoming: bool) -> List[ContestListItem]:
+def parse_contest_list(raw_contests, upcoming: bool) -> List[ContestListItem]:
   contests: List[ContestListItem] = []
 
   for c in raw_contests.xpath('.//tr[@data-contestid]'):
@@ -92,7 +91,7 @@ def parse_contest_list(raw_contests: str, upcoming: bool) -> List[ContestListIte
         ) for a in td[1].xpath('.//a')
     ]
     start = td[2].xpath('.//span')[0].text
-    start = int(datetime.strptime(start+"+0300", "%b/%d/%Y %H:%M%z").timestamp()) # Russian + 3hours
+    start = int(datetime.strptime(start + "+0300", "%b/%d/%Y %H:%M%z").timestamp())  # Russian + 3hours
     length = td[3].text.strip()
     participants = ''
     registration = False
