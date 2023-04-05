@@ -1,7 +1,6 @@
 from abc import abstractmethod
 from typing import Any, Callable, Dict, Protocol, Tuple
 import aiohttp
-import json
 
 
 class AioHttpHelperInterface(Protocol):

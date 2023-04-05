@@ -23,7 +23,7 @@ async def test_e2e_login():
   # http = HttpHelper(token_path=token_path, cookie_jar_path=cookie_jar_path)
   http = HttpHelper(token_path='', cookie_jar_path='')
   await http.open_session()
-  result = await async_login(http=http, handle=handle, passwd=password)
+  result = await async_login(http=http, handle=handle, password=password)
   await http.close_session()
   assert result.success
 
@@ -36,7 +36,7 @@ async def test_e2e_login_failed():
   # http = HttpHelper(token_path=token_path, cookie_jar_path=cookie_jar_path)
   http = HttpHelper(token_path='', cookie_jar_path='')
   await http.open_session()
-  result = await async_login(http=http, handle='wrong handle', passwd='wrong password')
+  result = await async_login(http=http, handle='wrong handle', password='wrong password')
   await http.close_session()
   assert not result.success
 

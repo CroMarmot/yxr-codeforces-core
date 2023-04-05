@@ -42,7 +42,7 @@ async def async_register(http: AioHttpHelperInterface, contest_id: str) -> Regis
           # http = HttpHelper(token_path='/tmp/cache_token', cookie_jar_path='/tmp/cache_cookie_jar')
           http = HttpHelper(token_path='', cookie_jar_path='')
           await http.open_session()
-          result = await async_login(http=http, handle='<handle>', passwd='<password>')
+          result = await async_login(http=http, handle='<handle>', password='<password>')
           assert(result.success)
           result = await async_register(http=http,contest_id='1811')
           print(result)

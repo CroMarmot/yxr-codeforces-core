@@ -23,7 +23,7 @@ async def test_e2e_register():
   # http = HttpHelper(token_path=token_path, cookie_jar_path=cookie_jar_path)
   http = HttpHelper(token_path='', cookie_jar_path='')
   await http.open_session()
-  result = await async_login(http=http, handle=handle, passwd=password)
+  result = await async_login(http=http, handle=handle, password=password)
   assert result.success
   result = await async_register(http=http, contest_id='1811')
   assert result.msg == RegisterResultMsg.NoRegistrationIsOpenedNow

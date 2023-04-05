@@ -57,4 +57,4 @@ async def test_async_login():
 
   mahh.add_listener(BEFORE_UPDATE_TOKENS, update_token_checker)
 
-  await async_login(http=mahh, handle='handle', passwd='password')
+  await async_login(http=mahh, handle='handle', password='password')

@@ -8,7 +8,7 @@ from lxml import html
 from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
 
 
-class E_STATUS(Enum):
+class E_STATUS(str, Enum):
   NOT_SUBMITTED = ""
   AC = "AC"
   ERROR = "ERROR"
@@ -110,7 +110,7 @@ def parse_materials(resp: str) -> List[Materials]:
 
 async def async_contest_meta(http: AioHttpHelperInterface, contest_id: str) -> ContestPage:
   """
-    This method will use ``http`` to request `/contest/<contest_id>`, and parse to struct result
+    This method will use ``http`` to request ``/contest/<contest_id>``, and parse to struct result
 
     :param http: AioHttpHelperInterface 
     :param contest_id: contest id in url

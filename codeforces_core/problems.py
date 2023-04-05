@@ -50,7 +50,7 @@ class ProblemInfo:
 
 async def async_fetch_problems(http: AioHttpHelperInterface, contest_id: str) -> List[ProblemInfo]:
   """
-    This method will use ``http`` to request `/contest/<contest_id>/problems`, and parse to struct result
+    This method will use ``http`` to request ``/contest/<contest_id>/problems``, and parse to struct result
 
     :param http: AioHttpHelperInterface 
     :param contest_id: contest id in url
@@ -70,7 +70,7 @@ async def async_fetch_problems(http: AioHttpHelperInterface, contest_id: str) ->
           http = HttpHelper(token_path='', cookie_jar_path='')
           await http.open_session()
           # you can login before request
-          result = await async_fetch_problems(http=http, contest_id = '1779')
+          result = await async_fetch_problems(http=http, contest_id='1779')
           print(len(result))
           print(result[0])
           await http.close_session()

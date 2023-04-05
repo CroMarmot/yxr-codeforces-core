@@ -57,7 +57,7 @@ def extract_channel(html_data: str) -> Tuple[str, str, str, str]:
 # TODO 已经登陆账号A, 再调用登陆账号B是不行的, 这个逻辑应该是由外部控制，调用时应该确保未登录状态
 async def async_login(http: AioHttpHelperInterface,
                       handle: str,
-                      passwd: str,
+                      password: str,
                       login_url=default_login_url) -> LoginResult:
   """
     This method will use ``http`` for login request, and  :py:func:`is_user_logged_in()` for login check
@@ -79,7 +79,7 @@ async def async_login(http: AioHttpHelperInterface,
           # http = HttpHelper(token_path='/tmp/cache_token', cookie_jar_path='/tmp/cache_cookie_jar')
           http = HttpHelper(token_path='', cookie_jar_path='')
           await http.open_session()
-          result = await async_login(http=http, handle='<handle>', passwd='<password>')
+          result = await async_login(http=http, handle='<handle>', password='<password>')
           assert(result.success)
 
           html_data = await http.async_get('https://codeforces.com')
@@ -102,7 +102,7 @@ async def async_login(http: AioHttpHelperInterface,
       'ftaa': ftaa,
       'bfaa': bfaa,
       'handleOrEmail': handle,
-      'password': passwd,
+      'password': password,
       'remember': 'on',
   }
   html_data = await http.async_post(login_url, login_data)

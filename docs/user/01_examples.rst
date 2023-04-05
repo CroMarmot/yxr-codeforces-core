@@ -36,6 +36,13 @@ codeforces\_core.problems module
    :noindex:
    :members: async_fetch_problems
 
+codeforces\_core.problem module
+--------------------------------
+
+.. automodule:: codeforces_core.problem
+   :noindex:
+   :members: async_fetch_problem
+
 codeforces\_core.submit module
 ------------------------------
 
@@ -49,3 +56,11 @@ codeforces\_core.websocket module
 .. automodule:: codeforces_core.websocket
    :noindex:
    :members: create_contest_ws_task, create_ws_task
+
+
+codeforces\_core.contest_standing module
+----------------------------------------
+
+.. automodule:: codeforces_core.contest_standing
+   :noindex:
+   :members: async_common_standing, async_friends_standing

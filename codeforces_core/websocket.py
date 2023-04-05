@@ -42,7 +42,7 @@ def create_ws_task(http: AioHttpHelperInterface, ws_handler: Callable[[Any], boo
           # http = HttpHelper(token_path='/tmp/cache_token', cookie_jar_path='/tmp/cache_cookie_jar')
           http = HttpHelper(token_path='', cookie_jar_path='')
           await http.open_session()
-          result = await async_login(http=http, handle='<handle>', passwd='<password>')
+          result = await async_login(http=http, handle='<handle>', password='<password>')
           assert(result.success)
           task = create_ws_task(http, ws_handler=display_ws)
           # submit code in webpage

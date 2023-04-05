@@ -14,7 +14,8 @@
 - Add auto test(e2e, unit, coverage report)
 - Add vscode-docker container support
 - Reconstruct submit, separate the function as submit / websocket listening / polling submission page
-- Contest register
+- Contest register / list / meta
+- Problems
 
 ### Features
 
