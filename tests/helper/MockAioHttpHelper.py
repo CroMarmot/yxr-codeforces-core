@@ -9,18 +9,19 @@ from ..constant import test_dir
 
 # The key is regex str instead of str
 GET_MOCK_LIST: Dict[str, str] = {
-    'logged-codeforces\\.com': 'logged-codeforces.com.html',
-    'notlogged-codeforces\\.com': 'notlogged-codeforces.com.html',
-    '/enter\\?back=%2F': 'notlogged-codeforces.com.html',
-    '/contest/1777/my': 'contest_1777_submission.html',
-    "/contests/page/1": 'contests.html',
-    "/contest/1779": 'contest_1779.html',
+    'logged-codeforces\\.com$': 'logged-codeforces.com.html',
+    'notlogged-codeforces\\.com$': 'notlogged-codeforces.com.html',
+    '/enter\\?back=%2F$': 'notlogged-codeforces.com.html',
+    '/contest/1777/my$': 'contest_1777_submission.html',
+    "/contests/page/1$": 'contests.html',
+    "/contest/1779$": 'contest_1779.html',
+    "/contest/1779/problems$": 'contest_1779_problems.html',
 }
 
 # The key is regex str instead of str
 POST_MOCK_LIST: Dict[str, str] = {
-    '/enter\\?back=%2F': 'logged-codeforces.com.html',
-    '/contest/.*/problem/.*': 'contest_1777_submission.html',
+    '/enter\\?back=%2F$': 'logged-codeforces.com.html',
+    '/contest/.*/problem/.*$': 'contest_1777_submission.html',
 }
 
 # The key is regex str instead of str

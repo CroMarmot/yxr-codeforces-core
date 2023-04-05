@@ -11,8 +11,10 @@
 | contest list         | ✅    | ✅                  | ✅         | ❌        |
 | contest meta         | ✅    | ✅                  | ✅         | ❌        |
 | contest standing     | ❌    | ❌                  | ❌         | ❌        |
-| problem info         | ❌    | ❌                  | ❌         | ❌        |
+| problems             | ✅    | ✅                  | ✅         | ❌        |
+| specific problem     | ❌    | ❌                  | ❌         | ❌        |
 | language list        | ❌    | ❌                  | ❌         | ❌        |
+| pid/url parser       | ❌    | ❌                  | ❌         | ❌        |
 | ...TODO              | ❔    | ❔                  | ❔         | ❔        |
 
 ## Refs

@@ -29,6 +29,13 @@ codeforces\_core.contest_meta module
    :noindex:
    :members: async_contest_meta
 
+codeforces\_core.problems module
+--------------------------------
+
+.. automodule:: codeforces_core.problems
+   :noindex:
+   :members: async_fetch_problems
+
 codeforces\_core.submit module
 ------------------------------
 
