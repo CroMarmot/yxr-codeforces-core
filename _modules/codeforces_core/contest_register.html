@@ -228,7 +228,7 @@
 <div class="viewcode-block" id="RegisterResult"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.contest_register.RegisterResult">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">RegisterResult</span><span class="p">:</span>
   <span class="n">title</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-  <span class="n">msg</span><span class="p">:</span> <span class="n">RegisterResultMsg</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>  <span class="c1"># example: already register, TODO 有些比赛会 None</span></div>
+  <span class="n">msg</span><span class="p">:</span> <span class="n">RegisterResultMsg</span> <span class="o">=</span> <span class="n">RegisterResultMsg</span><span class="o">.</span><span class="n">Empty</span>  <span class="c1"># example: already register, TODO 有些比赛会 None</span></div>
 
 
 <span class="c1"># TODO 统一参数命名</span>
@@ -275,7 +275,7 @@
   <span class="n">token</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">get_tokens</span><span class="p">()</span>
   <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_post</span><span class="p">(</span>
       <span class="n">url</span><span class="p">,</span>
-      <span class="n">form</span><span class="o">=</span><span class="n">http</span><span class="o">.</span><span class="n">create_form</span><span class="p">({</span>
+      <span class="n">data</span><span class="o">=</span><span class="n">http</span><span class="o">.</span><span class="n">create_form</span><span class="p">({</span>
           <span class="s1">&#39;csrf_token&#39;</span><span class="p">:</span> <span class="n">token</span><span class="p">[</span><span class="s1">&#39;csrf&#39;</span><span class="p">],</span>
           <span class="s1">&#39;action&#39;</span><span class="p">:</span> <span class="s1">&#39;formSubmitted&#39;</span><span class="p">,</span>
           <span class="s1">&#39;takePartAs&#39;</span><span class="p">:</span> <span class="s1">&#39;personal&#39;</span><span class="p">,</span>  <span class="c1"># Take part as individual participant</span>

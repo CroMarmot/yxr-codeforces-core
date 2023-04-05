@@ -212,6 +212,7 @@
           <h1>Source code for codeforces_core.util</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span><span class="p">,</span> <span class="n">getcwd</span><span class="p">,</span> <span class="n">sep</span>
+<span class="kn">import</span> <span class="nn">bs4</span>
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
 
 
@@ -254,6 +255,13 @@
     <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">lines</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">():</span>
       <span class="k">if</span> <span class="n">l</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Codeforces.showMessage(&quot;&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">l</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;&quot;&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span></div>
+
+
+<span class="c1"># for mypy type check</span>
+<div class="viewcode-block" id="soup_find_bs4Tag"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.util.soup_find_bs4Tag">[docs]</a><span class="k">def</span> <span class="nf">soup_find_bs4Tag</span><span class="p">(</span><span class="n">soup</span><span class="p">:</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">:</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="n">soup</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+  <span class="k">assert</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">bs4</span><span class="o">.</span><span class="n">Tag</span><span class="p">)</span>
+  <span class="k">return</span> <span class="n">result</span></div>
 </pre></div>
         </article>
       </div>

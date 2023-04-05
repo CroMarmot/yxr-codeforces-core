@@ -211,7 +211,7 @@
         <article role="main">
           <h1>Source code for codeforces_core.httphelper</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="c1"># from . import config</span>
 <span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">CF_HOST</span>
@@ -251,65 +251,18 @@
   <span class="k">return</span> <span class="n">headers</span></div>
 
 
-<span class="c1"># def get(url, headers=None, csrf=False):</span>
-<span class="c1">#   resp = asyncio.run(async_get(url, headers, csrf))</span>
-<span class="c1">#   if resp:</span>
-<span class="c1">#     return resp[0]</span>
-<span class="c1">#   else:</span>
-<span class="c1">#     return None</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># def post(url, data, headers=None, csrf=False):</span>
-<span class="c1">#   resp = asyncio.run(async_post(url, data, headers, csrf))</span>
-<span class="c1">#   if resp:</span>
-<span class="c1">#     return resp[0]</span>
-<span class="c1">#   else:</span>
-<span class="c1">#     return None</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># def GET(url, headers=None, csrf=False):</span>
-<span class="c1">#   return {&#39;method&#39;: async_get, &#39;url&#39;: url, &#39;headers&#39;: headers, &#39;csrf&#39;: csrf}</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># def POST(url, data, headers=None, csrf=False):</span>
-<span class="c1">#   return {&#39;method&#39;: async_post, &#39;url&#39;: url, &#39;data&#39;: data, &#39;headers&#39;: headers, &#39;csrf&#39;: csrf}</span>
-
-<span class="c1"># def urlsopen(urls):</span>
-<span class="c1">#   return asyncio.run(async_urlsopen(urls))</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># async def async_urlsopen(urls):</span>
-<span class="c1">#   tasks = []</span>
-<span class="c1">#   for u in urls:</span>
-<span class="c1">#     if u[&#39;method&#39;] == async_get:</span>
-<span class="c1">#       tasks += [async_get(u[&#39;url&#39;], u[&#39;headers&#39;], u[&#39;csrf&#39;])]</span>
-<span class="c1">#     elif u[&#39;method&#39;] == async_post:</span>
-<span class="c1">#       tasks += [async_post(u[&#39;url&#39;], u[&#39;data&#39;], u[&#39;headers&#39;], u[&#39;csrf&#39;])]</span>
-<span class="c1">#   return await asyncio.gather(*tasks)</span>
-<span class="c1">#</span>
-<span class="c1">#</span>
-<span class="c1"># async def on_request_start(session, trace_request_ctx, params):</span>
-<span class="c1">#   trace_request_ctx.start = asyncio.get_event_loop().time()</span>
-<span class="c1">#   print(session)</span>
-<span class="c1">#   print(&quot;[*] Request start : {}&quot;.format(params))</span>
-
-
-<div class="viewcode-block" id="on_request_chunk_sent"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.on_request_chunk_sent">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">on_request_chunk_sent</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">trace_request_ctx</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
-  <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[*] Request sent chunk : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">params</span><span class="o">.</span><span class="n">chunk</span><span class="p">))</span></div>
-
-
 <div class="viewcode-block" id="on_request_end"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.on_request_end">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">on_request_end</span><span class="p">(</span><span class="n">session</span><span class="p">,</span> <span class="n">trace_request_ctx</span><span class="p">,</span> <span class="n">params</span><span class="p">):</span>
   <span class="n">elapsed</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">get_event_loop</span><span class="p">()</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">trace_request_ctx</span><span class="o">.</span><span class="n">start</span>
   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[*] Request end : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">elapsed</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="HttpHelper"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper">[docs]</a><span class="k">class</span> <span class="nc">HttpHelper</span><span class="p">(</span><span class="n">AioHttpHelperInterface</span><span class="p">):</span>
-  <span class="n">session</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="n">session</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
   <span class="n">cookie_jar_path</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-  <span class="n">cookie_jar</span> <span class="o">=</span> <span class="kc">None</span>
+  <span class="n">cookie_jar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">aiohttp</span><span class="o">.</span><span class="n">CookieJar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
   <span class="n">token_path</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-  <span class="n">tokens</span> <span class="o">=</span> <span class="p">{}</span>
-  <span class="n">headers</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># TODO</span>
+  <span class="n">tokens</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="n">headers</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># TODO</span>
 
   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">token_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">default_headers</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">CF_HOST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="c1"># if path is empty string then won&#39;t save to any file, just store in memory</span>
@@ -340,22 +293,13 @@
 <div class="viewcode-block" id="HttpHelper.open_session"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.open_session">[docs]</a>  <span class="k">async</span> <span class="k">def</span> <span class="nf">open_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">:</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="o">.</span><span class="n">load_cookie_jar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="o">.</span><span class="n">load_tokens</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">token_path</span><span class="p">)</span>
-    <span class="c1"># if config.conf[&#39;trace_requests&#39;]:</span>
-    <span class="c1">#   cfg = aiohttp.TraceConfig()</span>
-    <span class="c1">#   cfg.on_request_start.append(on_request_start)</span>
-    <span class="c1">#   cfg.on_request_chunk_sent.append(on_request_chunk_sent)</span>
-    <span class="c1">#   cfg.on_request_end.append(on_request_end)</span>
-    <span class="c1">#   trace_config = [cfg]</span>
-    <span class="c1"># else:</span>
-    <span class="c1">#   trace_config = []</span>
-    <span class="n">trace_config</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="k">await</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">(</span><span class="n">cookie_jar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar</span><span class="p">,</span> <span class="n">trace_configs</span><span class="o">=</span><span class="n">trace_config</span><span class="p">)</span><span class="o">.</span><span class="fm">__aenter__</span><span class="p">()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="k">await</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">(</span><span class="n">cookie_jar</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar</span><span class="p">)</span><span class="o">.</span><span class="fm">__aenter__</span><span class="p">()</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span></div>
 
 <div class="viewcode-block" id="HttpHelper.close_session"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.close_session">[docs]</a>  <span class="k">async</span> <span class="k">def</span> <span class="nf">close_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="fm">__aexit__</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="HttpHelper.update_tokens"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.update_tokens">[docs]</a>  <span class="k">def</span> <span class="nf">update_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csrf</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ftaa</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">bfaa</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">uc</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">usmc</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
