@@ -12,7 +12,7 @@ class Lang:
   value: str
 
 
-async def async_fetch_language(http: AioHttpHelperInterface) -> List[Lang]:
+async def async_language(http: AioHttpHelperInterface) -> List[Lang]:
   """
     This method will use ``http`` to request ``/problemset/submit``, and parse language options
 
@@ -25,7 +25,7 @@ async def async_fetch_language(http: AioHttpHelperInterface) -> List[Lang]:
         import asyncio
         from codeforces_core.account import async_login
         from codeforces_core.httphelper import HttpHelper
-        from codeforces_core.language import async_fetch_language
+        from codeforces_core.language import async_language
 
         async def demo():
           # http = HttpHelper(token_path='/tmp/cache_token', cookie_jar_path='/tmp/cache_cookie_jar')
@@ -33,7 +33,7 @@ async def async_fetch_language(http: AioHttpHelperInterface) -> List[Lang]:
           await http.open_session()
           result = await async_login(http=http, handle='<handle>', password='<password>')
           assert(result.success)
-          result = await async_fetch_language(http)
+          result = await async_language(http)
           for item in result:
             print(item)
           await http.close_session()

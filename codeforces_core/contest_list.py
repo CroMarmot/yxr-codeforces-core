@@ -50,7 +50,7 @@ def parse_div(title: str) -> str:
 
 
 # 获取已经解决的 统计
-async def async_fetch_solved_count(http: AioHttpHelperInterface, solved_path: str):
+async def async_solved_count(http: AioHttpHelperInterface, solved_path: str):
   solved_string = await http.async_post("/data/contests", {'action': 'getSolvedProblemCountsByContest'}, csrf=True)
   solved_json = json.loads(solved_string)
   open(solved_path, 'w').write(solved_string)
@@ -122,7 +122,7 @@ def parse_contest_list(raw_contests: str, upcoming: bool) -> List[ContestListIte
 
 
 # This function is to simulate web request, do not do the cache
-async def async_list_contest(http: AioHttpHelperInterface, page: int = 1) -> ContestList:
+async def async_contest_list(http: AioHttpHelperInterface, page: int = 1) -> ContestList:
   """
     This method will use ``http`` for get contests page, you can both login or not login
 
@@ -136,14 +136,14 @@ async def async_list_contest(http: AioHttpHelperInterface, page: int = 1) -> Con
 
         import asyncio
         from codeforces_core.httphelper import HttpHelper
-        from codeforces_core.contest_list import async_list_contest
+        from codeforces_core.contest_list import async_contest_list
         
         async def demo():
           # http = HttpHelper(token_path='/tmp/cache_token', cookie_jar_path='/tmp/cache_cookie_jar')
           http = HttpHelper(token_path='', cookie_jar_path='')
           await http.open_session()
           # you can login before get list
-          result = await async_list_contest(http=http)
+          result = await async_contest_list(http=http)
           for c in result.upcomming[:5]:
               print(c)
           for c in result.history[:5]:

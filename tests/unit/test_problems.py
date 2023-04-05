@@ -6,11 +6,11 @@ pytest_plugins = ('pytest_asyncio', )
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_problems():
-  from codeforces_core.problems import async_fetch_problems
+async def test_async_problems():
+  from codeforces_core.problems import async_problems
   mahh = MockAioHttpHelper()
 
-  result = await async_fetch_problems(mahh, contest_id='1779')
+  result = await async_problems(mahh, contest_id='1779')
   assert len(result) == 8
 
   A = result[0]

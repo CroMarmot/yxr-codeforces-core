@@ -48,7 +48,7 @@ class ProblemInfo:
   note: str
 
 
-async def async_fetch_problems(http: AioHttpHelperInterface, contest_id: str) -> List[ProblemInfo]:
+async def async_problems(http: AioHttpHelperInterface, contest_id: str) -> List[ProblemInfo]:
   """
     This method will use ``http`` to request ``/contest/<contest_id>/problems``, and parse to struct result
 
@@ -63,14 +63,14 @@ async def async_fetch_problems(http: AioHttpHelperInterface, contest_id: str) ->
 
         import asyncio
         from codeforces_core.httphelper import HttpHelper
-        from codeforces_core.problems import async_fetch_problems
+        from codeforces_core.problems import async_problems
 
         async def demo():
           # http = HttpHelper(token_path='/tmp/cache_token', cookie_jar_path='/tmp/cache_cookie_jar')
           http = HttpHelper(token_path='', cookie_jar_path='')
           await http.open_session()
           # you can login before request
-          result = await async_fetch_problems(http=http, contest_id='1779')
+          result = await async_problems(http=http, contest_id='1779')
           print(len(result))
           print(result[0])
           await http.close_session()

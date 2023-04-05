@@ -6,11 +6,11 @@ pytest_plugins = ('pytest_asyncio', )
 
 
 @pytest.mark.asyncio
-async def test_async_list_contest():
-  from codeforces_core.contest_list import async_list_contest, CodeforcesUser
+async def test_async_contest_list():
+  from codeforces_core.contest_list import async_contest_list, CodeforcesUser
   mahh = MockAioHttpHelper()
 
-  result = await async_list_contest(mahh)
+  result = await async_contest_list(mahh)
   assert len(result.upcomming) == 5
   assert len(result.history) == 100
 

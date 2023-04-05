@@ -19,7 +19,7 @@ GET_MOCK_LIST: Dict[str, str] = {
     '/contest/1779/standings/page/.*$': "contest_1799_standing.html",
     '/contest/1779/standings/friends/true$': "contest_1799_standing_friends.html",
     '/contest/1779/problem/F$': "contest_1779_problem_F.html",
-    '/problemset/submit$':"problemset_submit.html",
+    '/problemset/submit$': "problemset_submit.html",
 }
 
 # The key is regex str instead of str

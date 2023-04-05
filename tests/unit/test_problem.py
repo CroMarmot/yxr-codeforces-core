@@ -8,11 +8,11 @@ pytest_plugins = ('pytest_asyncio', )
 
 
 @pytest.mark.asyncio
-async def test_async_fetch_problems():
-  from codeforces_core.problem import async_fetch_problem
+async def test_async_problems():
+  from codeforces_core.problem import async_problem
   mahh = MockAioHttpHelper()
 
-  result = await async_fetch_problem(mahh, contest_id='1779', level='F')
+  result = await async_problem(mahh, contest_id='1779', level='F')
   print(result)
   assert result.status == ParseProblemResult.Status.NOTVIS
   assert result.status == 'NOTVIS'
