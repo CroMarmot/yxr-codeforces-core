@@ -6,6 +6,8 @@
 Welcome to yxr-codeforces-core's documentation!
 ===============================================
 
+some python3.8+ codeforces api
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
