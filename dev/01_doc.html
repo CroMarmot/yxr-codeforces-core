@@ -228,12 +228,7 @@ make<span class="w"> </span>html
 </section>
 <section id="live-doc">
 <h2>Live doc<a class="headerlink" href="#live-doc" title="Permalink to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># This is hard to use, sometimes not refresh page</span>
-<span class="nb">cd</span><span class="w"> </span>docs
-sphinx-autobuild<span class="w"> </span>.<span class="w"> </span>./_build/html/
-
-<span class="c1"># the better way</span>
-<span class="nb">cd</span><span class="w"> </span>docs<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>clean<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>..<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sphinx-apidoc<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>docs/<span class="w"> </span>.<span class="w"> </span>tests<span class="w"> </span>setup.py<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>docs<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>html<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>..
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>docs<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>clean<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>..<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sphinx-apidoc<span class="w"> </span>-f<span class="w"> </span>-o<span class="w"> </span>docs/<span class="w"> </span>.<span class="w"> </span>tests<span class="w"> </span>setup.py<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>docs<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>make<span class="w"> </span>html<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span>..
 </pre></div>
 </div>
 </section>

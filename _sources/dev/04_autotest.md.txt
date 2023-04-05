@@ -21,7 +21,7 @@ the output is at `htmlcov`
 ## Static type test
 
 ```bash
-mypy codeforces_core
+mypy --ignore-missing-imports codeforces_core
 ```
 
 ## Static gen
