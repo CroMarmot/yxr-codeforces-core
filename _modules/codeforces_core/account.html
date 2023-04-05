@@ -215,10 +215,9 @@
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
 
-<span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">CF_HOST</span>
 <span class="kn">from</span> <span class="nn">.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
 
-<span class="n">default_login_url</span> <span class="o">=</span> <span class="n">CF_HOST</span> <span class="o">+</span> <span class="s2">&quot;/enter?back=</span><span class="si">%2F</span><span class="s2">&quot;</span>
+<span class="n">default_login_url</span> <span class="o">=</span> <span class="s2">&quot;/enter?back=</span><span class="si">%2F</span><span class="s2">&quot;</span>
 
 
 <div class="viewcode-block" id="LoginResult"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.account.LoginResult">[docs]</a><span class="nd">@dataclass</span>
@@ -270,7 +269,7 @@
 <span class="c1"># TODO 已经登陆账号A, 再调用登陆账号B是不行的, 这个逻辑应该是由外部控制，调用时应该确保未登录状态</span>
 <div class="viewcode-block" id="async_login"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.account.async_login">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_login</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span>
                       <span class="n">handle</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                      <span class="n">passwd</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                      <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                       <span class="n">login_url</span><span class="o">=</span><span class="n">default_login_url</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LoginResult</span><span class="p">:</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This method will use ``http`` for login request, and  :py:func:`is_user_logged_in()` for login check</span>
@@ -292,7 +291,7 @@
 <span class="sd">          # http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
 <span class="sd">          http = HttpHelper(token_path=&#39;&#39;, cookie_jar_path=&#39;&#39;)</span>
 <span class="sd">          await http.open_session()</span>
-<span class="sd">          result = await async_login(http=http, handle=&#39;&lt;handle&gt;&#39;, passwd=&#39;&lt;password&gt;&#39;)</span>
+<span class="sd">          result = await async_login(http=http, handle=&#39;&lt;handle&gt;&#39;, password=&#39;&lt;password&gt;&#39;)</span>
 <span class="sd">          assert(result.success)</span>
 
 <span class="sd">          html_data = await http.async_get(&#39;https://codeforces.com&#39;)</span>
@@ -315,7 +314,7 @@
       <span class="s1">&#39;ftaa&#39;</span><span class="p">:</span> <span class="n">ftaa</span><span class="p">,</span>
       <span class="s1">&#39;bfaa&#39;</span><span class="p">:</span> <span class="n">bfaa</span><span class="p">,</span>
       <span class="s1">&#39;handleOrEmail&#39;</span><span class="p">:</span> <span class="n">handle</span><span class="p">,</span>
-      <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="n">passwd</span><span class="p">,</span>
+      <span class="s1">&#39;password&#39;</span><span class="p">:</span> <span class="n">password</span><span class="p">,</span>
       <span class="s1">&#39;remember&#39;</span><span class="p">:</span> <span class="s1">&#39;on&#39;</span><span class="p">,</span>
   <span class="p">}</span>
   <span class="n">html_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_post</span><span class="p">(</span><span class="n">login_url</span><span class="p">,</span> <span class="n">login_data</span><span class="p">)</span>
@@ -332,15 +331,16 @@
   <span class="k">else</span><span class="p">:</span>
     <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
 
-  <span class="k">return</span> <span class="n">LoginResult</span><span class="p">(</span><span class="n">html</span><span class="o">=</span><span class="n">html_data</span><span class="p">,</span>
-                     <span class="n">csrf</span><span class="o">=</span><span class="n">csrf_token</span><span class="p">,</span>
-                     <span class="n">ftaa</span><span class="o">=</span><span class="n">ftaa</span><span class="p">,</span>
-                     <span class="n">bfaa</span><span class="o">=</span><span class="n">bfaa</span><span class="p">,</span>
-                     <span class="n">uc</span><span class="o">=</span><span class="n">uc</span><span class="p">,</span>
-                     <span class="n">usmc</span><span class="o">=</span><span class="n">usmc</span><span class="p">,</span>
-                     <span class="c1"># cc=cc,</span>
-                     <span class="c1"># pc=pc,</span>
-                     <span class="n">success</span><span class="o">=</span><span class="n">success</span><span class="p">)</span></div>
+  <span class="k">return</span> <span class="n">LoginResult</span><span class="p">(</span>
+      <span class="n">html</span><span class="o">=</span><span class="n">html_data</span><span class="p">,</span>
+      <span class="n">csrf</span><span class="o">=</span><span class="n">csrf_token</span><span class="p">,</span>
+      <span class="n">ftaa</span><span class="o">=</span><span class="n">ftaa</span><span class="p">,</span>
+      <span class="n">bfaa</span><span class="o">=</span><span class="n">bfaa</span><span class="p">,</span>
+      <span class="n">uc</span><span class="o">=</span><span class="n">uc</span><span class="p">,</span>
+      <span class="n">usmc</span><span class="o">=</span><span class="n">usmc</span><span class="p">,</span>
+      <span class="c1"># cc=cc,</span>
+      <span class="c1"># pc=pc,</span>
+      <span class="n">success</span><span class="o">=</span><span class="n">success</span><span class="p">)</span></div>
 </pre></div>
         </article>
       </div>

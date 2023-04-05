@@ -36,10 +36,34 @@ codeforces\_core.constants module
    :undoc-members:
    :show-inheritance:
 
-codeforces\_core.contest module
--------------------------------
+codeforces\_core.contest\_list module
+-------------------------------------
 
-.. automodule:: codeforces_core.contest
+.. automodule:: codeforces_core.contest_list
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.contest\_meta module
+-------------------------------------
+
+.. automodule:: codeforces_core.contest_meta
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.contest\_register module
+-----------------------------------------
+
+.. automodule:: codeforces_core.contest_register
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.contest\_standing module
+-----------------------------------------
+
+.. automodule:: codeforces_core.contest_standing
    :members:
    :undoc-members:
    :show-inheritance:
@@ -52,10 +76,10 @@ codeforces\_core.httphelper module
    :undoc-members:
    :show-inheritance:
 
-codeforces\_core.judge module
------------------------------
+codeforces\_core.language module
+--------------------------------
 
-.. automodule:: codeforces_core.judge
+.. automodule:: codeforces_core.language
    :members:
    :undoc-members:
    :show-inheritance:
@@ -68,6 +92,14 @@ codeforces\_core.problem module
    :undoc-members:
    :show-inheritance:
 
+codeforces\_core.problems module
+--------------------------------
+
+.. automodule:: codeforces_core.problems
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 codeforces\_core.submit module
 ------------------------------
 
@@ -76,10 +108,42 @@ codeforces\_core.submit module
    :undoc-members:
    :show-inheritance:
 
-codeforces\_core.ui module
---------------------------
+codeforces\_core.unused\_contest module
+---------------------------------------
 
-.. automodule:: codeforces_core.ui
+.. automodule:: codeforces_core.unused_contest
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.unused\_http module
+------------------------------------
+
+.. automodule:: codeforces_core.unused_http
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.unused\_judge module
+-------------------------------------
+
+.. automodule:: codeforces_core.unused_judge
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.unused\_problem module
+---------------------------------------
+
+.. automodule:: codeforces_core.unused_problem
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.unused\_ui module
+----------------------------------
+
+.. automodule:: codeforces_core.unused_ui
    :members:
    :undoc-members:
    :show-inheritance:

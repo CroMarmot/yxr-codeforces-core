@@ -216,7 +216,6 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Tuple</span>
 
 <span class="kn">from</span> <span class="nn">codeforces_core.account</span> <span class="kn">import</span> <span class="n">extract_channel</span>
-<span class="kn">from</span> <span class="nn">codeforces_core.constants</span> <span class="kn">import</span> <span class="n">CF_HOST</span>
 <span class="kn">from</span> <span class="nn">codeforces_core.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -249,13 +248,13 @@
 <span class="sd">        from codeforces_core.httphelper import HttpHelper</span>
 <span class="sd">        from codeforces_core.account import async_login</span>
 <span class="sd">        from codeforces_core.websocket import create_ws_task, display_ws</span>
-<span class="sd">        from codeforces_core.submit import async_submit</span>
+<span class="sd">        from codeforces_core.submit import async__submit</span>
 
 <span class="sd">        async def demo():</span>
 <span class="sd">          # http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
 <span class="sd">          http = HttpHelper(token_path=&#39;&#39;, cookie_jar_path=&#39;&#39;)</span>
 <span class="sd">          await http.open_session()</span>
-<span class="sd">          result = await async_login(http=http, handle=&#39;&lt;handle&gt;&#39;, passwd=&#39;&lt;password&gt;&#39;)</span>
+<span class="sd">          result = await async_login(http=http, handle=&#39;&lt;handle&gt;&#39;, password=&#39;&lt;password&gt;&#39;)</span>
 <span class="sd">          assert(result.success)</span>
 <span class="sd">          task = create_ws_task(http, ws_handler=display_ws)</span>
 <span class="sd">          # submit code in webpage</span>
@@ -275,27 +274,27 @@
   <span class="k">return</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="n">http</span><span class="o">.</span><span class="n">websockets</span><span class="p">(</span><span class="n">ws_url</span><span class="p">,</span> <span class="n">ws_handler</span><span class="p">))</span></div>
 
 
-<span class="c1"># https://codeforces.com/contest/&lt;contestid&gt;/my 会多出两个 meta</span>
+<span class="c1"># https://codeforces.com/contest/&lt;contest_id&gt;/my 会多出两个 meta</span>
 <span class="c1">#    &lt;meta name=&quot;cc&quot; content=&quot;xxx&quot;/&gt;</span>
 <span class="c1">#    &lt;meta name=&quot;pc&quot; content=&quot;yyy&quot;/&gt;</span>
 <span class="c1"># 这两个可以监听 题目测试时 的通过 百分比 变化</span>
-<div class="viewcode-block" id="create_contest_ws_task"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.websocket.create_contest_ws_task">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">create_contest_ws_task</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contestid</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<div class="viewcode-block" id="create_contest_ws_task"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.websocket.create_contest_ws_task">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">create_contest_ws_task</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                                  <span class="n">ws_handler</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Task</span><span class="p">:</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This method will use ``http`` to create contest specific websocket, and ``ws_handler`` to handle each ws message</span>
 
 <span class="sd">    :param http: AioHttpHelperInterface </span>
-<span class="sd">    :param contestid: contest id in the url</span>
+<span class="sd">    :param contest_id: contest id in the url</span>
 <span class="sd">    :param ws_handler: function to handler messages </span>
 
 <span class="sd">    :returns: the task which run ws</span>
 
 <span class="sd">    Examples:</span>
 
-<span class="sd">    See docstring of :py:func:`codeforces_core.submit.async_submit()`</span>
+<span class="sd">    See docstring of :py:func:`codeforces_core.submit.async__submit()`</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="n">epoch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># s -&gt; ms</span>
-  <span class="n">html_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">CF_HOST</span><span class="si">}</span><span class="s2">/contest/</span><span class="si">{</span><span class="n">contestid</span><span class="si">}</span><span class="s2">/my&quot;</span><span class="p">)</span>
+  <span class="n">html_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/contest/</span><span class="si">{</span><span class="n">contest_id</span><span class="si">}</span><span class="s2">/my&quot;</span><span class="p">)</span>
   <span class="n">uc</span><span class="p">,</span> <span class="n">usmc</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">pc</span> <span class="o">=</span> <span class="n">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">)</span>
   <span class="k">assert</span> <span class="n">cc</span> <span class="ow">and</span> <span class="n">pc</span>
   <span class="n">ws_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;wss://pubsub.codeforces.com/ws/s_</span><span class="si">{</span><span class="n">pc</span><span class="si">}</span><span class="s2">/s_</span><span class="si">{</span><span class="n">cc</span><span class="si">}</span><span class="s2">?_=</span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2">&amp;tag=&amp;time=&amp;eventid=&quot;</span>

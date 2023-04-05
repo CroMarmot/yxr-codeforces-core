@@ -217,7 +217,7 @@
 <h2>codeforces_core.account module<a class="headerlink" href="#codeforces-core-account-module" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.account.</span></span><span class="sig-name descname"><span class="pre">async_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">passwd</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'https://codeforces.com/enter?back=%2F'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../codeforces_core.html#codeforces_core.account.LoginResult" title="codeforces_core.account.LoginResult"><span class="pre">LoginResult</span></a></span></span><a class="reference internal" href="../_modules/codeforces_core/account.html#async_login"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.account.</span></span><span class="sig-name descname"><span class="pre">async_login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">handle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">login_url</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'/enter?back=%2F'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../codeforces_core.html#codeforces_core.account.LoginResult" title="codeforces_core.account.LoginResult"><span class="pre">LoginResult</span></a></span></span><a class="reference internal" href="../_modules/codeforces_core/account.html#async_login"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> for login request, and  <a class="reference internal" href="../codeforces_core.html#codeforces_core.account.is_user_logged_in" title="codeforces_core.account.is_user_logged_in"><code class="xref py py-func docutils literal notranslate"><span class="pre">is_user_logged_in()</span></code></a> for login check</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -239,7 +239,7 @@
   <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
   <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
   <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
-  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_login</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="s1">&#39;&lt;handle&gt;&#39;</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_login</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="s1">&#39;&lt;handle&gt;&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">)</span>
   <span class="k">assert</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">)</span>
 
   <span class="n">html_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="s1">&#39;https://codeforces.com&#39;</span><span class="p">)</span>
@@ -253,11 +253,203 @@
 </dd></dl>
 
 </section>
+<section id="codeforces-core-contest-list-module">
+<h2>codeforces_core.contest_list module<a class="headerlink" href="#codeforces-core-contest-list-module" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.contest_list.</span></span><span class="sig-name descname"><span class="pre">async__contest_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../codeforces_core.html#codeforces_core.contest_list.ContestList" title="codeforces_core.contest_list.ContestList"><span class="pre">ContestList</span></a></span></span><a class="reference internal" href="../_modules/codeforces_core/contest_list.html#async__contest_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> for get contests page, you can both login or not login</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>page</strong> – the page in url</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the result</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.contest_list</span> <span class="kn">import</span> <span class="n">async__contest_list</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
+  <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
+  <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
+  <span class="c1"># you can login before get list</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async__contest_list</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">upcomming</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">history</span><span class="p">[:</span><span class="mi">5</span><span class="p">]:</span>
+      <span class="nb">print</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">close_session</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="codeforces-core-contest-register-module">
+<h2>codeforces_core.contest_register module<a class="headerlink" href="#codeforces-core-contest-register-module" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.contest_register.</span></span><span class="sig-name descname"><span class="pre">async_register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contest_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../codeforces_core.html#codeforces_core.contest_register.RegisterResult" title="codeforces_core.contest_register.RegisterResult"><span class="pre">RegisterResult</span></a></span></span><a class="reference internal" href="../_modules/codeforces_core/contest_register.html#async_register"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> for register request, you need login before</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>contest_id</strong> – Codeforces contest_id in url</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>the result</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.account</span> <span class="kn">import</span> <span class="n">async_login</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.contest_register</span> <span class="kn">import</span> <span class="n">async_register</span><span class="p">,</span> <span class="n">RegisterResultMsg</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
+  <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
+  <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_login</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="s1">&#39;&lt;handle&gt;&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">)</span>
+  <span class="k">assert</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_register</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span><span class="n">contest_id</span><span class="o">=</span><span class="s1">&#39;1811&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+  <span class="c1"># assert result.msg == RegisterResultMsg.HaveBeenRegistered</span>
+  <span class="c1"># assert result.msg == RegisterResultMsg.AlreadyRegistered</span>
+  <span class="c1"># assert result.msg == RegisterResultMsg.NoRegistrationIsOpenedNow</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">close_session</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="codeforces-core-contest-meta-module">
+<h2>codeforces_core.contest_meta module<a class="headerlink" href="#codeforces-core-contest-meta-module" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.contest_meta.</span></span><span class="sig-name descname"><span class="pre">async_contest_meta</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contest_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../codeforces_core.html#codeforces_core.contest_meta.ContestPage" title="codeforces_core.contest_meta.ContestPage"><span class="pre">ContestPage</span></a></span></span><a class="reference internal" href="../_modules/codeforces_core/contest_meta.html#async_contest_meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> to request <code class="docutils literal notranslate"><span class="pre">/contest/&lt;contest_id&gt;</span></code>, and parse to struct result</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>http</strong> – AioHttpHelperInterface</p></li>
+<li><p><strong>contest_id</strong> – contest id in url</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>parsed structured result</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.contest_meta</span> <span class="kn">import</span> <span class="n">async_contest_meta</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
+  <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
+  <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
+  <span class="c1"># you can login before request</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_contest_meta</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">contest_id</span> <span class="o">=</span> <span class="s1">&#39;1779&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">url</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">problems</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">materials</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">close_session</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="codeforces-core-problems-module">
+<h2>codeforces_core.problems module<a class="headerlink" href="#codeforces-core-problems-module" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.problems.</span></span><span class="sig-name descname"><span class="pre">async__problems</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contest_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../codeforces_core.html#codeforces_core.problems.ProblemInfo" title="codeforces_core.problems.ProblemInfo"><span class="pre">ProblemInfo</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/codeforces_core/problems.html#async__problems"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> to request <code class="docutils literal notranslate"><span class="pre">/contest/&lt;contest_id&gt;/problems</span></code>, and parse to struct result</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>http</strong> – AioHttpHelperInterface</p></li>
+<li><p><strong>contest_id</strong> – contest id in url</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>parsed structured result</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.problems</span> <span class="kn">import</span> <span class="n">async__problems</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
+  <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
+  <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
+  <span class="c1"># you can login before request</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async__problems</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">contest_id</span><span class="o">=</span><span class="s1">&#39;1779&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">close_session</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="codeforces-core-problem-module">
+<h2>codeforces_core.problem module<a class="headerlink" href="#codeforces-core-problem-module" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.problem.</span></span><span class="sig-name descname"><span class="pre">async__problem</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contest_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../codeforces_core.html#codeforces_core.problem.ParseProblemResult" title="codeforces_core.problem.ParseProblemResult"><span class="pre">ParseProblemResult</span></a></span></span><a class="reference internal" href="../_modules/codeforces_core/problem.html#async__problem"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> to request <code class="docutils literal notranslate"><span class="pre">/contest/&lt;contest_id&gt;/problems</span></code>, and parse to struct result</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>http</strong> – AioHttpHelperInterface</p></li>
+<li><p><strong>contest_id</strong> – contest id in url</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>parsed structured result</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.problem</span> <span class="kn">import</span> <span class="n">async__problem</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
+  <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
+  <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
+  <span class="c1"># you can login before request</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async__problem</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">contest_id</span><span class="o">=</span><span class="s1">&#39;1779&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">close_session</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
 <section id="codeforces-core-submit-module">
 <h2>codeforces_core.submit module<a class="headerlink" href="#codeforces-core-submit-module" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.submit.</span></span><span class="sig-name descname"><span class="pre">async_submit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">cid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/codeforces_core/submit.html#async_submit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.submit.</span></span><span class="sig-name descname"><span class="pre">async__submit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contest_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lang_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/codeforces_core/submit.html#async__submit"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> to post submit</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -275,21 +467,21 @@
 <span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
 <span class="kn">from</span> <span class="nn">codeforces_core.account</span> <span class="kn">import</span> <span class="n">async_login</span>
 <span class="kn">from</span> <span class="nn">codeforces_core.websocket</span> <span class="kn">import</span> <span class="n">create_contest_ws_task</span>
-<span class="kn">from</span> <span class="nn">codeforces_core.submit</span> <span class="kn">import</span> <span class="n">async_submit</span><span class="p">,</span> <span class="n">display_contest_ws</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.submit</span> <span class="kn">import</span> <span class="n">async__submit</span><span class="p">,</span> <span class="n">display_contest_ws</span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
   <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
   <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
   <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
-  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_login</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="s1">&#39;&lt;handle&gt;&#39;</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_login</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="s1">&#39;&lt;handle&gt;&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">)</span>
   <span class="k">assert</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">)</span>
 
   <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;before submit&#39;</span><span class="p">)</span>
-  <span class="n">submit_id</span><span class="p">,</span> <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_submit</span><span class="p">(</span><span class="n">http</span><span class="p">,</span> <span class="n">cid</span><span class="o">=</span><span class="s1">&#39;1777&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;F.cpp&#39;</span><span class="p">,</span> <span class="n">lang_id</span><span class="o">=</span><span class="s1">&#39;73&#39;</span><span class="p">)</span>
+  <span class="n">submit_id</span><span class="p">,</span> <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async__submit</span><span class="p">(</span><span class="n">http</span><span class="p">,</span> <span class="n">contest_id</span><span class="o">=</span><span class="s1">&#39;1777&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="s1">&#39;F.cpp&#39;</span><span class="p">,</span> <span class="n">lang_id</span><span class="o">=</span><span class="s1">&#39;73&#39;</span><span class="p">)</span>
   <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;submit id:&#39;</span><span class="p">,</span><span class="n">submit_id</span><span class="p">)</span>
 
   <span class="c1"># connect websocket before submit sometimes cannot receive message</span>
-  <span class="n">contest_task</span> <span class="o">=</span> <span class="n">create_contest_ws_task</span><span class="p">(</span><span class="n">http</span><span class="p">,</span> <span class="n">contestid</span><span class="o">=</span><span class="s1">&#39;1777&#39;</span><span class="p">,</span> <span class="n">ws_handler</span><span class="o">=</span><span class="n">display_contest_ws</span><span class="p">)</span>
+  <span class="n">contest_task</span> <span class="o">=</span> <span class="n">create_contest_ws_task</span><span class="p">(</span><span class="n">http</span><span class="p">,</span> <span class="n">contest_id</span><span class="o">=</span><span class="s1">&#39;1777&#39;</span><span class="p">,</span> <span class="n">ws_handler</span><span class="o">=</span><span class="n">display_contest_ws</span><span class="p">)</span>
   <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;contest ws created&quot;</span><span class="p">);</span>
 
   <span class="k">try</span><span class="p">:</span>
@@ -309,13 +501,13 @@
 <h2>codeforces_core.websocket module<a class="headerlink" href="#codeforces-core-websocket-module" title="Permalink to this heading">#</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.websocket.</span></span><span class="sig-name descname"><span class="pre">create_contest_ws_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contestid</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Task</span></span></span><a class="reference internal" href="../_modules/codeforces_core/websocket.html#create_contest_ws_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.websocket.</span></span><span class="sig-name descname"><span class="pre">create_contest_ws_task</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contest_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ws_handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Task</span></span></span><a class="reference internal" href="../_modules/codeforces_core/websocket.html#create_contest_ws_task"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
 <dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> to create contest specific websocket, and <code class="docutils literal notranslate"><span class="pre">ws_handler</span></code> to handle each ws message</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>http</strong> – AioHttpHelperInterface</p></li>
-<li><p><strong>contestid</strong> – contest id in the url</p></li>
+<li><p><strong>contest_id</strong> – contest id in the url</p></li>
 <li><p><strong>ws_handler</strong> – function to handler messages</p></li>
 </ul>
 </dd>
@@ -324,7 +516,7 @@
 </dd>
 </dl>
 <p>Examples:</p>
-<p>See docstring of <a class="reference internal" href="../codeforces_core.html#codeforces_core.submit.async_submit" title="codeforces_core.submit.async_submit"><code class="xref py py-func docutils literal notranslate"><span class="pre">codeforces_core.submit.async_submit()</span></code></a></p>
+<p>See docstring of <a class="reference internal" href="../codeforces_core.html#codeforces_core.submit.async__submit" title="codeforces_core.submit.async__submit"><code class="xref py py-func docutils literal notranslate"><span class="pre">codeforces_core.submit.async__submit()</span></code></a></p>
 </dd></dl>
 
 <dl class="py function">
@@ -348,13 +540,13 @@
 <span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
 <span class="kn">from</span> <span class="nn">codeforces_core.account</span> <span class="kn">import</span> <span class="n">async_login</span>
 <span class="kn">from</span> <span class="nn">codeforces_core.websocket</span> <span class="kn">import</span> <span class="n">create_ws_task</span><span class="p">,</span> <span class="n">display_ws</span>
-<span class="kn">from</span> <span class="nn">codeforces_core.submit</span> <span class="kn">import</span> <span class="n">async_submit</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.submit</span> <span class="kn">import</span> <span class="n">async__submit</span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
   <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
   <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
   <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
-  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_login</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="s1">&#39;&lt;handle&gt;&#39;</span><span class="p">,</span> <span class="n">passwd</span><span class="o">=</span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_login</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="s1">&#39;&lt;handle&gt;&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">)</span>
   <span class="k">assert</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">)</span>
   <span class="n">task</span> <span class="o">=</span> <span class="n">create_ws_task</span><span class="p">(</span><span class="n">http</span><span class="p">,</span> <span class="n">ws_handler</span><span class="o">=</span><span class="n">display_ws</span><span class="p">)</span>
   <span class="c1"># submit code in webpage</span>
@@ -363,6 +555,113 @@
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ws is done, result:&quot;</span><span class="p">,</span> <span class="n">task</span><span class="o">.</span><span class="n">result</span><span class="p">())</span>
   <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">:</span>
     <span class="k">pass</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">close_session</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="codeforces-core-contest-standing-module">
+<h2>codeforces_core.contest_standing module<a class="headerlink" href="#codeforces-core-contest-standing-module" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.contest_standing.</span></span><span class="sig-name descname"><span class="pre">async_common_standing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contest_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">page</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'1'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../codeforces_core.html#codeforces_core.contest_standing.Standing" title="codeforces_core.contest_standing.Standing"><span class="pre">Standing</span></a></span></span><a class="reference internal" href="../_modules/codeforces_core/contest_standing.html#async_common_standing"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> to request <code class="docutils literal notranslate"><span class="pre">/contest/&lt;contest_id&gt;/standings/page/&lt;page&gt;</span></code>, and parse to struct result</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>contest_id</strong> – contest id in url</p></li>
+<li><p><strong>page</strong> – pagination 1-index</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>parsed structured result</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.contest_standing</span> <span class="kn">import</span> <span class="n">async_common_standing</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
+  <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
+  <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_common_standing</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">contest_id</span><span class="o">=</span><span class="s1">&#39;1779&#39;</span><span class="p">,</span> <span class="n">page</span><span class="o">=</span><span class="s1">&#39;2&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">head</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">rows</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">close_session</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.contest_standing.</span></span><span class="sig-name descname"><span class="pre">async_friends_standing</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">contest_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../codeforces_core.html#codeforces_core.contest_standing.Standing" title="codeforces_core.contest_standing.Standing"><span class="pre">Standing</span></a></span></span><a class="reference internal" href="../_modules/codeforces_core/contest_standing.html#async_friends_standing"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> to request <code class="docutils literal notranslate"><span class="pre">/contest/&lt;contest_id&gt;/standings/friends/true</span></code>, and parse to struct result</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>contest_id</strong> – contest id in url</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>parsed structured result</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.account</span> <span class="kn">import</span> <span class="n">async_login</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.contest_standing</span> <span class="kn">import</span> <span class="n">async_friends_standing</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
+  <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
+  <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_login</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="s1">&#39;&lt;handle&gt;&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">)</span>
+  <span class="k">assert</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_friends_standing</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">contest_id</span><span class="o">=</span><span class="s1">&#39;1779&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">head</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">rows</span><span class="p">))</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">rows</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">close_session</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+<section id="codeforces-core-language-module">
+<h2>codeforces_core.language module<a class="headerlink" href="#codeforces-core-language-module" title="Permalink to this heading">#</a></h2>
+<dl class="py function">
+<dt class="sig sig-object py">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">codeforces_core.language.</span></span><span class="sig-name descname"><span class="pre">async__language</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">http</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface" title="codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface"><span class="pre">AioHttpHelperInterface</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../codeforces_core.html#codeforces_core.language.Lang" title="codeforces_core.language.Lang"><span class="pre">Lang</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../_modules/codeforces_core/language.html#async__language"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd><p>This method will use <code class="docutils literal notranslate"><span class="pre">http</span></code> to request <code class="docutils literal notranslate"><span class="pre">/problemset/submit</span></code>, and parse language options</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>parsed structured result</p>
+</dd>
+</dl>
+<p>Examples:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.account</span> <span class="kn">import</span> <span class="n">async_login</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.language</span> <span class="kn">import</span> <span class="n">async__language</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
+  <span class="c1"># http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
+  <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">(</span><span class="n">token_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_login</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="s1">&#39;&lt;handle&gt;&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">)</span>
+  <span class="k">assert</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">success</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async__language</span><span class="p">(</span><span class="n">http</span><span class="p">)</span>
+  <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
   <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">close_session</span><span class="p">()</span>
 
 <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
@@ -430,8 +729,15 @@
             <ul>
 <li><a class="reference internal" href="#">Examples</a><ul>
 <li><a class="reference internal" href="#codeforces-core-account-module">codeforces_core.account module</a></li>
+<li><a class="reference internal" href="#codeforces-core-contest-list-module">codeforces_core.contest_list module</a></li>
+<li><a class="reference internal" href="#codeforces-core-contest-register-module">codeforces_core.contest_register module</a></li>
+<li><a class="reference internal" href="#codeforces-core-contest-meta-module">codeforces_core.contest_meta module</a></li>
+<li><a class="reference internal" href="#codeforces-core-problems-module">codeforces_core.problems module</a></li>
+<li><a class="reference internal" href="#codeforces-core-problem-module">codeforces_core.problem module</a></li>
 <li><a class="reference internal" href="#codeforces-core-submit-module">codeforces_core.submit module</a></li>
 <li><a class="reference internal" href="#codeforces-core-websocket-module">codeforces_core.websocket module</a></li>
+<li><a class="reference internal" href="#codeforces-core-contest-standing-module">codeforces_core.contest_standing module</a></li>
+<li><a class="reference internal" href="#codeforces-core-language-module">codeforces_core.language module</a></li>
 </ul>
 </li>
 </ul>
