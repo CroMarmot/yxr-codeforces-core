@@ -1,5 +1,7 @@
 # yxr-codeforces-core(WIP)
 
+python3.8+ ([typing.Protocol](https://docs.python.org/3/library/typing.html#typing.Protocol) New in version 3.8.)
+
 | feature                          | code | inline example doc | unit test | e2e test |
 | -------------------------------- | ---- | ------------------ | --------- | -------- |
 | account login                    | ✅    | ✅                  | ✅         | ✅        |
