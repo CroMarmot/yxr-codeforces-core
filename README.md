@@ -17,6 +17,8 @@ python3.8+ ([typing.Protocol](https://docs.python.org/3/library/typing.html#typi
 | language list                    | ✅    | ✅                  | ✅         | ❌        |
 | pid/url parser                   | ❌    | ❌                  | ❌         | ❌        |
 
-## Refs
+# Docs
 
-<https://github.com/zshchun/cftools>
+[User](https://cromarmot.github.io/yxr-codeforces-core/user/index.html)
+
+[Developer](https://cromarmot.github.io/yxr-codeforces-core/dev/index.html)

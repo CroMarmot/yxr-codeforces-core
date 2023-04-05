@@ -1,9 +1,9 @@
 # Auto Test
 
 ```bash
-pytest -v test/unit
+pytest -v tests/unit
 # config `tests/e2e/e2e_test_config.py` before run command
-pytest -v test/e2e
+pytest -v tests/e2e
 ```
 
 ## Coverage test

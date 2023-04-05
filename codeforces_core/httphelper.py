@@ -1,8 +1,5 @@
 import logging
-from typing import Any, Callable, Dict, List, Optional, Tuple
-
-# from . import config
-from .constants import CF_HOST
+from typing import Any, Callable, Dict, Optional, Tuple
 from lxml import html
 from os import path
 import asyncio
@@ -11,6 +8,7 @@ import pyaes
 import json
 import re
 
+from .constants import CF_HOST
 from .interfaces.AioHttpHelper import AioHttpHelperInterface
 
 default_headers = {
