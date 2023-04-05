@@ -12,7 +12,6 @@ Menu
     02_debug
     03_lint
     04_autotest
-    05_rst_examples
 
 Lib in use
 ----------

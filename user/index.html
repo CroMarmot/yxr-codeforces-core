@@ -134,7 +134,7 @@
           <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
         </button>
       </div>
-      <label class="toc-overlay-icon toc-header-icon no-toc" for="__toc">
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
         <div class="visually-hidden">Toggle table of contents sidebar</div>
         <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
       </label>
@@ -159,6 +159,7 @@
 <li class="toctree-l1 current has-children current-page"><a class="current reference internal" href="#">User</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="00_install.html">Install</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01_examples.html">Examples</a></li>
+<li class="toctree-l2"><a class="reference internal" href="02_about.html">About</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../dev/index.html">Developer</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -167,7 +168,6 @@
 <li class="toctree-l2"><a class="reference internal" href="../dev/02_debug.html">Debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../dev/03_lint.html">Lint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../dev/04_autotest.html">Auto Test</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../dev/05_rst_examples.html">rst Examples</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../modules.html">yxr-codeforces-core</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -205,7 +205,7 @@
               <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
             </button>
           </div>
-          <label class="toc-overlay-icon toc-content-icon no-toc" for="__toc">
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
             <div class="visually-hidden">Toggle table of contents sidebar</div>
             <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
           </label>
@@ -213,6 +213,24 @@
         <article role="main">
           <section id="user">
 <h1>User<a class="headerlink" href="#user" title="Permalink to this heading">#</a></h1>
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.httphelper</span> <span class="kn">import</span> <span class="n">HttpHelper</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.account</span> <span class="kn">import</span> <span class="n">async_login</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.contest_meta</span> <span class="kn">import</span> <span class="n">async_contest_meta</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">demo</span><span class="p">():</span>
+  <span class="n">http</span> <span class="o">=</span> <span class="n">HttpHelper</span><span class="p">()</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">open_session</span><span class="p">()</span>
+  <span class="k">await</span> <span class="n">async_login</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">handle</span><span class="o">=</span><span class="s1">&#39;&lt;handle&gt;&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;&lt;password&gt;&#39;</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">async_contest_meta</span><span class="p">(</span><span class="n">http</span><span class="o">=</span><span class="n">http</span><span class="p">,</span> <span class="n">contest_id</span> <span class="o">=</span> <span class="s1">&#39;1779&#39;</span><span class="p">)</span>
+  <span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+  <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">close_session</span><span class="p">()</span>
+
+<span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">demo</span><span class="p">())</span>
+</pre></div>
+</div>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="00_install.html">Install</a><ul>
@@ -233,8 +251,13 @@
 <li class="toctree-l2"><a class="reference internal" href="01_examples.html#codeforces-core-language-module">codeforces_core.language module</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="02_about.html">About</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02_about.html#refs">Refs</a></li>
+</ul>
+</li>
 </ul>
 </div>
+</section>
 </section>
 
         </article>
@@ -280,8 +303,27 @@
         
       </footer>
     </div>
-    <aside class="toc-drawer no-toc">
+    <aside class="toc-drawer">
       
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">User</a><ul>
+<li><a class="reference internal" href="#quick-start">Quick Start</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
       
       
     </aside>
