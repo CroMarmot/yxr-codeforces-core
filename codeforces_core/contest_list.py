@@ -11,9 +11,6 @@ from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
 logger = logging.getLogger(__name__)
 
 
-def russian_2_utc(ts: int) -> int:
-  return ts + 5 * 60 * 60
-
 
 @dataclass
 class CodeforcesUser:
@@ -69,7 +66,7 @@ def ddhhmm2seconds(length: str) -> int:
 def is_contest_running(item: ContestListItem) -> bool:
   start = item.start
   end = start + ddhhmm2seconds(item.length)
-  now = datetime.now().astimezone(tz=None)
+  now = datetime.now()  # local time zone
   return now >= start and now < end
 
 
@@ -95,7 +92,7 @@ def parse_contest_list(raw_contests: str, upcoming: bool) -> List[ContestListIte
         ) for a in td[1].xpath('.//a')
     ]
     start = td[2].xpath('.//span')[0].text
-    start = russian_2_utc(int(datetime.strptime(start, "%b/%d/%Y %H:%M").timestamp()))
+    start = int(datetime.strptime(start+"+0300", "%b/%d/%Y %H:%M%z").timestamp()) # Russian + 3hours
     length = td[3].text.strip()
     participants = ''
     registration = False
