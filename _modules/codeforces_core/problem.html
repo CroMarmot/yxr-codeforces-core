@@ -259,7 +259,7 @@
   <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span></div>
 
 
-<div class="viewcode-block" id="async__problem"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.problem.async__problem">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async__problem</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParseProblemResult</span><span class="p">:</span>
+<div class="viewcode-block" id="async_problem"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.problem.async_problem">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_problem</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ParseProblemResult</span><span class="p">:</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This method will use ``http`` to request ``/contest/&lt;contest_id&gt;/problems``, and parse to struct result</span>
 
@@ -274,14 +274,14 @@
 
 <span class="sd">        import asyncio</span>
 <span class="sd">        from codeforces_core.httphelper import HttpHelper</span>
-<span class="sd">        from codeforces_core.problem import async__problem</span>
+<span class="sd">        from codeforces_core.problem import async_problem</span>
 
 <span class="sd">        async def demo():</span>
 <span class="sd">          # http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
 <span class="sd">          http = HttpHelper(token_path=&#39;&#39;, cookie_jar_path=&#39;&#39;)</span>
 <span class="sd">          await http.open_session()</span>
 <span class="sd">          # you can login before request</span>
-<span class="sd">          result = await async__problem(http=http, contest_id=&#39;1779&#39;, level=&#39;F&#39;)</span>
+<span class="sd">          result = await async_problem(http=http, contest_id=&#39;1779&#39;, level=&#39;F&#39;)</span>
 <span class="sd">          print(result)</span>
 <span class="sd">          await http.close_session()</span>
 

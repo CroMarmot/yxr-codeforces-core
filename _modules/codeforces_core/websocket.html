@@ -248,7 +248,7 @@
 <span class="sd">        from codeforces_core.httphelper import HttpHelper</span>
 <span class="sd">        from codeforces_core.account import async_login</span>
 <span class="sd">        from codeforces_core.websocket import create_ws_task, display_ws</span>
-<span class="sd">        from codeforces_core.submit import async__submit</span>
+<span class="sd">        from codeforces_core.submit import async_submit</span>
 
 <span class="sd">        async def demo():</span>
 <span class="sd">          # http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
@@ -291,7 +291,7 @@
 
 <span class="sd">    Examples:</span>
 
-<span class="sd">    See docstring of :py:func:`codeforces_core.submit.async__submit()`</span>
+<span class="sd">    See docstring of :py:func:`codeforces_core.submit.async_submit()`</span>
 <span class="sd">  &quot;&quot;&quot;</span>
   <span class="n">epoch</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="p">()</span> <span class="o">*</span> <span class="mi">1000</span><span class="p">)</span>  <span class="c1"># s -&gt; ms</span>
   <span class="n">html_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;/contest/</span><span class="si">{</span><span class="n">contest_id</span><span class="si">}</span><span class="s2">/my&quot;</span><span class="p">)</span>

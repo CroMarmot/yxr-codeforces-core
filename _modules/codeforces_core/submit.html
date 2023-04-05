@@ -225,7 +225,7 @@
 
 
 <span class="c1"># return (contest_id, html_text of contest/&lt;contest id&gt;/my )</span>
-<div class="viewcode-block" id="async__submit"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.submit.async__submit">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async__submit</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<div class="viewcode-block" id="async_submit"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.submit.async_submit">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_submit</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                         <span class="n">lang_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This method will use ``http`` to post submit</span>
@@ -243,7 +243,7 @@
 <span class="sd">        from codeforces_core.httphelper import HttpHelper</span>
 <span class="sd">        from codeforces_core.account import async_login</span>
 <span class="sd">        from codeforces_core.websocket import create_contest_ws_task</span>
-<span class="sd">        from codeforces_core.submit import async__submit, display_contest_ws</span>
+<span class="sd">        from codeforces_core.submit import async_submit, display_contest_ws</span>
 
 <span class="sd">        async def demo():</span>
 <span class="sd">          # http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
@@ -253,7 +253,7 @@
 <span class="sd">          assert(result.success)</span>
 
 <span class="sd">          print(&#39;before submit&#39;)</span>
-<span class="sd">          submit_id, resp = await async__submit(http, contest_id=&#39;1777&#39;, level=&#39;F&#39;, filename=&#39;F.cpp&#39;, lang_id=&#39;73&#39;)</span>
+<span class="sd">          submit_id, resp = await async_submit(http, contest_id=&#39;1777&#39;, level=&#39;F&#39;, filename=&#39;F.cpp&#39;, lang_id=&#39;73&#39;)</span>
 <span class="sd">          print(&#39;submit id:&#39;,submit_id)</span>
 
 <span class="sd">          # connect websocket before submit sometimes cannot receive message</span>
