@@ -223,9 +223,6 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="russian_2_utc"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.contest_list.russian_2_utc">[docs]</a><span class="k">def</span> <span class="nf">russian_2_utc</span><span class="p">(</span><span class="n">ts</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-  <span class="k">return</span> <span class="n">ts</span> <span class="o">+</span> <span class="mi">5</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span></div>
-
 
 <div class="viewcode-block" id="CodeforcesUser"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.contest_list.CodeforcesUser">[docs]</a><span class="nd">@dataclass</span>
 <span class="k">class</span> <span class="nc">CodeforcesUser</span><span class="p">:</span>
@@ -281,7 +278,7 @@
 <div class="viewcode-block" id="is_contest_running"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.contest_list.is_contest_running">[docs]</a><span class="k">def</span> <span class="nf">is_contest_running</span><span class="p">(</span><span class="n">item</span><span class="p">:</span> <span class="n">ContestListItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
   <span class="n">start</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">start</span>
   <span class="n">end</span> <span class="o">=</span> <span class="n">start</span> <span class="o">+</span> <span class="n">ddhhmm2seconds</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">length</span><span class="p">)</span>
-  <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+  <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>  <span class="c1"># local time zone</span>
   <span class="k">return</span> <span class="n">now</span> <span class="o">&gt;=</span> <span class="n">start</span> <span class="ow">and</span> <span class="n">now</span> <span class="o">&lt;</span> <span class="n">end</span></div>
 
 
@@ -307,7 +304,7 @@
         <span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">td</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//a&#39;</span><span class="p">)</span>
     <span class="p">]</span>
     <span class="n">start</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//span&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">russian_2_utc</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="s2">&quot;%b/</span><span class="si">%d</span><span class="s2">/%Y %H:%M&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">()))</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">start</span><span class="o">+</span><span class="s2">&quot;+0300&quot;</span><span class="p">,</span> <span class="s2">&quot;%b/</span><span class="si">%d</span><span class="s2">/%Y %H:%M%z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span> <span class="c1"># Russian + 3hours</span>
     <span class="n">length</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
     <span class="n">participants</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
     <span class="n">registration</span> <span class="o">=</span> <span class="kc">False</span>
