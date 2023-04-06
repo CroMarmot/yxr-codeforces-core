@@ -23,9 +23,7 @@ python3 -m venv venv
 
 ```bash
 pip3 install .
-pip3 install .[test]
 pip3 install .[dev]
-pip3 install .[doc]
 ```
 
 ## Build

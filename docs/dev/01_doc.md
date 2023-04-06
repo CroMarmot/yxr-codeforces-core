@@ -3,7 +3,7 @@
 auto generate from code
 
 ```bash
-sphinx-apidoc -f -o docs/ . tests setup.py
+sphinx-apidoc -f -o docs/ codeforces_core/
 ```
 
 This will force overwriting
@@ -20,7 +20,7 @@ The output file is at `./docs/_build/html/`
 ## Live doc
 
 ```bash
-cd docs && make clean && cd .. && sphinx-apidoc -f -o docs/ . tests setup.py && cd docs && make html && cd ..
+cd docs && make clean && cd .. && sphinx-apidoc -f -o docs/ codeforces_core/ && cd docs && make html && cd ..
 ```
 
 ## rst Examples
