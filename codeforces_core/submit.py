@@ -5,15 +5,17 @@ from os import path
 from typing import Any, List, Tuple
 from lxml import html
 
+from codeforces_core.util import typedxpath
+
 # from .ui import BLUE, GREEN, RED, redraw
-from . import account
+from .account import is_user_logged_in
 from .interfaces.AioHttpHelper import AioHttpHelperInterface
+from .url import problem_url_parse
 
 logger = logging.getLogger(__name__)
 
 
-# return (contest_id, html_text of contest/<contest id>/my )
-async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str, filename: str,
+async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str, file_path: str,
                        lang_id: str) -> Tuple[str, str]:
   """
     This method will use ``http`` to post submit
@@ -21,7 +23,7 @@ async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str
     :param http: AioHttpHelperInterface 
     :param ws_handler: function to handler messages 
 
-    :returns: the task which run ws
+    :returns: (submission_id, html_text of contest/<contest id>/my )
 
     Examples:
 
@@ -41,7 +43,7 @@ async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str
           assert(result.success)
 
           print('before submit')
-          submit_id, resp = await async_submit(http, contest_id='1777', level='F', filename='F.cpp', lang_id='73')
+          submit_id, resp = await async_submit(http, contest_id='1777', level='F', file_path='F.cpp', lang_id='73')
           print('submit id:',submit_id)
 
           # connect websocket before submit sometimes cannot receive message
@@ -62,8 +64,8 @@ async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str
   if not contest_id or not level:
     logger.error("[!] Invalid contestID or level")
     return '', ''
-  if not path.isfile(filename):
-    logger.error("[!] File not found : {}".format(filename))
+  if not path.isfile(file_path):
+    logger.error("[!] File not found : {}".format(file_path))
     return '', ''
 
   token = http.get_tokens()
@@ -77,13 +79,13 @@ async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str
   }
   url = '/contest/{}/problem/{}?csrf_token={}'.format(contest_id, level.upper(), token['csrf'])
   form = http.create_form(submit_form)
-  form.add_field('sourceFile', open(filename, 'rb'), filename=filename)
+  form.add_field('sourceFile', open(file_path, 'rb'), filename=file_path)
   resp = await http.async_post(url, form)  # 正常是 302 -> https://codeforces.com/contest/<contest id>/my
-  if not account.is_user_logged_in(resp):
+  if not is_user_logged_in(resp):
     logger.error("Login required")
     return '', resp
   doc = html.fromstring(resp)
-  for e in doc.xpath('.//span[@class="error for__sourceFile"]'):
+  for e in typedxpath(doc, './/span[@class="error for__sourceFile"]'):
     if e.text == 'You have submitted exactly the same code before':
       logger.error("[!] " + e.text)
       return '', resp
@@ -106,10 +108,10 @@ class SubmissionPageResult:
 # status_url = f'/contest/{contest_id}/my'
 # resp = await http.async_get(status_url)
 # status = parse_submit_status(resp)
-def parse_submit_status(html_page) -> List[SubmissionPageResult]:
+def parse_submit_status(html_page: str) -> List[SubmissionPageResult]:
   ret: List[SubmissionPageResult] = []
   doc = html.fromstring(html_page)
-  tr = doc.xpath('.//table[@class="status-frame-datatable"]/tr[@data-submission-id]')
+  tr = typedxpath(doc, './/table[@class="status-frame-datatable"]/tr[@data-submission-id]')
   for t in tr:
     td = t.xpath('.//td')
     submission_id = ''.join(td[0].itertext()).strip()
@@ -119,6 +121,14 @@ def parse_submit_status(html_page) -> List[SubmissionPageResult]:
     prog_mem = td[7].text.strip().replace('\xa0', ' ').split()[0]
     ret.append(SubmissionPageResult(id=submission_id, url=url, verdict=verdict, time_ms=prog_time, mem_bytes=prog_mem))
   return ret
+
+
+async def async_fetch_submission_page(http: AioHttpHelperInterface, problem_url: str) -> List[SubmissionPageResult]:
+  contest_id, problem_key = problem_url_parse(problem_url)
+  # 正常是 302 -> https://codeforces.com/contest/<contest id>/my
+  html_page = await http.async_get(f'/contest/{contest_id}/my')
+  result = parse_submit_status(html_page)
+  return list(filter(lambda o: o.url.endswith(problem_key), result))
 
 
 @dataclass

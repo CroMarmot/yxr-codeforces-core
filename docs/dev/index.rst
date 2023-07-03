@@ -12,6 +12,7 @@ Menu
     02_debug
     03_lint
     04_autotest
+    05_publish
 
 Lib in use
 ----------

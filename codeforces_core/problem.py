@@ -76,7 +76,7 @@ async def async_problem(http: AioHttpHelperInterface, contest_id: str, level: st
         asyncio.run(demo())
   """
   resp = await http.async_get(f'/contest/{contest_id}/problem/{level}')
-  problem = ParseProblemResult()
+  problem = ParseProblemResult(html=resp)
   soup = BeautifulSoup(resp, 'lxml')
 
   # TODO implememt soup_find function to assert type for mypy

@@ -2,7 +2,7 @@ import asyncio
 import os
 import re
 import aiohttp
-from typing import Any, Callable, Dict
+from typing import Any, AsyncIterator, Callable, Dict, Tuple
 
 from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
 from ..constant import test_dir
@@ -13,7 +13,7 @@ GET_MOCK_LIST: Dict[str, str] = {
     'notlogged-codeforces\\.com$': 'notlogged-codeforces.com.html',
     '/enter\\?back=%2F$': 'notlogged-codeforces.com.html',
     '/contest/1777/my$': 'contest_1777_submission.html',
-    "/contests/page/1$": 'contests.html',
+    "/contests/page/.*$": 'contests.html',
     "/contest/1779$": 'contest_1779.html',
     "/contest/1779/problems$": 'contest_1779_problems.html',
     '/contest/1779/standings/page/.*$': "contest_1799_standing.html",
@@ -118,24 +118,23 @@ class MockAioHttpHelper(AioHttpHelperInterface):
       form.add_field(k, v)
     return form
 
-  async def websockets(self, url: str, callback: Callable[[Any], bool]) -> Any:
+  async def websockets(self, url: str, callback: Callable[[Any], Tuple[bool, Any]]) -> AsyncIterator[Any]:
     try:
       for k, v in WS_MOCK_LIST.items():
         if re.match(k, url):
           path = os.path.join(test_dir, 'unit/mock', WS_MOCK_LIST[k])
-          ret = []
           with open(path, 'r') as f:
             lines = f.readlines()
             for line in lines:
               endwatch, obj = callback(line)
-              ret.append(obj)
+              await asyncio.sleep(0.2)
+              yield obj
               if endwatch:
-                return ret
-            return ret
-
+                return
+            return
       # No url matched
       print("POST", url)
       assert (False)
     except Exception as e:
       # session closed?
-      return False
+      return

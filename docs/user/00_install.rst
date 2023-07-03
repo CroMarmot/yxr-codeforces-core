@@ -1,7 +1,7 @@
 Install
 =======
 
-with github
+With github
 -----------
 
 .. code-block::
@@ -11,8 +11,8 @@ with github
     # Install at local
     pip3 install -e . --config-settings editable_mode=compat
 
-Future(NOT SUPPORT YET!WIP)
----------------------------
+With pypi
+---------
 
 .. code-block::
 

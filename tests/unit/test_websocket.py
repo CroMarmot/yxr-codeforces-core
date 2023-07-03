@@ -7,7 +7,7 @@ from ..helper.MockAioHttpHelper import BEFORE_ASYNC_POST, MockAioHttpHelper
 
 @pytest.mark.asyncio
 async def test_websocket():
-  from codeforces_core.websocket import create_contest_ws_task
+  from codeforces_core.websocket import create_contest_ws_task_yield
   from ..helper.MockAioHttpHelper import BEFORE_OPEN_SESSION
   mahh = MockAioHttpHelper()
 
@@ -23,8 +23,9 @@ async def test_websocket():
     return False, data
 
   await mahh.open_session()
-  task = create_contest_ws_task(http=mahh, contest_id='1777', ws_handler=ws_checker)
-  res = await task
+  res = []
+  async for ret in create_contest_ws_task_yield(http=mahh, contest_id='1777', ws_handler=ws_checker):
+    res.append(ret)
   assert len(res) == 8
   assert res[
       0] == r'{"id":11,"channel":"s_d3dd4b58d7fa6daf07e56129caa438cdebe15779","text":"{\"t\":\"s\",\"d\":[5973095027388772356,200625609,1777,1746206,\"TESTS\",null,\"TESTING\",0,4,0,0,148217099,\"215020\",\"04.04.2023 3:21:48\",\"04.04.2023 3:21:48\",2147483647,73,0]}"}' + '\n'

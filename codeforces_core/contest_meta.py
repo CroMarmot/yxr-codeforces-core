@@ -1,9 +1,11 @@
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import List
+from typing import List, cast
 from bs4 import BeautifulSoup
 import bs4
 from lxml import html
+from lxml.etree import _Element
+from lxml.html import HtmlMixin
 
 from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
 from codeforces_core.util import soup_find_bs4Tag
@@ -96,15 +98,15 @@ def parse_problems(resp: str) -> List[ProblemMeta]:
 
 def parse_materials(resp: str) -> List[Materials]:
   doc = html.fromstring(resp)
-  captions = doc.xpath('.//div[@class="caption titled"]')
+  captions = cast(List[_Element], doc.xpath('.//div[@class="caption titled"]'))
   ret = []
   for c in captions:
     title = c.text[1:].strip()
     if title != 'Contest materials':
       continue
-    links = c.getparent().xpath('.//a[@href]')
+    links = cast(List[_Element], c.getparent().xpath('.//a[@href]'))
     for a in links:
-      title_text = html.fromstring(a.get('title')).text_content()
+      title_text = str(cast(HtmlMixin, html.fromstring(a.get('title'))).text_content())
       ret.append(Materials(text=title_text, url=a.get('href')))
   return ret
 

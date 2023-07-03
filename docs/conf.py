@@ -13,7 +13,8 @@ sys.path.insert(0, os.path.abspath(".."))
 project = 'yxr-codeforces-core'
 copyright = '2023, YeXiaoRain'
 author = 'YeXiaoRain'
-release = '0.0.1'
+from codeforces_core import __version__
+release = __version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

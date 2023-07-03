@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 from enum import Enum
+from typing import List, cast
 from lxml import html
+from lxml.etree import _Element
 
 from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
 from . import util
@@ -56,7 +58,7 @@ async def async_register(http: AioHttpHelperInterface, contest_id: str) -> Regis
   url = f'/contestRegistration/{contest_id}'
   resp = await http.async_get(url)
   doc = html.fromstring(resp)
-  title = doc.xpath('.//title')[0].text
+  title = cast(List[_Element], doc.xpath('.//title'))[0].text
   msg = util.show_message(resp)  # AlreadyRegistered
   if msg:
     return RegisterResult(title=title, msg=msg)

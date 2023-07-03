@@ -4,9 +4,11 @@ import logging
 import re
 from typing import List
 from lxml import html
+from lxml.etree import ElementBase
 from datetime import datetime, timedelta
 
 from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
+from codeforces_core.util import typedxpath
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +26,7 @@ class ContestListItem:
   id: int
   title: str
   authors: List[CodeforcesUser]
-  start: int
+  start: int  # timestamp
   length: str
   participants: str
   upcoming: bool
@@ -75,45 +77,48 @@ class ContestList:
   history: List[ContestListItem]
 
 
-def parse_contest_list(raw_contests, upcoming: bool) -> List[ContestListItem]:
+def parse_contest_list(raw_contests: ElementBase, upcoming: bool) -> List[ContestListItem]:
   contests: List[ContestListItem] = []
 
-  for c in raw_contests.xpath('.//tr[@data-contestid]'):
-    cid = int(c.get('data-contestid'))
-    td = c.xpath('.//td')
-    title = td[0].text.lstrip().splitlines()[0]
-    authors: List[CodeforcesUser] = [
-        CodeforcesUser(
-            class__=a.get('class').split(' ')[1],
-            profile=a.get('href'),
-            title=a.get('title'),
-            name=a.text,
-        ) for a in td[1].xpath('.//a')
-    ]
-    start = td[2].xpath('.//span')[0].text
-    start = int(datetime.strptime(start + "+0300", "%b/%d/%Y %H:%M%z").timestamp())  # Russian + 3hours
-    length = td[3].text.strip()
-    participants = ''
-    registration = False
+  for c in typedxpath(raw_contests, './/tr[@data-contestid]'):
+    try:
+      cid = int(c.get('data-contestid'))
+      td = typedxpath(c, './/td')
+      title = td[0].text.lstrip().splitlines()[0]
+      authors: List[CodeforcesUser] = [
+          CodeforcesUser(
+              class__=a.get('class').split(' ')[1],
+              profile=a.get('href'),
+              title=a.get('title'),
+              name=a.text,
+          ) for a in typedxpath(td[1], './/a')
+      ]
+      start_str = typedxpath(td[2], './/span')[0].text
+      start = int(datetime.strptime(str(start_str) + "+0300", "%b/%d/%Y %H:%M%z").timestamp())  # Russian + 3hours
+      length = td[3].text.strip()
+      participants = ''
+      registration = False
 
-    if upcoming:
-      msg = td[5].text_content().strip()
-      if msg.startswith("Registration completed"):
-        registration = True
-      participants = re.sub('\\s+', ' ', msg.split('x')[-1])
-    else:
-      participants = re.sub('\\s+', ' ', td[5].text_content().strip().lstrip('x'))
+      if upcoming:
+        msg = td[5].text_content().strip()
+        if msg.startswith("Registration completed"):
+          registration = True
+        participants = re.sub('\\s+', ' ', msg.split('x')[-1])
+      else:
+        participants = re.sub('\\s+', ' ', td[5].text_content().strip().lstrip('x'))
 
-    contests.append(
-        ContestListItem(id=cid,
-                        title=title,
-                        authors=authors,
-                        start=start,
-                        length=length,
-                        participants=participants,
-                        registered=registration,
-                        upcoming=upcoming,
-                        Div=parse_div(title)))
+      contests.append(
+          ContestListItem(id=cid,
+                          title=title,
+                          authors=authors,
+                          start=start,
+                          length=length,
+                          participants=participants,
+                          registered=registration,
+                          upcoming=upcoming,
+                          Div=parse_div(title)))
+    except Exception as e:
+      logger.exception(e)
   return contests
 
 
@@ -124,7 +129,7 @@ async def async_contest_list(http: AioHttpHelperInterface, page: int = 1) -> Con
 
     :param page: the page in url
 
-    :returns: the result 
+    :returns: the result
 
     Examples:
 
@@ -133,7 +138,7 @@ async def async_contest_list(http: AioHttpHelperInterface, page: int = 1) -> Con
         import asyncio
         from codeforces_core.httphelper import HttpHelper
         from codeforces_core.contest_list import async_contest_list
-        
+
         async def demo():
           # http = HttpHelper(token_path='/tmp/cache_token', cookie_jar_path='/tmp/cache_cookie_jar')
           http = HttpHelper(token_path='', cookie_jar_path='')
@@ -145,11 +150,11 @@ async def async_contest_list(http: AioHttpHelperInterface, page: int = 1) -> Con
           for c in result.history[:5]:
               print(c)
           await http.close_session()
-        
+
         asyncio.run(demo())
   """
-  doc = html.fromstring(await http.async_get(f'/contests/page/{page}'))
-  table = doc.xpath('.//div[@class="datatable"]')
+  doc = html.fromstring(await http.async_get(f'/contests/page/{page}?complete=true'))
+  table = typedxpath(doc, './/div[@class="datatable"]')
   upcoming = parse_contest_list(table[0], upcoming=True)
 
   # count contests

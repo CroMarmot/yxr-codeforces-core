@@ -31,6 +31,7 @@ class StandingRow:
 class Standing:
   head: List[str]
   rows: List[StandingRow]
+  url: str = ''
 
 
 def parseStandingHtml(html) -> Standing:
@@ -124,7 +125,9 @@ async def async_friends_standing(http: AioHttpHelperInterface, contest_id: str) 
   """
   url = f'/contest/{contest_id}/standings/friends/true'
   resp = await http.async_get(url)
-  return parseStandingHtml(resp)
+  result = parseStandingHtml(resp)
+  result.url = url
+  return result
 
 
 async def async_common_standing(http: AioHttpHelperInterface, contest_id: str, page: str = '1') -> Standing:
@@ -158,4 +161,6 @@ async def async_common_standing(http: AioHttpHelperInterface, contest_id: str, p
   """
   url = f'/contest/{contest_id}/standings/page/{page}'
   resp = await http.async_get(url)
-  return parseStandingHtml(resp)
+  result = parseStandingHtml(resp)
+  result.url = url
+  return result

@@ -3,7 +3,7 @@ on:
   push:
     branches:
     - master
-    - dev 
+    - dev
 
 jobs:
   unit_test:
