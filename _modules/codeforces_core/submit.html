@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>codeforces_core.submit - yxr-codeforces-core 0.0.1 documentation</title>
+        <title>codeforces_core.submit - yxr-codeforces-core 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -122,7 +122,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.1 documentation</div></a>
+      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +145,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.1 documentation</span>
+  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -167,6 +167,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../dev/02_debug.html">Debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/03_lint.html">Lint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/04_autotest.html">Auto Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/05_publish.html">Publish</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">yxr-codeforces-core</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -217,15 +218,17 @@
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
 
+<span class="kn">from</span> <span class="nn">codeforces_core.util</span> <span class="kn">import</span> <span class="n">typedxpath</span>
+
 <span class="c1"># from .ui import BLUE, GREEN, RED, redraw</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">account</span>
+<span class="kn">from</span> <span class="nn">.account</span> <span class="kn">import</span> <span class="n">is_user_logged_in</span>
 <span class="kn">from</span> <span class="nn">.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
+<span class="kn">from</span> <span class="nn">.url</span> <span class="kn">import</span> <span class="n">problem_url_parse</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<span class="c1"># return (contest_id, html_text of contest/&lt;contest id&gt;/my )</span>
-<div class="viewcode-block" id="async_submit"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.submit.async_submit">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_submit</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<div class="viewcode-block" id="async_submit"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.submit.async_submit">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_submit</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                        <span class="n">lang_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This method will use ``http`` to post submit</span>
@@ -233,7 +236,7 @@
 <span class="sd">    :param http: AioHttpHelperInterface </span>
 <span class="sd">    :param ws_handler: function to handler messages </span>
 
-<span class="sd">    :returns: the task which run ws</span>
+<span class="sd">    :returns: (submission_id, html_text of contest/&lt;contest id&gt;/my )</span>
 
 <span class="sd">    Examples:</span>
 
@@ -253,7 +256,7 @@
 <span class="sd">          assert(result.success)</span>
 
 <span class="sd">          print(&#39;before submit&#39;)</span>
-<span class="sd">          submit_id, resp = await async_submit(http, contest_id=&#39;1777&#39;, level=&#39;F&#39;, filename=&#39;F.cpp&#39;, lang_id=&#39;73&#39;)</span>
+<span class="sd">          submit_id, resp = await async_submit(http, contest_id=&#39;1777&#39;, level=&#39;F&#39;, file_path=&#39;F.cpp&#39;, lang_id=&#39;73&#39;)</span>
 <span class="sd">          print(&#39;submit id:&#39;,submit_id)</span>
 
 <span class="sd">          # connect websocket before submit sometimes cannot receive message</span>
@@ -274,8 +277,8 @@
   <span class="k">if</span> <span class="ow">not</span> <span class="n">contest_id</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">level</span><span class="p">:</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;[!] Invalid contestID or level&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;[!] File not found : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;[!] File not found : </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">file_path</span><span class="p">))</span>
     <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
 
   <span class="n">token</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">get_tokens</span><span class="p">()</span>
@@ -289,13 +292,13 @@
   <span class="p">}</span>
   <span class="n">url</span> <span class="o">=</span> <span class="s1">&#39;/contest/</span><span class="si">{}</span><span class="s1">/problem/</span><span class="si">{}</span><span class="s1">?csrf_token=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">contest_id</span><span class="p">,</span> <span class="n">level</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span> <span class="n">token</span><span class="p">[</span><span class="s1">&#39;csrf&#39;</span><span class="p">])</span>
   <span class="n">form</span> <span class="o">=</span> <span class="n">http</span><span class="o">.</span><span class="n">create_form</span><span class="p">(</span><span class="n">submit_form</span><span class="p">)</span>
-  <span class="n">form</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;sourceFile&#39;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="n">filename</span><span class="o">=</span><span class="n">filename</span><span class="p">)</span>
+  <span class="n">form</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;sourceFile&#39;</span><span class="p">,</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">),</span> <span class="n">filename</span><span class="o">=</span><span class="n">file_path</span><span class="p">)</span>
   <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">form</span><span class="p">)</span>  <span class="c1"># 正常是 302 -&gt; https://codeforces.com/contest/&lt;contest id&gt;/my</span>
-  <span class="k">if</span> <span class="ow">not</span> <span class="n">account</span><span class="o">.</span><span class="n">is_user_logged_in</span><span class="p">(</span><span class="n">resp</span><span class="p">):</span>
+  <span class="k">if</span> <span class="ow">not</span> <span class="n">is_user_logged_in</span><span class="p">(</span><span class="n">resp</span><span class="p">):</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Login required&quot;</span><span class="p">)</span>
     <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">resp</span>
   <span class="n">doc</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//span[@class=&quot;error for__sourceFile&quot;]&#39;</span><span class="p">):</span>
+  <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">typedxpath</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;.//span[@class=&quot;error for__sourceFile&quot;]&#39;</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">text</span> <span class="o">==</span> <span class="s1">&#39;You have submitted exactly the same code before&#39;</span><span class="p">:</span>
       <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;[!] &quot;</span> <span class="o">+</span> <span class="n">e</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
       <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">resp</span>
@@ -318,10 +321,10 @@
 <span class="c1"># status_url = f&#39;/contest/{contest_id}/my&#39;</span>
 <span class="c1"># resp = await http.async_get(status_url)</span>
 <span class="c1"># status = parse_submit_status(resp)</span>
-<div class="viewcode-block" id="parse_submit_status"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.submit.parse_submit_status">[docs]</a><span class="k">def</span> <span class="nf">parse_submit_status</span><span class="p">(</span><span class="n">html_page</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SubmissionPageResult</span><span class="p">]:</span>
+<div class="viewcode-block" id="parse_submit_status"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.submit.parse_submit_status">[docs]</a><span class="k">def</span> <span class="nf">parse_submit_status</span><span class="p">(</span><span class="n">html_page</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SubmissionPageResult</span><span class="p">]:</span>
   <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">SubmissionPageResult</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="n">doc</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">html_page</span><span class="p">)</span>
-  <span class="n">tr</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//table[@class=&quot;status-frame-datatable&quot;]/tr[@data-submission-id]&#39;</span><span class="p">)</span>
+  <span class="n">tr</span> <span class="o">=</span> <span class="n">typedxpath</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;.//table[@class=&quot;status-frame-datatable&quot;]/tr[@data-submission-id]&#39;</span><span class="p">)</span>
   <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tr</span><span class="p">:</span>
     <span class="n">td</span> <span class="o">=</span> <span class="n">t</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//td&#39;</span><span class="p">)</span>
     <span class="n">submission_id</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">td</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">itertext</span><span class="p">())</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
@@ -331,6 +334,14 @@
     <span class="n">prog_mem</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\xa0</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">SubmissionPageResult</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">submission_id</span><span class="p">,</span> <span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">verdict</span><span class="o">=</span><span class="n">verdict</span><span class="p">,</span> <span class="n">time_ms</span><span class="o">=</span><span class="n">prog_time</span><span class="p">,</span> <span class="n">mem_bytes</span><span class="o">=</span><span class="n">prog_mem</span><span class="p">))</span>
   <span class="k">return</span> <span class="n">ret</span></div>
+
+
+<div class="viewcode-block" id="async_fetch_submission_page"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.submit.async_fetch_submission_page">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_fetch_submission_page</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">problem_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SubmissionPageResult</span><span class="p">]:</span>
+  <span class="n">contest_id</span><span class="p">,</span> <span class="n">problem_key</span> <span class="o">=</span> <span class="n">problem_url_parse</span><span class="p">(</span><span class="n">problem_url</span><span class="p">)</span>
+  <span class="c1"># 正常是 302 -&gt; https://codeforces.com/contest/&lt;contest id&gt;/my</span>
+  <span class="n">html_page</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/contest/</span><span class="si">{</span><span class="n">contest_id</span><span class="si">}</span><span class="s1">/my&#39;</span><span class="p">)</span>
+  <span class="n">result</span> <span class="o">=</span> <span class="n">parse_submit_status</span><span class="p">(</span><span class="n">html_page</span><span class="p">)</span>
+  <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">o</span><span class="p">:</span> <span class="n">o</span><span class="o">.</span><span class="n">url</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="n">problem_key</span><span class="p">),</span> <span class="n">result</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="SubmissionWSResult"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.submit.SubmissionWSResult">[docs]</a><span class="nd">@dataclass</span>

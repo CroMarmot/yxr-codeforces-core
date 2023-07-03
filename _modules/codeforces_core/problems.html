@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>codeforces_core.problems - yxr-codeforces-core 0.0.1 documentation</title>
+        <title>codeforces_core.problems - yxr-codeforces-core 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -122,7 +122,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.1 documentation</div></a>
+      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +145,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.1 documentation</span>
+  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -167,6 +167,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../dev/02_debug.html">Debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/03_lint.html">Lint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/04_autotest.html">Auto Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/05_publish.html">Publish</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">yxr-codeforces-core</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -211,7 +212,8 @@
         <article role="main">
           <h1>Source code for codeforces_core.problems</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">cast</span>
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
 
 <span class="kn">from</span> <span class="nn">codeforces_core.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
@@ -292,53 +294,56 @@
   <span class="n">url</span> <span class="o">=</span> <span class="s2">&quot;/contest/</span><span class="si">{}</span><span class="s2">/problems&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">contest_id</span><span class="p">)</span>
   <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
   <span class="n">doc</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
-  <span class="n">probs</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;problemindexholder&quot;]&#39;</span><span class="p">)</span>
+  <span class="n">probs</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">],</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;problemindexholder&quot;]&#39;</span><span class="p">))</span>
 
   <span class="n">ret</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ProblemInfo</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
   <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">probs</span><span class="p">:</span>
-    <span class="c1">#if alert: alert = alert[0].text</span>
-    <span class="n">level</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;problemindex&#39;</span><span class="p">)</span>
-    <span class="n">typo</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;ttypography&quot;]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">pop_element</span><span class="p">(</span><span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;title&quot;]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">time_limit</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;time-limit&quot;]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">time_limit</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_limit</span><span class="o">.</span><span class="n">itertext</span><span class="p">()][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">memory_limit</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;memory-limit&quot;]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">memory_limit</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">memory_limit</span><span class="o">.</span><span class="n">itertext</span><span class="p">()][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">desc</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[not(@class)]&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">desc</span><span class="p">:</span>
-      <span class="n">desc</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">desc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">itertext</span><span class="p">()])</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="c1"># if alert: alert = alert[0].text</span>
+      <span class="n">level</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;problemindex&#39;</span><span class="p">)</span>
+      <span class="n">typo</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;ttypography&quot;]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">title</span> <span class="o">=</span> <span class="n">pop_element</span><span class="p">(</span><span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;title&quot;]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+      <span class="n">time_limit</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;time-limit&quot;]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">time_limit</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">time_limit</span><span class="o">.</span><span class="n">itertext</span><span class="p">()][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">memory_limit</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;memory-limit&quot;]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">memory_limit</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">memory_limit</span><span class="o">.</span><span class="n">itertext</span><span class="p">()][</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">desc</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[not(@class)]&#39;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">desc</span><span class="p">:</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">desc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">itertext</span><span class="p">()])</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">desc</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;section-title&quot;]&#39;</span><span class="p">):</span>
-      <span class="n">pop_element</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;section-title&quot;]&#39;</span><span class="p">):</span>
+        <span class="n">pop_element</span><span class="p">(</span><span class="n">j</span><span class="p">)</span>
 
-    <span class="n">in_spec</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;input-specification&quot;]&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">in_spec</span><span class="p">:</span>
-      <span class="n">in_spec</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">in_spec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">itertext</span><span class="p">()])</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">in_spec</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+      <span class="n">in_spec</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;input-specification&quot;]&#39;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">in_spec</span><span class="p">:</span>
+        <span class="n">in_spec</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">in_spec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">itertext</span><span class="p">()])</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">in_spec</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="n">out_spec</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;output-specification&quot;]&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">out_spec</span><span class="p">:</span>
-      <span class="n">out_spec</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">out_spec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">itertext</span><span class="p">()])</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">out_spec</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+      <span class="n">out_spec</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;output-specification&quot;]&#39;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">out_spec</span><span class="p">:</span>
+        <span class="n">out_spec</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">out_spec</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">itertext</span><span class="p">()])</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">out_spec</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
 
-    <span class="n">in_tc</span> <span class="o">=</span> <span class="n">extract_testcases</span><span class="p">(</span><span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;input&quot;]&#39;</span><span class="p">))</span>
-    <span class="n">out_tc</span> <span class="o">=</span> <span class="n">extract_testcases</span><span class="p">(</span><span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;output&quot;]&#39;</span><span class="p">))</span>
-    <span class="n">note</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;note&quot;]&#39;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">note</span><span class="p">:</span>
-      <span class="n">note</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">note</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">itertext</span><span class="p">()])</span>
-    <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-        <span class="n">ProblemInfo</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
-                    <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
-                    <span class="n">time_limit_seconds</span><span class="o">=</span><span class="n">time_limit</span><span class="p">,</span>
-                    <span class="n">memory_limit_mb</span><span class="o">=</span><span class="n">memory_limit</span><span class="p">,</span>
-                    <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
-                    <span class="n">in_tc</span><span class="o">=</span><span class="n">in_tc</span><span class="p">,</span>
-                    <span class="n">out_tc</span><span class="o">=</span><span class="n">out_tc</span><span class="p">,</span>
-                    <span class="n">note</span><span class="o">=</span><span class="n">note</span><span class="p">))</span>
+      <span class="n">in_tc</span> <span class="o">=</span> <span class="n">extract_testcases</span><span class="p">(</span><span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;input&quot;]&#39;</span><span class="p">))</span>
+      <span class="n">out_tc</span> <span class="o">=</span> <span class="n">extract_testcases</span><span class="p">(</span><span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;output&quot;]&#39;</span><span class="p">))</span>
+      <span class="n">note</span> <span class="o">=</span> <span class="n">typo</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;note&quot;]&#39;</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">note</span><span class="p">:</span>
+        <span class="n">note</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">t</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">note</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">itertext</span><span class="p">()])</span>
+      <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+          <span class="n">ProblemInfo</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+                      <span class="n">level</span><span class="o">=</span><span class="n">level</span><span class="p">,</span>
+                      <span class="n">time_limit_seconds</span><span class="o">=</span><span class="n">time_limit</span><span class="p">,</span>
+                      <span class="n">memory_limit_mb</span><span class="o">=</span><span class="n">memory_limit</span><span class="p">,</span>
+                      <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">,</span>
+                      <span class="n">in_tc</span><span class="o">=</span><span class="n">in_tc</span><span class="p">,</span>
+                      <span class="n">out_tc</span><span class="o">=</span><span class="n">out_tc</span><span class="p">,</span>
+                      <span class="n">note</span><span class="o">=</span><span class="n">note</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
   <span class="k">return</span> <span class="n">ret</span></div>
 </pre></div>
         </article>

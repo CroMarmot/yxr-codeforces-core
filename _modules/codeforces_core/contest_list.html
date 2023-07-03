@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>codeforces_core.contest_list - yxr-codeforces-core 0.0.1 documentation</title>
+        <title>codeforces_core.contest_list - yxr-codeforces-core 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -122,7 +122,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.1 documentation</div></a>
+      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +145,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.1 documentation</span>
+  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -167,6 +167,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../dev/02_debug.html">Debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/03_lint.html">Lint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/04_autotest.html">Auto Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/05_publish.html">Publish</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">yxr-codeforces-core</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -216,9 +217,11 @@
 <span class="kn">import</span> <span class="nn">re</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">List</span>
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">lxml.etree</span> <span class="kn">import</span> <span class="n">ElementBase</span>
 <span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
 
 <span class="kn">from</span> <span class="nn">codeforces_core.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
+<span class="kn">from</span> <span class="nn">codeforces_core.util</span> <span class="kn">import</span> <span class="n">typedxpath</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
@@ -236,7 +239,7 @@
   <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
   <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
   <span class="n">authors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CodeforcesUser</span><span class="p">]</span>
-  <span class="n">start</span><span class="p">:</span> <span class="nb">int</span>
+  <span class="n">start</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># timestamp</span>
   <span class="n">length</span><span class="p">:</span> <span class="nb">str</span>
   <span class="n">participants</span><span class="p">:</span> <span class="nb">str</span>
   <span class="n">upcoming</span><span class="p">:</span> <span class="nb">bool</span>
@@ -287,45 +290,48 @@
   <span class="n">history</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ContestListItem</span><span class="p">]</span></div>
 
 
-<div class="viewcode-block" id="parse_contest_list"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.contest_list.parse_contest_list">[docs]</a><span class="k">def</span> <span class="nf">parse_contest_list</span><span class="p">(</span><span class="n">raw_contests</span><span class="p">,</span> <span class="n">upcoming</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ContestListItem</span><span class="p">]:</span>
+<div class="viewcode-block" id="parse_contest_list"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.contest_list.parse_contest_list">[docs]</a><span class="k">def</span> <span class="nf">parse_contest_list</span><span class="p">(</span><span class="n">raw_contests</span><span class="p">:</span> <span class="n">ElementBase</span><span class="p">,</span> <span class="n">upcoming</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ContestListItem</span><span class="p">]:</span>
   <span class="n">contests</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ContestListItem</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
-  <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">raw_contests</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//tr[@data-contestid]&#39;</span><span class="p">):</span>
-    <span class="n">cid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data-contestid&#39;</span><span class="p">))</span>
-    <span class="n">td</span> <span class="o">=</span> <span class="n">c</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//td&#39;</span><span class="p">)</span>
-    <span class="n">title</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">authors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CodeforcesUser</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">CodeforcesUser</span><span class="p">(</span>
-            <span class="n">class__</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">profile</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">),</span>
-            <span class="n">title</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">),</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
-        <span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">td</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//a&#39;</span><span class="p">)</span>
-    <span class="p">]</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//span&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">start</span> <span class="o">+</span> <span class="s2">&quot;+0300&quot;</span><span class="p">,</span> <span class="s2">&quot;%b/</span><span class="si">%d</span><span class="s2">/%Y %H:%M%z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span>  <span class="c1"># Russian + 3hours</span>
-    <span class="n">length</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">participants</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-    <span class="n">registration</span> <span class="o">=</span> <span class="kc">False</span>
+  <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">typedxpath</span><span class="p">(</span><span class="n">raw_contests</span><span class="p">,</span> <span class="s1">&#39;.//tr[@data-contestid]&#39;</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+      <span class="n">cid</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data-contestid&#39;</span><span class="p">))</span>
+      <span class="n">td</span> <span class="o">=</span> <span class="n">typedxpath</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="s1">&#39;.//td&#39;</span><span class="p">)</span>
+      <span class="n">title</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">lstrip</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+      <span class="n">authors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">CodeforcesUser</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+          <span class="n">CodeforcesUser</span><span class="p">(</span>
+              <span class="n">class__</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;class&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39; &#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">],</span>
+              <span class="n">profile</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">),</span>
+              <span class="n">title</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;title&#39;</span><span class="p">),</span>
+              <span class="n">name</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
+          <span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">typedxpath</span><span class="p">(</span><span class="n">td</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;.//a&#39;</span><span class="p">)</span>
+      <span class="p">]</span>
+      <span class="n">start_str</span> <span class="o">=</span> <span class="n">typedxpath</span><span class="p">(</span><span class="n">td</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;.//span&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span>
+      <span class="n">start</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">start_str</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;+0300&quot;</span><span class="p">,</span> <span class="s2">&quot;%b/</span><span class="si">%d</span><span class="s2">/%Y %H:%M%z&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span>  <span class="c1"># Russian + 3hours</span>
+      <span class="n">length</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+      <span class="n">participants</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+      <span class="n">registration</span> <span class="o">=</span> <span class="kc">False</span>
 
-    <span class="k">if</span> <span class="n">upcoming</span><span class="p">:</span>
-      <span class="n">msg</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">text_content</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-      <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Registration completed&quot;</span><span class="p">):</span>
-        <span class="n">registration</span> <span class="o">=</span> <span class="kc">True</span>
-      <span class="n">participants</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="n">participants</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">td</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">text_content</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">))</span>
+      <span class="k">if</span> <span class="n">upcoming</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="n">td</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">text_content</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;Registration completed&quot;</span><span class="p">):</span>
+          <span class="n">registration</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">participants</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">participants</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\\</span><span class="s1">s+&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">,</span> <span class="n">td</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">text_content</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s1">&#39;x&#39;</span><span class="p">))</span>
 
-    <span class="n">contests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-        <span class="n">ContestListItem</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cid</span><span class="p">,</span>
-                        <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
-                        <span class="n">authors</span><span class="o">=</span><span class="n">authors</span><span class="p">,</span>
-                        <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
-                        <span class="n">length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span>
-                        <span class="n">participants</span><span class="o">=</span><span class="n">participants</span><span class="p">,</span>
-                        <span class="n">registered</span><span class="o">=</span><span class="n">registration</span><span class="p">,</span>
-                        <span class="n">upcoming</span><span class="o">=</span><span class="n">upcoming</span><span class="p">,</span>
-                        <span class="n">Div</span><span class="o">=</span><span class="n">parse_div</span><span class="p">(</span><span class="n">title</span><span class="p">)))</span>
+      <span class="n">contests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+          <span class="n">ContestListItem</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">cid</span><span class="p">,</span>
+                          <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+                          <span class="n">authors</span><span class="o">=</span><span class="n">authors</span><span class="p">,</span>
+                          <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span>
+                          <span class="n">length</span><span class="o">=</span><span class="n">length</span><span class="p">,</span>
+                          <span class="n">participants</span><span class="o">=</span><span class="n">participants</span><span class="p">,</span>
+                          <span class="n">registered</span><span class="o">=</span><span class="n">registration</span><span class="p">,</span>
+                          <span class="n">upcoming</span><span class="o">=</span><span class="n">upcoming</span><span class="p">,</span>
+                          <span class="n">Div</span><span class="o">=</span><span class="n">parse_div</span><span class="p">(</span><span class="n">title</span><span class="p">)))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
   <span class="k">return</span> <span class="n">contests</span></div>
 
 
@@ -336,7 +342,7 @@
 
 <span class="sd">    :param page: the page in url</span>
 
-<span class="sd">    :returns: the result </span>
+<span class="sd">    :returns: the result</span>
 
 <span class="sd">    Examples:</span>
 
@@ -345,7 +351,7 @@
 <span class="sd">        import asyncio</span>
 <span class="sd">        from codeforces_core.httphelper import HttpHelper</span>
 <span class="sd">        from codeforces_core.contest_list import async_contest_list</span>
-<span class="sd">        </span>
+
 <span class="sd">        async def demo():</span>
 <span class="sd">          # http = HttpHelper(token_path=&#39;/tmp/cache_token&#39;, cookie_jar_path=&#39;/tmp/cache_cookie_jar&#39;)</span>
 <span class="sd">          http = HttpHelper(token_path=&#39;&#39;, cookie_jar_path=&#39;&#39;)</span>
@@ -357,11 +363,11 @@
 <span class="sd">          for c in result.history[:5]:</span>
 <span class="sd">              print(c)</span>
 <span class="sd">          await http.close_session()</span>
-<span class="sd">        </span>
+
 <span class="sd">        asyncio.run(demo())</span>
 <span class="sd">  &quot;&quot;&quot;</span>
-  <span class="n">doc</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/contests/page/</span><span class="si">{</span><span class="n">page</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">))</span>
-  <span class="n">table</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s1">&#39;.//div[@class=&quot;datatable&quot;]&#39;</span><span class="p">)</span>
+  <span class="n">doc</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/contests/page/</span><span class="si">{</span><span class="n">page</span><span class="si">}</span><span class="s1">?complete=true&#39;</span><span class="p">))</span>
+  <span class="n">table</span> <span class="o">=</span> <span class="n">typedxpath</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;.//div[@class=&quot;datatable&quot;]&#39;</span><span class="p">)</span>
   <span class="n">upcoming</span> <span class="o">=</span> <span class="n">parse_contest_list</span><span class="p">(</span><span class="n">table</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">upcoming</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
   <span class="c1"># count contests</span>

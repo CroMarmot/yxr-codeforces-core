@@ -100,6 +100,14 @@ codeforces\_core.submit module
    :undoc-members:
    :show-inheritance:
 
+codeforces\_core.url module
+---------------------------
+
+.. automodule:: codeforces_core.url
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 codeforces\_core.util module
 ----------------------------
 

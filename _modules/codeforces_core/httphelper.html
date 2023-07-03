@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>codeforces_core.httphelper - yxr-codeforces-core 0.0.1 documentation</title>
+        <title>codeforces_core.httphelper - yxr-codeforces-core 0.0.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -122,7 +122,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.1 documentation</div></a>
+      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +145,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.1 documentation</span>
+  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -167,6 +167,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../dev/02_debug.html">Debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/03_lint.html">Lint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../dev/04_autotest.html">Auto Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dev/05_publish.html">Publish</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../modules.html">yxr-codeforces-core</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -211,8 +212,9 @@
         <article role="main">
           <h1>Source code for codeforces_core.httphelper</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">AsyncIterator</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">cast</span>
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
+<span class="kn">from</span> <span class="nn">lxml.etree</span> <span class="kn">import</span> <span class="n">_Element</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">aiohttp</span>
@@ -244,7 +246,7 @@
     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="s2">&quot;RCPC redirection detected&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="add_header"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.add_header">[docs]</a><span class="k">def</span> <span class="nf">add_header</span><span class="p">(</span><span class="n">newhdr</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">default_headers</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="add_header"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.add_header">[docs]</a><span class="k">def</span> <span class="nf">add_header</span><span class="p">(</span><span class="n">newhdr</span><span class="p">,</span> <span class="n">headers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
   <span class="n">headers</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">newhdr</span><span class="p">)</span>
   <span class="k">return</span> <span class="n">headers</span></div>
 
@@ -259,8 +261,8 @@
   <span class="n">cookie_jar_path</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
   <span class="n">cookie_jar</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">aiohttp</span><span class="o">.</span><span class="n">CookieJar</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
   <span class="n">token_path</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-  <span class="n">tokens</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="p">{}</span>
-  <span class="n">headers</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># TODO</span>
+  <span class="n">tokens</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="n">headers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># TODO</span>
 
   <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">token_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">default_headers</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">CF_HOST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="c1"># if path is empty string then won&#39;t save to any file, just store in memory</span>
@@ -273,7 +275,7 @@
 
 <div class="viewcode-block" id="HttpHelper.load_tokens"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.load_tokens">[docs]</a>  <span class="nd">@staticmethod</span>
   <span class="k">def</span> <span class="nf">load_tokens</span><span class="p">(</span><span class="n">token_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-    <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">token_path</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">token_path</span> <span class="ow">and</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">token_path</span><span class="p">):</span>
       <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">token_path</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
     <span class="k">return</span> <span class="p">{}</span></div>
@@ -284,8 +286,8 @@
     <span class="k">if</span> <span class="n">cookie_jar_path</span><span class="p">:</span>
       <span class="k">if</span> <span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">cookie_jar_path</span><span class="p">):</span>
         <span class="n">jar</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">cookie_jar_path</span><span class="p">)</span>
-      <span class="c1"># else:</span>
-      <span class="c1">#   jar.save(file_path=cookie_jar_path)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">jar</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="n">cookie_jar_path</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">jar</span></div>
 
 <div class="viewcode-block" id="HttpHelper.open_session"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.open_session">[docs]</a>  <span class="k">async</span> <span class="k">def</span> <span class="nf">open_session</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">:</span>
@@ -307,36 +309,41 @@
         <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">,</span> <span class="n">f</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HttpHelper.async_get"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.async_get">[docs]</a>  <span class="k">async</span> <span class="k">def</span> <span class="nf">async_get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">csrf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Please open_session() before async_get()&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">headers</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">default_headers</span>
     <span class="k">if</span> <span class="n">csrf</span> <span class="ow">and</span> <span class="s1">&#39;csrf&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">:</span>
-      <span class="n">headers</span> <span class="o">=</span> <span class="n">add_header</span><span class="p">({</span><span class="s1">&#39;X-Csrf-Token&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">[</span><span class="s1">&#39;csrf&#39;</span><span class="p">]})</span>
+      <span class="n">headers</span> <span class="o">=</span> <span class="n">add_header</span><span class="p">({</span><span class="s1">&#39;X-Csrf-Token&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">[</span><span class="s1">&#39;csrf&#39;</span><span class="p">]},</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
     <span class="c1"># TODO remove the feature</span>
     <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span> <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">+</span> <span class="n">url</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">try</span><span class="p">:</span>
       <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">check_rcpc</span><span class="p">(</span><span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
+        <span class="n">text</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">check_rcpc</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span><span class="p">:</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span><span class="p">)</span>  <span class="c1"># TODO move auto save to file out</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">text</span>
     <span class="k">except</span> <span class="n">RCPCRedirectionError</span><span class="p">:</span>
       <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span><span class="p">:</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span><span class="p">)</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="HttpHelper.async_post"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.async_post">[docs]</a>  <span class="k">async</span> <span class="k">def</span> <span class="nf">async_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">csrf</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="HttpHelper.async_post"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.async_post">[docs]</a>  <span class="k">async</span> <span class="k">def</span> <span class="nf">async_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">default_headers</span><span class="p">,</span> <span class="n">csrf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Please open_session() before async_get()&#39;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">headers</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span> <span class="n">headers</span> <span class="o">=</span> <span class="n">default_headers</span>
     <span class="k">if</span> <span class="n">csrf</span> <span class="ow">and</span> <span class="s1">&#39;csrf&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">:</span>
-      <span class="n">headers</span> <span class="o">=</span> <span class="n">add_header</span><span class="p">({</span><span class="s1">&#39;X-Csrf-Token&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">[</span><span class="s1">&#39;csrf&#39;</span><span class="p">]})</span>
+      <span class="n">headers</span> <span class="o">=</span> <span class="n">add_header</span><span class="p">({</span><span class="s1">&#39;X-Csrf-Token&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span><span class="p">[</span><span class="s1">&#39;csrf&#39;</span><span class="p">]},</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
 
     <span class="c1"># TODO remove the feature</span>
     <span class="k">if</span> <span class="n">url</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">):</span> <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">+</span> <span class="n">url</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">try</span><span class="p">:</span>
-      <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+      <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_rcpc</span><span class="p">(</span><span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">())</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span><span class="p">:</span>
@@ -347,17 +354,19 @@
         <span class="k">assert</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">200</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span><span class="p">:</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span><span class="p">)</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span></div>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+      <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HttpHelper.get_tokens"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.get_tokens">[docs]</a>  <span class="k">def</span> <span class="nf">get_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span></div>
 
 <div class="viewcode-block" id="HttpHelper.check_rcpc"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.check_rcpc">[docs]</a>  <span class="k">def</span> <span class="nf">check_rcpc</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">html_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
     <span class="n">doc</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">html_data</span><span class="p">)</span>
-    <span class="n">aesmin</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;.//script[@type=&#39;text/javascript&#39; and @src=&#39;/aes.min.js&#39;]&quot;</span><span class="p">)</span>
+    <span class="n">aesmin</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">_Element</span><span class="p">],</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;.//script[@type=&#39;text/javascript&#39; and @src=&#39;/aes.min.js&#39;]&quot;</span><span class="p">))</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">aesmin</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
       <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[+] RCPC redirection detected&quot;</span><span class="p">)</span>
-      <span class="n">js</span> <span class="o">=</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;.//script[not(@type)]&quot;</span><span class="p">)</span>
+      <span class="n">js</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">List</span><span class="p">[</span><span class="n">_Element</span><span class="p">],</span> <span class="n">doc</span><span class="o">.</span><span class="n">xpath</span><span class="p">(</span><span class="s2">&quot;.//script[not(@type)]&quot;</span><span class="p">))</span>
       <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">js</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
       <span class="n">keys</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[abc]=toNumbers\([^\)]*&#39;</span><span class="p">,</span> <span class="n">js</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">)</span>
       <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
@@ -382,28 +391,26 @@
     <span class="k">return</span> <span class="n">form</span></div>
 
   <span class="c1"># callback return (end watch?, transform result)</span>
-<div class="viewcode-block" id="HttpHelper.websockets"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.websockets">[docs]</a>  <span class="k">async</span> <span class="k">def</span> <span class="nf">websockets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<div class="viewcode-block" id="HttpHelper.websockets"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.websockets">[docs]</a>  <span class="k">async</span> <span class="k">def</span> <span class="nf">websockets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">callback</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Any</span><span class="p">],</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="n">Any</span><span class="p">]])</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">Any</span><span class="p">]:</span>
     <span class="k">try</span><span class="p">:</span>
       <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">ws_connect</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="k">as</span> <span class="n">ws</span><span class="p">:</span>
-        <span class="n">ret</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="k">async</span> <span class="k">for</span> <span class="n">msg</span> <span class="ow">in</span> <span class="n">ws</span><span class="p">:</span>
           <span class="k">if</span> <span class="n">msg</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">WSMsgType</span><span class="o">.</span><span class="n">TEXT</span><span class="p">:</span>
             <span class="n">js</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
             <span class="n">js</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">js</span><span class="p">[</span><span class="s1">&#39;text&#39;</span><span class="p">])</span>
 
             <span class="n">endwatch</span><span class="p">,</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">callback</span><span class="p">(</span><span class="n">js</span><span class="p">)</span>
-            <span class="n">ret</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+            <span class="k">yield</span> <span class="n">obj</span>
             <span class="k">if</span> <span class="n">endwatch</span><span class="p">:</span>
-              <span class="k">return</span> <span class="n">ret</span>
+              <span class="k">return</span>
 
           <span class="k">else</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;wrong msg type?&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
             <span class="k">break</span>
-        <span class="k">return</span> <span class="n">ret</span>
+        <span class="k">return</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
       <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
-      <span class="c1"># session closed?</span>
-      <span class="k">return</span> <span class="kc">False</span></div></div>
+      <span class="k">return</span></div></div>
 </pre></div>
         </article>
       </div>

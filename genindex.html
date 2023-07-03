@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="#" /><link rel="search" title="Search" href="search.html" />
 
-    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 --><title>Index - yxr-codeforces-core 0.0.1 documentation</title>
+    <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 --><title>Index - yxr-codeforces-core 0.0.2 documentation</title>
 <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -121,7 +121,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="index.html"><div class="brand">yxr-codeforces-core 0.0.1 documentation</div></a>
+      <a href="index.html"><div class="brand">yxr-codeforces-core 0.0.2 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -144,7 +144,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="index.html">
   
   
-  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.1 documentation</span>
+  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -166,6 +166,7 @@
 <li class="toctree-l2"><a class="reference internal" href="dev/02_debug.html">Debug</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev/03_lint.html">Lint</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dev/04_autotest.html">Auto Test</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dev/05_publish.html">Publish</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="modules.html">yxr-codeforces-core</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
@@ -237,16 +238,20 @@
 </li>
         <li><a href="codeforces_core.html#codeforces_core.contest_meta.async_contest_meta">async_contest_meta() (in module codeforces_core.contest_meta)</a>
 </li>
+        <li><a href="codeforces_core.html#codeforces_core.account.async_fetch_logged_in">async_fetch_logged_in() (in module codeforces_core.account)</a>
+</li>
+        <li><a href="codeforces_core.html#codeforces_core.submit.async_fetch_submission_page">async_fetch_submission_page() (in module codeforces_core.submit)</a>
+</li>
         <li><a href="codeforces_core.html#codeforces_core.contest_standing.async_friends_standing">async_friends_standing() (in module codeforces_core.contest_standing)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="codeforces_core.html#codeforces_core.httphelper.HttpHelper.async_get">async_get() (codeforces_core.httphelper.HttpHelper method)</a>
 
         <ul>
           <li><a href="codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface.async_get">(codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface method)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="codeforces_core.html#codeforces_core.language.async_language">async_language() (in module codeforces_core.language)</a>
 </li>
         <li><a href="codeforces_core.html#codeforces_core.account.async_login">async_login() (in module codeforces_core.account)</a>
@@ -398,6 +403,13 @@
 </li>
         </ul></li>
         <li>
+    codeforces_core.url
+
+        <ul>
+          <li><a href="codeforces_core.html#module-codeforces_core.url">module</a>
+</li>
+        </ul></li>
+        <li>
     codeforces_core.util
 
         <ul>
@@ -431,7 +443,7 @@
 </li>
         <li><a href="codeforces_core.html#codeforces_core.httphelper.HttpHelper.cookie_jar_path">cookie_jar_path (codeforces_core.httphelper.HttpHelper attribute)</a>
 </li>
-        <li><a href="codeforces_core.html#codeforces_core.websocket.create_contest_ws_task">create_contest_ws_task() (in module codeforces_core.websocket)</a>
+        <li><a href="codeforces_core.html#codeforces_core.websocket.create_contest_ws_task_yield">create_contest_ws_task_yield() (in module codeforces_core.websocket)</a>
 </li>
         <li><a href="codeforces_core.html#codeforces_core.httphelper.HttpHelper.create_form">create_form() (codeforces_core.httphelper.HttpHelper method)</a>
 
@@ -439,8 +451,6 @@
           <li><a href="codeforces_core.interfaces.html#codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface.create_form">(codeforces_core.interfaces.AioHttpHelper.AioHttpHelperInterface method)</a>
 </li>
         </ul></li>
-        <li><a href="codeforces_core.html#codeforces_core.websocket.create_ws_task">create_ws_task() (in module codeforces_core.websocket)</a>
-</li>
         <li><a href="codeforces_core.html#codeforces_core.account.LoginResult.csrf">csrf (codeforces_core.account.LoginResult attribute)</a>
 </li>
     </ul></td>
@@ -679,6 +689,8 @@
 </li>
           <li><a href="codeforces_core.html#module-codeforces_core.submit">codeforces_core.submit</a>
 </li>
+          <li><a href="codeforces_core.html#module-codeforces_core.url">codeforces_core.url</a>
+</li>
           <li><a href="codeforces_core.html#module-codeforces_core.util">codeforces_core.util</a>
 </li>
           <li><a href="codeforces_core.html#module-codeforces_core.websocket">codeforces_core.websocket</a>
@@ -792,7 +804,13 @@
     <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="codeforces_core.html#codeforces_core.contest_standing.StandingRow.penalty">penalty (codeforces_core.contest_standing.StandingRow attribute)</a>
 </li>
+        <li><a href="codeforces_core.html#codeforces_core.url.pid2split">pid2split() (in module codeforces_core.url)</a>
+</li>
+        <li><a href="codeforces_core.html#codeforces_core.url.pid2url">pid2url() (in module codeforces_core.url)</a>
+</li>
         <li><a href="codeforces_core.html#codeforces_core.util.pop_element">pop_element() (in module codeforces_core.util)</a>
+</li>
+        <li><a href="codeforces_core.html#codeforces_core.url.problem_url_parse">problem_url_parse() (in module codeforces_core.url)</a>
 </li>
         <li><a href="codeforces_core.html#codeforces_core.problem.ProblemInfo">ProblemInfo (class in codeforces_core.problem)</a>
 
@@ -930,10 +948,10 @@
           <li><a href="codeforces_core.html#codeforces_core.problems.ProblemInfo.time_limit_seconds">(codeforces_core.problems.ProblemInfo attribute)</a>
 </li>
         </ul></li>
-    </ul></td>
-    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="codeforces_core.html#codeforces_core.submit.SubmissionPageResult.time_ms">time_ms (codeforces_core.submit.SubmissionPageResult attribute)</a>
 </li>
+    </ul></td>
+    <td style="width: 33%; vertical-align: top;"><ul>
         <li><a href="codeforces_core.html#codeforces_core.contest_list.CodeforcesUser.title">title (codeforces_core.contest_list.CodeforcesUser attribute)</a>
 
         <ul>
@@ -957,6 +975,8 @@
         <li><a href="codeforces_core.html#codeforces_core.httphelper.HttpHelper.tokens">tokens (codeforces_core.httphelper.HttpHelper attribute)</a>
 </li>
         <li><a href="codeforces_core.html#codeforces_core.submit.transform_submission">transform_submission() (in module codeforces_core.submit)</a>
+</li>
+        <li><a href="codeforces_core.html#codeforces_core.util.typedxpath">typedxpath() (in module codeforces_core.util)</a>
 </li>
     </ul></td>
   </tr></table>
@@ -986,6 +1006,8 @@
           <li><a href="codeforces_core.html#codeforces_core.contest_meta.Materials.url">(codeforces_core.contest_meta.Materials attribute)</a>
 </li>
           <li><a href="codeforces_core.html#codeforces_core.contest_meta.ProblemMeta.url">(codeforces_core.contest_meta.ProblemMeta attribute)</a>
+</li>
+          <li><a href="codeforces_core.html#codeforces_core.contest_standing.Standing.url">(codeforces_core.contest_standing.Standing attribute)</a>
 </li>
           <li><a href="codeforces_core.html#codeforces_core.problem.ParseProblemResult.url">(codeforces_core.problem.ParseProblemResult attribute)</a>
 </li>
