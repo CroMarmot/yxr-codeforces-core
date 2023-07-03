@@ -1,3 +1,4 @@
+import asyncio
 import pytest
 import os
 # src
@@ -24,6 +25,10 @@ async def test_e2e_login():
   http = HttpHelper(token_path='', cookie_jar_path='')
   await http.open_session()
   result = await async_login(http=http, handle=handle, password=password)
+
+  # print(cookies)
+  # for key, item in cookies.items():
+  #   print(key, item.value)
   await http.close_session()
   assert result.success
 

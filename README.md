@@ -7,7 +7,7 @@ python3.8+ ([typing.Protocol](https://docs.python.org/3/library/typing.html#typi
 | account login                    | ✅    | ✅                  | ✅         | ✅        |
 | submit code                      | ✅    | ✅                  | ✅         | ❌        |
 | submission websocket             | ✅    | ✅                  | ✅         | ❌        |
-| my submission page               | ❌    | ❌                  | ❌         | ❌        |
+| my submission page               | ✅    | ✅                  | ❌         | ❌        |
 | contest register                 | ✅    | ✅                  | ❌         | ✅        |
 | contest list                     | ✅    | ✅                  | ✅         | ❌        |
 | contest meta                     | ✅    | ✅                  | ✅         | ❌        |
@@ -15,9 +15,10 @@ python3.8+ ([typing.Protocol](https://docs.python.org/3/library/typing.html#typi
 | problems                         | ✅    | ✅                  | ✅         | ❌        |
 | specific problem                 | ✅    | ✅                  | ✅         | ❌        |
 | language list                    | ✅    | ✅                  | ✅         | ❌        |
-| pid/url parser                   | ❌    | ❌                  | ❌         | ❌        |
+| pid/url parser                   | ✅    | ✅                  | ❌         | ❌        |
+| domain 2 ip dig tool             | ❌    | ❌                  | ❌         | ❌        |
 
-# Docs
+## Docs
 
 [User](https://cromarmot.github.io/yxr-codeforces-core/user/index.html)
 

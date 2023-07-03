@@ -2,6 +2,10 @@ from dataclasses import dataclass
 from typing import Tuple
 from random import choice
 from lxml import html
+from lxml.html import HtmlElement
+import logging
+
+from codeforces_core.util import typedxpath
 
 from .interfaces.AioHttpHelper import AioHttpHelperInterface
 
@@ -23,35 +27,56 @@ class LoginResult:
 
 def is_user_logged_in(html_data: str) -> bool:
   doc = html.fromstring(html_data)
-  links = doc.xpath('.//div[@class="lang-chooser"]/div[not(@style)]/a[@href]')
+  links = typedxpath(doc, './/div[@class="lang-chooser"]/div[not(@style)]/a[@href]')
   for m in links:
     if m.text.strip() in ["Register", "Enter"]:
       return False
   return True
 
 
-@DeprecationWarning
-def check_login(html_data: str) -> bool:
-  doc = html.fromstring(html_data)
-  captions = doc.xpath('.//div[@class="caption titled"]')
-  for c in captions:
-    titled = c.text.strip()
-    if titled == 'Login into Codeforces':
-      return False
-  return True
+async def async_fetch_logged_in(http: AioHttpHelperInterface, login_url=default_login_url) -> Tuple[bool, str]:
+  """
+    auto update token 
+    return bool(is_logged_in), html_data
+  """
+  html_data = await http.async_get(login_url)
+  try:
+    uc, usmc, cc, pc, csrf_token, ftaa, bfaa = extract_channel(html_data)
+  except Exception as e:
+    uc, usmc, cc, pc, csrf_token, ftaa, bfaa = '', '', '', '', '', '', ''
+    logging.error(str(e))
+
+  if is_user_logged_in(html_data=html_data):
+    http.update_tokens(csrf=csrf_token, ftaa=ftaa, bfaa=bfaa, uc=uc, usmc=usmc)
+    return True, html_data
+  return False, ''
 
 
-def extract_channel(html_data: str) -> Tuple[str, str, str, str]:
+def extract_channel(html_data: str) -> Tuple[str, str, str, str, str, str, str]:
   doc = html.fromstring(html_data)
-  uc = doc.xpath('.//meta[@name="uc"]')
-  uc = uc[0].get('content') if len(uc) > 0 else None
-  usmc = doc.xpath('.//meta[@name="usmc"]')
-  usmc = usmc[0].get('content') if len(usmc) > 0 else None
-  cc = doc.xpath('.//meta[@name="cc"]')
-  cc = cc[0].get('content') if len(cc) > 0 else None
-  pc = doc.xpath('.//meta[@name="pc"]')
-  pc = pc[0].get('content') if len(pc) > 0 else None
-  return uc, usmc, cc, pc
+
+  def xpath_content(el: HtmlElement, s: str) -> str:
+    try:
+      l = typedxpath(el, s)
+      return l[0].get('content') if len(l) > 0 else ''
+    except Exception as e:
+      logging.exception(e)
+      return ''
+
+  uc = xpath_content(doc, './/meta[@name="uc"]')
+  usmc = xpath_content(doc, './/meta[@name="usmc"]')
+  cc = xpath_content(doc, './/meta[@name="cc"]')
+  pc = xpath_content(doc, './/meta[@name="pc"]')
+  try:
+    csrf_token = typedxpath(doc, './/span[@class="csrf-token"]')[0].get('data-csrf')
+    assert len(csrf_token) == 32, "Invalid CSRF token"
+  except Exception as e:
+    logging.exception(e)
+    csrf_token = ''
+  ftaa = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789') for x in range(18)])
+  # bfaa : Fingerprint2.x64hash128
+  bfaa = ''.join([choice('0123456789abcdef') for x in range(32)])
+  return uc, usmc, cc, pc, csrf_token, ftaa, bfaa
 
 
 # TODO 已经登陆账号A, 再调用登陆账号B是不行的, 这个逻辑应该是由外部控制，调用时应该确保未登录状态
@@ -72,7 +97,7 @@ async def async_login(http: AioHttpHelperInterface,
     .. code-block::
 
         import asyncio
-        from codeforces_core.account import async_login
+        from codeforces_core.account import async_login, is_user_logged_in
         from codeforces_core.httphelper import HttpHelper
 
         async def demo():
@@ -90,12 +115,7 @@ async def async_login(http: AioHttpHelperInterface,
         asyncio.run(demo())
   """
   html_data = await http.async_get(login_url)
-  doc = html.fromstring(html_data)
-  csrf_token = doc.xpath('.//span[@class="csrf-token"]')[0].get('data-csrf')
-  assert len(csrf_token) == 32, "Invalid CSRF token"
-  ftaa = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789') for x in range(18)])
-  # bfaa : Fingerprint2.x64hash128
-  bfaa = ''.join([choice('0123456789abcdef') for x in range(32)])
+  csrf_token, ftaa, bfaa = extract_channel(html_data)[4:7]
   login_data = {
       'csrf_token': csrf_token,
       'action': 'enter',
@@ -106,10 +126,8 @@ async def async_login(http: AioHttpHelperInterface,
       'remember': 'on',
   }
   html_data = await http.async_post(login_url, login_data)
-  try:
-    uc, usmc, cc, pc = extract_channel(html_data)
-  except:
-    uc, usmc, cc, pc = '', '', '', ''
+  # uc, usmc, cc, pc, csrf_token, ftaa, bfaa = extract_channel(html_data)
+  uc, usmc, cc, pc = extract_channel(html_data)[0:4]
 
   success = False
   # if check_login(result.html):

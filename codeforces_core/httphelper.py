@@ -1,6 +1,7 @@
 import logging
-from typing import Any, Callable, Dict, Optional, Tuple
+from typing import Any, AsyncIterator, Callable, Dict, List, Optional, Tuple, cast
 from lxml import html
+from lxml.etree import _Element
 from os import path
 import asyncio
 import aiohttp
@@ -32,7 +33,7 @@ class RCPCRedirectionError(Exception):
     super().__init__("RCPC redirection detected")
 
 
-def add_header(newhdr, headers=default_headers) -> Dict[str, str]:
+def add_header(newhdr, headers: Dict[str, str]) -> Dict[str, str]:
   headers.update(newhdr)
   return headers
 
@@ -47,8 +48,8 @@ class HttpHelper(AioHttpHelperInterface):
   cookie_jar_path = ''
   cookie_jar: Optional[aiohttp.CookieJar] = None
   token_path = ''
-  tokens: Any = {}
-  headers: Any = {}  # TODO
+  tokens: Dict[str, str] = {}
+  headers: Dict[str, str] = {}  # TODO
 
   def __init__(self, cookie_jar_path: str = '', token_path: str = '', headers=default_headers, host=CF_HOST) -> None:
     # if path is empty string then won't save to any file, just store in memory
@@ -61,7 +62,7 @@ class HttpHelper(AioHttpHelperInterface):
 
   @staticmethod
   def load_tokens(token_path: str) -> Dict[str, Any]:
-    if path.isfile(token_path):
+    if token_path and path.isfile(token_path):
       with open(token_path, 'r') as f:
         return json.load(f)
     return {}
@@ -72,8 +73,8 @@ class HttpHelper(AioHttpHelperInterface):
     if cookie_jar_path:
       if path.isfile(cookie_jar_path):
         jar.load(file_path=cookie_jar_path)
-      # else:
-      #   jar.save(file_path=cookie_jar_path)
+      else:
+        jar.save(file_path=cookie_jar_path)
     return jar
 
   async def open_session(self) -> aiohttp.ClientSession:
@@ -95,36 +96,41 @@ class HttpHelper(AioHttpHelperInterface):
         json.dump(self.tokens, f)
 
   async def async_get(self, url, headers=None, csrf=False):
+    if self.session is None:
+      raise Exception('Please open_session() before async_get()')
     if headers == None: headers = default_headers
     if csrf and 'csrf' in self.tokens:
-      headers = add_header({'X-Csrf-Token': self.tokens['csrf']})
+      headers = add_header({'X-Csrf-Token': self.tokens['csrf']}, headers=headers)
     # TODO remove the feature
     if url.startswith('/'): url = self.host + url
-    result = None
     try:
       async with self.session.get(url, headers=headers) as response:
         assert response.status == 200
-        self.check_rcpc(await response.text())
+        text = await response.text()
+        self.check_rcpc(text)
         if self.cookie_jar_path:
           self.cookie_jar.save(file_path=self.cookie_jar_path)  # TODO move auto save to file out
-        return await response.text()
+        return text
     except RCPCRedirectionError:
       async with self.session.get(url, headers=headers) as response:
         assert response.status == 200
         if self.cookie_jar_path:
           self.cookie_jar.save(file_path=self.cookie_jar_path)
         return await response.text()
+    except Exception as e:
+      logger.error(e)
 
-  async def async_post(self, url, data, headers=None, csrf=False):
+  async def async_post(self, url, data, headers=default_headers, csrf=False, **kwargs: Any):
+    if self.session is None:
+      raise Exception('Please open_session() before async_get()')
     if headers == None: headers = default_headers
     if csrf and 'csrf' in self.tokens:
-      headers = add_header({'X-Csrf-Token': self.tokens['csrf']})
+      headers = add_header({'X-Csrf-Token': self.tokens['csrf']}, headers=headers)
 
     # TODO remove the feature
     if url.startswith('/'): url = self.host + url
-    result = None
     try:
-      async with self.session.post(url, headers=headers, data=data) as response:
+      async with self.session.post(url, headers=headers, data=data, **kwargs) as response:
         assert response.status == 200
         self.check_rcpc(await response.text())
         if self.cookie_jar_path:
@@ -136,16 +142,18 @@ class HttpHelper(AioHttpHelperInterface):
         if self.cookie_jar_path:
           self.cookie_jar.save(file_path=self.cookie_jar_path)
         return await response.text()
+    except Exception as e:
+      logger.error(e)
 
   def get_tokens(self):
     return self.tokens
 
   def check_rcpc(self, html_data: str):
     doc = html.fromstring(html_data)
-    aesmin = doc.xpath(".//script[@type='text/javascript' and @src='/aes.min.js']")
+    aesmin = cast(List[_Element], doc.xpath(".//script[@type='text/javascript' and @src='/aes.min.js']"))
     if len(aesmin) > 0:
       print("[+] RCPC redirection detected")
-      js = doc.xpath(".//script[not(@type)]")
+      js = cast(List[_Element], doc.xpath(".//script[not(@type)]"))
       assert len(js) > 0
       keys = re.findall(r'[abc]=toNumbers\([^\)]*', js[0].text)
       for k in keys:
@@ -170,25 +178,23 @@ class HttpHelper(AioHttpHelperInterface):
     return form
 
   # callback return (end watch?, transform result)
-  async def websockets(self, url: str, callback: Callable[[Any], Tuple[bool, Any]]) -> Any:
+  async def websockets(self, url: str, callback: Callable[[Any], Tuple[bool, Any]]) -> AsyncIterator[Any]:
     try:
       async with self.session.ws_connect(url) as ws:
-        ret = []
         async for msg in ws:
           if msg.type == aiohttp.WSMsgType.TEXT:
             js = json.loads(msg.data)
             js['text'] = json.loads(js['text'])
 
             endwatch, obj = callback(js)
-            ret.append(obj)
+            yield obj
             if endwatch:
-              return ret
+              return
 
           else:
             logger.error('wrong msg type?', msg.type)
             break
-        return ret
+        return
     except Exception as e:
       logger.error(e)
-      # session closed?
-      return False
+      return

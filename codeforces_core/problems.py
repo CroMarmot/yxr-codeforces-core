@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import List
+import logging
+from typing import Any, List, cast
 from lxml import html
 
 from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
@@ -80,51 +81,54 @@ async def async_problems(http: AioHttpHelperInterface, contest_id: str) -> List[
   url = "/contest/{}/problems".format(contest_id)
   resp = await http.async_get(url)
   doc = html.fromstring(resp)
-  probs = doc.xpath('.//div[@class="problemindexholder"]')
+  probs = cast(List[Any], doc.xpath('.//div[@class="problemindexholder"]'))
 
   ret: List[ProblemInfo] = []
   for p in probs:
-    #if alert: alert = alert[0].text
-    level = p.get('problemindex')
-    typo = p.xpath('.//div[@class="ttypography"]')[0]
-    title = pop_element(typo.xpath('.//div[@class="title"]')[0])
-    time_limit = typo.xpath('.//div[@class="time-limit"]')[0]
-    time_limit = [t for t in time_limit.itertext()][1].split(' ')[0]
-    memory_limit = typo.xpath('.//div[@class="memory-limit"]')[0]
-    memory_limit = [t for t in memory_limit.itertext()][1].split(' ')[0]
-    desc = typo.xpath('.//div[not(@class)]')
-    if desc:
-      desc = '\n'.join([t for t in desc[0].itertext()])
-    else:
-      desc = ""
+    try:
+      # if alert: alert = alert[0].text
+      level = p.get('problemindex')
+      typo = p.xpath('.//div[@class="ttypography"]')[0]
+      title = pop_element(typo.xpath('.//div[@class="title"]')[0])
+      time_limit = typo.xpath('.//div[@class="time-limit"]')[0]
+      time_limit = [t for t in time_limit.itertext()][1].split(' ')[0]
+      memory_limit = typo.xpath('.//div[@class="memory-limit"]')[0]
+      memory_limit = [t for t in memory_limit.itertext()][1].split(' ')[0]
+      desc = typo.xpath('.//div[not(@class)]')
+      if desc:
+        desc = '\n'.join([t for t in desc[0].itertext()])
+      else:
+        desc = ""
 
-    for j in typo.xpath('.//div[@class="section-title"]'):
-      pop_element(j)
+      for j in typo.xpath('.//div[@class="section-title"]'):
+        pop_element(j)
 
-    in_spec = typo.xpath('.//div[@class="input-specification"]')
-    if in_spec:
-      in_spec = '\n'.join([t for t in in_spec[0].itertext()])
-    else:
-      in_spec = ""
+      in_spec = typo.xpath('.//div[@class="input-specification"]')
+      if in_spec:
+        in_spec = '\n'.join([t for t in in_spec[0].itertext()])
+      else:
+        in_spec = ""
 
-    out_spec = typo.xpath('.//div[@class="output-specification"]')
-    if out_spec:
-      out_spec = '\n'.join([t for t in out_spec[0].itertext()])
-    else:
-      out_spec = ""
+      out_spec = typo.xpath('.//div[@class="output-specification"]')
+      if out_spec:
+        out_spec = '\n'.join([t for t in out_spec[0].itertext()])
+      else:
+        out_spec = ""
 
-    in_tc = extract_testcases(typo.xpath('.//div[@class="input"]'))
-    out_tc = extract_testcases(typo.xpath('.//div[@class="output"]'))
-    note = typo.xpath('.//div[@class="note"]')
-    if note:
-      note = '\n'.join([t for t in note[0].itertext()])
-    ret.append(
-        ProblemInfo(title=title,
-                    level=level,
-                    time_limit_seconds=time_limit,
-                    memory_limit_mb=memory_limit,
-                    desc=desc,
-                    in_tc=in_tc,
-                    out_tc=out_tc,
-                    note=note))
+      in_tc = extract_testcases(typo.xpath('.//div[@class="input"]'))
+      out_tc = extract_testcases(typo.xpath('.//div[@class="output"]'))
+      note = typo.xpath('.//div[@class="note"]')
+      if note:
+        note = '\n'.join([t for t in note[0].itertext()])
+      ret.append(
+          ProblemInfo(title=title,
+                      level=level,
+                      time_limit_seconds=time_limit,
+                      memory_limit_mb=memory_limit,
+                      desc=desc,
+                      in_tc=in_tc,
+                      out_tc=out_tc,
+                      note=note))
+    except Exception as e:
+      logging.exception(e)
   return ret

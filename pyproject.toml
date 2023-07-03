@@ -1,9 +1,6 @@
 [build-system]
-requires = [
-  "setuptools>=61.0",
-  "wheel",
-]
-build-backend = "setuptools.build_meta"
+requires = [ "hatchling" ]
+build-backend = "hatchling.build"
 
 [project]
 name = "yxr-codeforces-core"
@@ -33,16 +30,17 @@ dependencies = [
 "Bug Tracker" = "https://github.com/CroMarmot/yxr-codeforces-core/issues"
 
 [project.optional-dependencies]
+dev = [
+  "yxr-codeforces-core[test,doc]",
+  'build',
+  "yapf",
+  "toml",
+]
+
 doc = [
   "sphinx ~= 5.3",
   "furo",
   "myst-parser",
-]
-
-dev = [
-  "yxr-codeforces-core[test,doc]",
-  "yapf",
-  "toml",
 ]
 
 test = [
@@ -54,14 +52,20 @@ test = [
   "mypy", # 0.982
 ]
 
-[tool.setuptools.dynamic]
-version = {attr = "codeforces_core.__version__"}
+[tool.hatch.build]
+ignore-vcs = true
+include = [
+  "codeforces_core",
+]
+exclude = [
+  "tests",
+  "docs",
+  "build",
+  "venv",
+]
 
-[tool.setuptools.packages.find]
-where = ["."] # default "."
-include = ["codeforces_core"] # ["*"] by default
-exclude = ["TODO.md", "tests", "docs"] # empty by default
-namespaces = true # true by default
+[tool.hatch.version]
+path = "codeforces_core/__init__.py"
 
 [tool.pytest.ini_options]
 minversion = "6.0"

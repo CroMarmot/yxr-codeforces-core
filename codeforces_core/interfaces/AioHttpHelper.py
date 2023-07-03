@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Any, Callable, Dict, Protocol, Tuple
+from typing import Any, Callable, Dict, Protocol, Tuple, AsyncIterator
 import aiohttp
 
 
@@ -35,5 +35,7 @@ class AioHttpHelperInterface(Protocol):
 
   # TODO move call back out
   @abstractmethod
-  async def websockets(self, url: str, callback: Callable[[Any], Tuple[bool, Any]]) -> Any:
+  async def websockets(self, url: str, callback: Callable[[Any], Tuple[bool, Any]]) -> AsyncIterator[Any]:
     raise NotImplementedError
+    # mypy type hint https://github.com/python/mypy/issues/5070
+    yield 0
