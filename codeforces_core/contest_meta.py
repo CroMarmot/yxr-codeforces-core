@@ -7,8 +7,8 @@ from lxml import html
 from lxml.etree import _Element
 from lxml.html import HtmlMixin
 
-from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
-from codeforces_core.util import soup_find_bs4Tag
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
+from .util import soup_find_bs4Tag
 
 
 class E_STATUS(str, Enum):
@@ -111,7 +111,7 @@ def parse_materials(resp: str) -> List[Materials]:
   return ret
 
 
-async def async_contest_meta(http: AioHttpHelperInterface, contest_id: str) -> ContestPage:
+async def async_contest_meta(http: AioHttpHelperInterface, contest_id: str, **kw) -> ContestPage:
   """
     This method will use ``http`` to request ``/contest/<contest_id>``, and parse to struct result
 

@@ -4,7 +4,7 @@ from typing import List, cast
 from lxml import html
 from lxml.etree import _Element
 
-from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
 from . import util
 
 
@@ -23,7 +23,7 @@ class RegisterResult:
 
 # TODO 统一参数命名
 # Take part as individual participant
-async def async_register(http: AioHttpHelperInterface, contest_id: str) -> RegisterResult:
+async def async_register(http: AioHttpHelperInterface, contest_id: str, **kw) -> RegisterResult:
   """
     This method will use ``http`` for register request, you need login before
 

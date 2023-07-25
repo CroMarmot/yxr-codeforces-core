@@ -1,22 +1,19 @@
 from collections import defaultdict
 from dataclasses import dataclass, field
-import logging
 from os import path
 from typing import Any, List, Tuple
 from lxml import html
 
-from codeforces_core.util import typedxpath
-
 # from .ui import BLUE, GREEN, RED, redraw
+from .util import typedxpath
 from .account import is_user_logged_in
 from .interfaces.AioHttpHelper import AioHttpHelperInterface
+from .kwargs import extract_common_kwargs
 from .url import problem_url_parse
 
-logger = logging.getLogger(__name__)
 
-
-async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str, file_path: str,
-                       lang_id: str) -> Tuple[str, str]:
+async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str, file_path: str, lang_id: str,
+                       **kw) -> Tuple[str, str]:
   """
     This method will use ``http`` to post submit
 
@@ -60,6 +57,7 @@ async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str
         asyncio.run(demo())
 
   """
+  logger = extract_common_kwargs(**kw).logger
 
   if not contest_id or not level:
     logger.error("[!] Invalid contestID or level")
@@ -123,7 +121,8 @@ def parse_submit_status(html_page: str) -> List[SubmissionPageResult]:
   return ret
 
 
-async def async_fetch_submission_page(http: AioHttpHelperInterface, problem_url: str) -> List[SubmissionPageResult]:
+async def async_fetch_submission_page(http: AioHttpHelperInterface, problem_url: str,
+                                      **kw) -> List[SubmissionPageResult]:
   contest_id, problem_key = problem_url_parse(problem_url)
   # 正常是 302 -> https://codeforces.com/contest/<contest id>/my
   html_page = await http.async_get(f'/contest/{contest_id}/my')

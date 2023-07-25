@@ -3,7 +3,7 @@ from typing import List
 from bs4 import BeautifulSoup
 import bs4
 
-from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
 
 
 @dataclass
@@ -12,7 +12,7 @@ class Lang:
   value: str
 
 
-async def async_language(http: AioHttpHelperInterface) -> List[Lang]:
+async def async_language(http: AioHttpHelperInterface, **kw) -> List[Lang]:
   """
     This method will use ``http`` to request ``/problemset/submit``, and parse language options
 

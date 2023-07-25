@@ -1,16 +1,14 @@
 from dataclasses import dataclass
 import json
-import logging
 import re
 from typing import List
 from lxml import html
 from lxml.etree import ElementBase
 from datetime import datetime, timedelta
 
-from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
-from codeforces_core.util import typedxpath
-
-logger = logging.getLogger(__name__)
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
+from .kwargs import extract_common_kwargs
+from .util import typedxpath
 
 
 @dataclass
@@ -77,7 +75,8 @@ class ContestList:
   history: List[ContestListItem]
 
 
-def parse_contest_list(raw_contests: ElementBase, upcoming: bool) -> List[ContestListItem]:
+def parse_contest_list(raw_contests: ElementBase, upcoming: bool, **kw) -> List[ContestListItem]:
+  logger = extract_common_kwargs(**kw).logger
   contests: List[ContestListItem] = []
 
   for c in typedxpath(raw_contests, './/tr[@data-contestid]'):
@@ -123,7 +122,7 @@ def parse_contest_list(raw_contests: ElementBase, upcoming: bool) -> List[Contes
 
 
 # This function is to simulate web request, do not do the cache
-async def async_contest_list(http: AioHttpHelperInterface, page: int = 1) -> ContestList:
+async def async_contest_list(http: AioHttpHelperInterface, page: int = 1, **kw) -> ContestList:
   """
     This method will use ``http`` for get contests page, you can both login or not login
 
@@ -153,6 +152,7 @@ async def async_contest_list(http: AioHttpHelperInterface, page: int = 1) -> Con
 
         asyncio.run(demo())
   """
+  logger = extract_common_kwargs(**kw).logger
   doc = html.fromstring(await http.async_get(f'/contests/page/{page}?complete=true'))
   table = typedxpath(doc, './/div[@class="datatable"]')
   upcoming = parse_contest_list(table[0], upcoming=True)

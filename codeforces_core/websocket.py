@@ -1,13 +1,10 @@
-import asyncio
-import logging
 from time import time
 from typing import Any, Callable, Tuple, AsyncIterator
 
-from codeforces_core.account import extract_channel
-from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
-from codeforces_core.submit import SubmissionWSResult
-
-logger = logging.getLogger(__name__)
+from .account import extract_channel
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
+from .kwargs import extract_common_kwargs
+from .submit import SubmissionWSResult
 
 
 # return (end watch?, transform result)
@@ -66,16 +63,17 @@ def display_ws(result: Any) -> Tuple[bool, Any]:
 # https://codeforces.com/contest/<contest_id>/my 会多出两个 meta
 #    <meta name="cc" content="xxx"/>
 #    <meta name="pc" content="yyy"/>
+#   TODO 设计上不太对, handler处理了数据, 结果也抛给了使用者, 应该handler 只关心是否停止, 而transform不应该在handler里处理
 # 这两个可以监听 题目测试时 的通过 百分比 变化
-async def create_contest_ws_task_yield(
-    http: AioHttpHelperInterface, contest_id: str,
-    ws_handler: Callable[[Any], Tuple[bool, Any]]) -> AsyncIterator[SubmissionWSResult]:
+async def create_contest_ws_task_yield(http: AioHttpHelperInterface, contest_id: str,
+                                       ws_handler: Callable[[Any], Tuple[bool, Any]],
+                                       **kw) -> AsyncIterator[SubmissionWSResult]:
   """
     This method will use ``http`` to create contest specific websocket, and ``ws_handler`` to handle each ws message
 
-    :param http: AioHttpHelperInterface 
+    :param http: AioHttpHelperInterface
     :param contest_id: contest id in the url
-    :param ws_handler: function to handler messages 
+    :param ws_handler: function to handler messages
 
     :returns: the task which run ws
 
@@ -83,11 +81,14 @@ async def create_contest_ws_task_yield(
 
     See docstring of :py:func:`codeforces_core.submit.async_submit()`
   """
+  logger = extract_common_kwargs(**kw).logger
   epoch = int(time() * 1000)  # s -> ms
   html_data = await http.async_get(f"/contest/{contest_id}/my")
-  cc, pc = extract_channel(html_data)[2:4]
+  cc, pc = extract_channel(html_data, logger)[2:4]
   assert cc and pc
   ws_url = f"wss://pubsub.codeforces.com/ws/s_{pc}/s_{cc}?_={epoch}&tag=&time=&eventid="
-  logger.info("ws_url:", ws_url)
+  logger.debug(f"pc = {pc}")  # 似乎和场次有关, 可能包含别人的?
+  logger.debug(f"cc = {cc}")  # 似乎只会包含自己的
+  logger.debug(f"ws_url = {ws_url}")
   async for data in http.websockets(ws_url, ws_handler):
     yield data
