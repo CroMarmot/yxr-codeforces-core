@@ -11,6 +11,7 @@ import re
 
 from .constants import CF_HOST
 from .interfaces.AioHttpHelper import AioHttpHelperInterface
+from .kwargs import extract_common_kwargs
 
 default_headers = {
     'Accept': '*/*',
@@ -19,12 +20,6 @@ default_headers = {
     'User-Agent':
     'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
 }
-
-# session: aiohttp.ClientSession = None
-# tokens = {}
-# cookie_jar = None
-
-logger = logging.getLogger(__name__)
 
 
 class RCPCRedirectionError(Exception):
@@ -50,8 +45,14 @@ class HttpHelper(AioHttpHelperInterface):
   token_path = ''
   tokens: Dict[str, str] = {}
   headers: Dict[str, str] = {}  # TODO
+  logger: logging.Logger
 
-  def __init__(self, cookie_jar_path: str = '', token_path: str = '', headers=default_headers, host=CF_HOST) -> None:
+  def __init__(self,
+               cookie_jar_path: str = '',
+               token_path: str = '',
+               headers=default_headers,
+               host=CF_HOST,
+               **kw) -> None:
     # if path is empty string then won't save to any file, just store in memory
     self.cookie_jar_path = cookie_jar_path
     # if path is empty string then won't save to any file, just store in memory
@@ -59,6 +60,7 @@ class HttpHelper(AioHttpHelperInterface):
     self.headers = headers
     # TODO support cf mirror site?
     self.host = host
+    self.logger = extract_common_kwargs(**kw).logger
 
   @staticmethod
   def load_tokens(token_path: str) -> Dict[str, Any]:
@@ -118,7 +120,7 @@ class HttpHelper(AioHttpHelperInterface):
           self.cookie_jar.save(file_path=self.cookie_jar_path)
         return await response.text()
     except Exception as e:
-      logger.error(e)
+      self.logger.error(e)
 
   async def async_post(self, url, data, headers=default_headers, csrf=False, **kwargs: Any):
     if self.session is None:
@@ -143,7 +145,7 @@ class HttpHelper(AioHttpHelperInterface):
           self.cookie_jar.save(file_path=self.cookie_jar_path)
         return await response.text()
     except Exception as e:
-      logger.error(e)
+      self.logger.error(e)
 
   def get_tokens(self):
     return self.tokens
@@ -192,9 +194,9 @@ class HttpHelper(AioHttpHelperInterface):
               return
 
           else:
-            logger.error('wrong msg type?', msg.type)
+            self.logger.error('wrong msg type?', msg.type)
             break
         return
     except Exception as e:
-      logger.error(e)
+      self.logger.error(e)
       return

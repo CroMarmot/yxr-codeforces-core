@@ -4,7 +4,7 @@ from typing import List
 from bs4 import BeautifulSoup
 import bs4
 
-from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
 
 
 @dataclass
@@ -47,7 +47,7 @@ class ParseProblemResult(object):
   file_path: str = ''
 
 
-async def async_problem(http: AioHttpHelperInterface, contest_id: str, level: str) -> ParseProblemResult:
+async def async_problem(http: AioHttpHelperInterface, contest_id: str, level: str, **kw) -> ParseProblemResult:
   """
     This method will use ``http`` to request ``/contest/<contest_id>/problems``, and parse to struct result
 

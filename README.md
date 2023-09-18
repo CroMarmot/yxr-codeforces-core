@@ -1,4 +1,4 @@
-# yxr-codeforces-core(WIP)
+# yxr-codeforces-core
 
 python3.8+ ([typing.Protocol](https://docs.python.org/3/library/typing.html#typing.Protocol) New in version 3.8.)
 

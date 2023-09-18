@@ -1,12 +1,12 @@
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Optional, Tuple
 from random import choice
 from lxml import html
 from lxml.html import HtmlElement
 import logging
 
-from codeforces_core.util import typedxpath
-
+from .kwargs import extract_common_kwargs
+from .util import typedxpath
 from .interfaces.AioHttpHelper import AioHttpHelperInterface
 
 default_login_url = "/enter?back=%2F"
@@ -34,17 +34,15 @@ def is_user_logged_in(html_data: str) -> bool:
   return True
 
 
-async def async_fetch_logged_in(http: AioHttpHelperInterface, login_url=default_login_url) -> Tuple[bool, str]:
+async def async_fetch_logged_in(http: AioHttpHelperInterface, login_url=default_login_url, **kw) -> Tuple[bool, str]:
   """
     auto update token 
     return bool(is_logged_in), html_data
   """
+  logger = extract_common_kwargs(**kw).logger
+
   html_data = await http.async_get(login_url)
-  try:
-    uc, usmc, cc, pc, csrf_token, ftaa, bfaa = extract_channel(html_data)
-  except Exception as e:
-    uc, usmc, cc, pc, csrf_token, ftaa, bfaa = '', '', '', '', '', '', ''
-    logging.error(str(e))
+  uc, usmc, cc, pc, csrf_token, ftaa, bfaa = extract_channel(html_data, logger=logger)
 
   if is_user_logged_in(html_data=html_data):
     http.update_tokens(csrf=csrf_token, ftaa=ftaa, bfaa=bfaa, uc=uc, usmc=usmc)
@@ -52,7 +50,9 @@ async def async_fetch_logged_in(http: AioHttpHelperInterface, login_url=default_
   return False, ''
 
 
-def extract_channel(html_data: str) -> Tuple[str, str, str, str, str, str, str]:
+# No exception, handler inside
+def extract_channel(html_data: str,
+                    logger: Optional[logging.Logger] = None) -> Tuple[str, str, str, str, str, str, str]:
   doc = html.fromstring(html_data)
 
   def xpath_content(el: HtmlElement, s: str) -> str:
@@ -60,7 +60,7 @@ def extract_channel(html_data: str) -> Tuple[str, str, str, str, str, str, str]:
       l = typedxpath(el, s)
       return l[0].get('content') if len(l) > 0 else ''
     except Exception as e:
-      logging.exception(e)
+      if logger: logger.exception(e)
       return ''
 
   uc = xpath_content(doc, './/meta[@name="uc"]')
@@ -71,7 +71,7 @@ def extract_channel(html_data: str) -> Tuple[str, str, str, str, str, str, str]:
     csrf_token = typedxpath(doc, './/span[@class="csrf-token"]')[0].get('data-csrf')
     assert len(csrf_token) == 32, "Invalid CSRF token"
   except Exception as e:
-    logging.exception(e)
+    if logger: logger.exception(e)
     csrf_token = ''
   ftaa = ''.join([choice('abcdefghijklmnopqrstuvwxyz0123456789') for x in range(18)])
   # bfaa : Fingerprint2.x64hash128
@@ -83,7 +83,8 @@ def extract_channel(html_data: str) -> Tuple[str, str, str, str, str, str, str]:
 async def async_login(http: AioHttpHelperInterface,
                       handle: str,
                       password: str,
-                      login_url=default_login_url) -> LoginResult:
+                      login_url=default_login_url,
+                      **kw) -> LoginResult:
   """
     This method will use ``http`` for login request, and  :py:func:`is_user_logged_in()` for login check
 
@@ -114,8 +115,9 @@ async def async_login(http: AioHttpHelperInterface,
 
         asyncio.run(demo())
   """
+  logger = extract_common_kwargs(**kw).logger
   html_data = await http.async_get(login_url)
-  csrf_token, ftaa, bfaa = extract_channel(html_data)[4:7]
+  csrf_token, ftaa, bfaa = extract_channel(html_data, logger=logger)[4:7]
   login_data = {
       'csrf_token': csrf_token,
       'action': 'enter',
@@ -127,7 +129,7 @@ async def async_login(http: AioHttpHelperInterface,
   }
   html_data = await http.async_post(login_url, login_data)
   # uc, usmc, cc, pc, csrf_token, ftaa, bfaa = extract_channel(html_data)
-  uc, usmc, cc, pc = extract_channel(html_data)[0:4]
+  uc, usmc, cc, pc = extract_channel(html_data, logger=logger)[0:4]
 
   success = False
   # if check_login(result.html):

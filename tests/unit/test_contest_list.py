@@ -1,6 +1,8 @@
+import os
 import pytest
 
 from ..helper.MockAioHttpHelper import MockAioHttpHelper
+from ..constant import mock_file
 
 pytest_plugins = ('pytest_asyncio', )
 
@@ -31,7 +33,7 @@ async def test_async_contest_list():
   # assert c.authors == []
   assert c.start == 1680962700
   # assert c.length== '02:00'
-  assert c.participants == 'Before registration 3 days'
+  assert c.participants == ''
   # assert c.upcoming== True
   assert c.registered == False
   assert c.Div == ['D', '2']
@@ -43,7 +45,7 @@ async def test_async_contest_list():
   assert c.start == 1681383600
   assert c.length == '14:00:00'
   # TODO better parse
-  assert c.participants == '4201 Until closing 3 weeks'
+  assert c.participants == '4201'
   # assert c.upcoming== True
   assert c.registered == False
   assert c.Div == ['C']
@@ -75,5 +77,32 @@ async def test_async_contest_list():
   assert c.length == '02:00'
   assert c.participants == '25997'
   assert c.upcoming == False
+  assert c.registered == False
+  assert c.Div == ['D', '1', '2']
+
+
+@pytest.mark.asyncio
+async def test_async_contest_list2():
+  from codeforces_core.contest_list import parse_contest_list_page, CodeforcesUser
+  with open(mock_file('contests_2.html'), 'r') as f:
+    html_str = f.read()
+
+  result = parse_contest_list_page(html_str)
+  assert len(result.upcomming) == 9
+
+  c = result.upcomming[0]
+  assert c.id == 1870
+  assert c.title == 'CodeTON Round 6 (Div. 1 + Div. 2, Rated, Prizes!)'
+  assert c.authors == [
+      CodeforcesUser(name='SomethingNew',
+                     title='International Grandmaster SomethingNew',
+                     class__='user-red',
+                     profile='/profile/SomethingNew'),
+      CodeforcesUser(name='glebustim', title='Grandmaster glebustim', class__='user-red', profile='/profile/glebustim')
+  ]
+  assert c.start == 1695047700
+  assert c.length == '02:00'
+  assert c.participants == '17066'
+  assert c.upcoming == True
   assert c.registered == False
   assert c.Div == ['D', '1', '2']

@@ -3,7 +3,8 @@ import logging
 from typing import Any, List, cast
 from lxml import html
 
-from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
+from .kwargs import extract_common_kwargs
 from .util import pop_element
 
 
@@ -49,7 +50,7 @@ class ProblemInfo:
   note: str
 
 
-async def async_problems(http: AioHttpHelperInterface, contest_id: str) -> List[ProblemInfo]:
+async def async_problems(http: AioHttpHelperInterface, contest_id: str, **kw) -> List[ProblemInfo]:
   """
     This method will use ``http`` to request ``/contest/<contest_id>/problems``, and parse to struct result
 
@@ -78,6 +79,7 @@ async def async_problems(http: AioHttpHelperInterface, contest_id: str) -> List[
 
         asyncio.run(demo())
   """
+  logger = extract_common_kwargs(**kw).logger
   url = "/contest/{}/problems".format(contest_id)
   resp = await http.async_get(url)
   doc = html.fromstring(resp)
@@ -130,5 +132,5 @@ async def async_problems(http: AioHttpHelperInterface, contest_id: str) -> List[
                       out_tc=out_tc,
                       note=note))
     except Exception as e:
-      logging.exception(e)
+      logger.exception(e)
   return ret

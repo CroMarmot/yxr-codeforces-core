@@ -1,16 +1,14 @@
 from dataclasses import dataclass
 import json
-import logging
 import re
 from typing import List
 from lxml import html
 from lxml.etree import ElementBase
 from datetime import datetime, timedelta
 
-from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
-from codeforces_core.util import typedxpath
-
-logger = logging.getLogger(__name__)
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
+from .kwargs import extract_common_kwargs
+from .util import typedxpath
 
 
 @dataclass
@@ -77,7 +75,8 @@ class ContestList:
   history: List[ContestListItem]
 
 
-def parse_contest_list(raw_contests: ElementBase, upcoming: bool) -> List[ContestListItem]:
+def parse_contest_list(raw_contests: ElementBase, upcoming: bool, **kw) -> List[ContestListItem]:
+  logger = extract_common_kwargs(**kw).logger
   contests: List[ContestListItem] = []
 
   for c in typedxpath(raw_contests, './/tr[@data-contestid]'):
@@ -97,14 +96,25 @@ def parse_contest_list(raw_contests: ElementBase, upcoming: bool) -> List[Contes
       start = int(datetime.strptime(str(start_str) + "+0300", "%b/%d/%Y %H:%M%z").timestamp())  # Russian + 3hours
       length = td[3].text.strip()
       participants = ''
-      registration = False
+      registered = False
 
       if upcoming:
-        msg = td[5].text_content().strip()
-        if msg.startswith("Registration completed"):
-          registration = True
-        participants = re.sub('\\s+', ' ', msg.split('x')[-1])
-      else:
+        # Registration completed x17284
+        # Register » x1521 Until closing 4 days
+        # Before registration 3 days
+        msg: str = re.sub('\\s+', ' ', td[5].text_content().strip())
+        if msg.startswith("Registration completed"):  # 完成注册
+          registered = True
+        elif msg.startswith('Before registration'):  # Before registration 3 days 还未开放注册 注册人数
+          registered = False
+        elif msg.startswith('Register'):  # 开放注册
+          registered = False
+
+        if msg.startswith("Registration completed") or msg.startswith('Register'):  # 开放注册
+          renshu = typedxpath(td[5], './/a[@class="contestParticipantCountLinkMargin"]')
+          if len(renshu) == 1:
+            participants = renshu[0].text_content().strip().lstrip('x')
+      else:  # 历史
         participants = re.sub('\\s+', ' ', td[5].text_content().strip().lstrip('x'))
 
       contests.append(
@@ -114,7 +124,7 @@ def parse_contest_list(raw_contests: ElementBase, upcoming: bool) -> List[Contes
                           start=start,
                           length=length,
                           participants=participants,
-                          registered=registration,
+                          registered=registered,
                           upcoming=upcoming,
                           Div=parse_div(title)))
     except Exception as e:
@@ -122,8 +132,26 @@ def parse_contest_list(raw_contests: ElementBase, upcoming: bool) -> List[Contes
   return contests
 
 
+def parse_contest_list_page(html_str: str, **kw) -> ContestList:
+  logger = extract_common_kwargs(**kw).logger
+  doc = html.fromstring(html_str)
+  table = typedxpath(doc, './/div[@class="datatable"]')
+  upcoming = parse_contest_list(table[0], upcoming=True)
+
+  # count contests
+  if len(table[1].xpath('.//tr[@data-contestid]')) == 0:
+    logger.error("[!] Contest is running or countdown")
+  else:
+    history = parse_contest_list(table[1], upcoming=False)
+
+  if not history:
+    logger.error("? list1 is empty")
+    return ContestList(upcomming=upcoming, history=[])
+  return ContestList(upcomming=upcoming, history=history)
+
+
 # This function is to simulate web request, do not do the cache
-async def async_contest_list(http: AioHttpHelperInterface, page: int = 1) -> ContestList:
+async def async_contest_list(http: AioHttpHelperInterface, page: int = 1, **kw) -> ContestList:
   """
     This method will use ``http`` for get contests page, you can both login or not login
 
@@ -153,17 +181,5 @@ async def async_contest_list(http: AioHttpHelperInterface, page: int = 1) -> Con
 
         asyncio.run(demo())
   """
-  doc = html.fromstring(await http.async_get(f'/contests/page/{page}?complete=true'))
-  table = typedxpath(doc, './/div[@class="datatable"]')
-  upcoming = parse_contest_list(table[0], upcoming=True)
-
-  # count contests
-  if len(table[1].xpath('.//tr[@data-contestid]')) == 0:
-    logger.error("[!] Contest is running or countdown")
-  else:
-    history = parse_contest_list(table[1], upcoming=False)
-
-  if not history:
-    logger.error("? list1 is empty")
-    return ContestList(upcomming=upcoming, history=[])
-  return ContestList(upcomming=upcoming, history=history)
+  html_str = await http.async_get(f'/contests/page/{page}?complete=true')
+  return parse_contest_list_page(html_str, **kw)

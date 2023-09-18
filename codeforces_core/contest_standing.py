@@ -4,7 +4,7 @@ from typing import List, Optional
 from bs4 import BeautifulSoup
 import bs4
 
-from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
+from .interfaces.AioHttpHelper import AioHttpHelperInterface
 
 # TODO post toggle showunofficial
 
@@ -92,7 +92,7 @@ def parseStandingHtml(html) -> Standing:
   return Standing(head=h, rows=rows)
 
 
-async def async_friends_standing(http: AioHttpHelperInterface, contest_id: str) -> Standing:
+async def async_friends_standing(http: AioHttpHelperInterface, contest_id: str, **kw) -> Standing:
   """
     This method will use ``http`` to request ``/contest/<contest_id>/standings/friends/true``, and parse to struct result
 
@@ -130,7 +130,7 @@ async def async_friends_standing(http: AioHttpHelperInterface, contest_id: str) 
   return result
 
 
-async def async_common_standing(http: AioHttpHelperInterface, contest_id: str, page: str = '1') -> Standing:
+async def async_common_standing(http: AioHttpHelperInterface, contest_id: str, page: str = '1', **kw) -> Standing:
   """
     This method will use ``http`` to request ``/contest/<contest_id>/standings/page/<page>``, and parse to struct result
 
