@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>codeforces_core.account - yxr-codeforces-core 0.0.2 documentation</title>
+        <title>codeforces_core.account - yxr-codeforces-core 0.0.2.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -122,7 +122,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.2 documentation</div></a>
+      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.2.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +145,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2 documentation</span>
+  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2.3 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -212,14 +212,14 @@
         <article role="main">
           <h1>Source code for codeforces_core.account</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Tuple</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choice</span>
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
 <span class="kn">from</span> <span class="nn">lxml.html</span> <span class="kn">import</span> <span class="n">HtmlElement</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 
-<span class="kn">from</span> <span class="nn">codeforces_core.util</span> <span class="kn">import</span> <span class="n">typedxpath</span>
-
+<span class="kn">from</span> <span class="nn">.kwargs</span> <span class="kn">import</span> <span class="n">extract_common_kwargs</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">typedxpath</span>
 <span class="kn">from</span> <span class="nn">.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
 
 <span class="n">default_login_url</span> <span class="o">=</span> <span class="s2">&quot;/enter?back=</span><span class="si">%2F</span><span class="s2">&quot;</span>
@@ -247,17 +247,15 @@
   <span class="k">return</span> <span class="kc">True</span></div>
 
 
-<div class="viewcode-block" id="async_fetch_logged_in"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.account.async_fetch_logged_in">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_fetch_logged_in</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="n">default_login_url</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="async_fetch_logged_in"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.account.async_fetch_logged_in">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_fetch_logged_in</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">login_url</span><span class="o">=</span><span class="n">default_login_url</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">bool</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    auto update token </span>
 <span class="sd">    return bool(is_logged_in), html_data</span>
 <span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">logger</span> <span class="o">=</span> <span class="n">extract_common_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">logger</span>
+
   <span class="n">html_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="n">login_url</span><span class="p">)</span>
-  <span class="k">try</span><span class="p">:</span>
-    <span class="n">uc</span><span class="p">,</span> <span class="n">usmc</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">csrf_token</span><span class="p">,</span> <span class="n">ftaa</span><span class="p">,</span> <span class="n">bfaa</span> <span class="o">=</span> <span class="n">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">)</span>
-  <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="n">uc</span><span class="p">,</span> <span class="n">usmc</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">csrf_token</span><span class="p">,</span> <span class="n">ftaa</span><span class="p">,</span> <span class="n">bfaa</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+  <span class="n">uc</span><span class="p">,</span> <span class="n">usmc</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">csrf_token</span><span class="p">,</span> <span class="n">ftaa</span><span class="p">,</span> <span class="n">bfaa</span> <span class="o">=</span> <span class="n">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)</span>
 
   <span class="k">if</span> <span class="n">is_user_logged_in</span><span class="p">(</span><span class="n">html_data</span><span class="o">=</span><span class="n">html_data</span><span class="p">):</span>
     <span class="n">http</span><span class="o">.</span><span class="n">update_tokens</span><span class="p">(</span><span class="n">csrf</span><span class="o">=</span><span class="n">csrf_token</span><span class="p">,</span> <span class="n">ftaa</span><span class="o">=</span><span class="n">ftaa</span><span class="p">,</span> <span class="n">bfaa</span><span class="o">=</span><span class="n">bfaa</span><span class="p">,</span> <span class="n">uc</span><span class="o">=</span><span class="n">uc</span><span class="p">,</span> <span class="n">usmc</span><span class="o">=</span><span class="n">usmc</span><span class="p">)</span>
@@ -265,7 +263,9 @@
   <span class="k">return</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;&#39;</span></div>
 
 
-<div class="viewcode-block" id="extract_channel"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.account.extract_channel">[docs]</a><span class="k">def</span> <span class="nf">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<span class="c1"># No exception, handler inside</span>
+<div class="viewcode-block" id="extract_channel"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.account.extract_channel">[docs]</a><span class="k">def</span> <span class="nf">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                    <span class="n">logger</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">logging</span><span class="o">.</span><span class="n">Logger</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
   <span class="n">doc</span> <span class="o">=</span> <span class="n">html</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">html_data</span><span class="p">)</span>
 
   <span class="k">def</span> <span class="nf">xpath_content</span><span class="p">(</span><span class="n">el</span><span class="p">:</span> <span class="n">HtmlElement</span><span class="p">,</span> <span class="n">s</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
@@ -273,7 +273,7 @@
       <span class="n">l</span> <span class="o">=</span> <span class="n">typedxpath</span><span class="p">(</span><span class="n">el</span><span class="p">,</span> <span class="n">s</span><span class="p">)</span>
       <span class="k">return</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;content&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="s1">&#39;&#39;</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-      <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+      <span class="k">if</span> <span class="n">logger</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
       <span class="k">return</span> <span class="s1">&#39;&#39;</span>
 
   <span class="n">uc</span> <span class="o">=</span> <span class="n">xpath_content</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;.//meta[@name=&quot;uc&quot;]&#39;</span><span class="p">)</span>
@@ -284,7 +284,7 @@
     <span class="n">csrf_token</span> <span class="o">=</span> <span class="n">typedxpath</span><span class="p">(</span><span class="n">doc</span><span class="p">,</span> <span class="s1">&#39;.//span[@class=&quot;csrf-token&quot;]&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;data-csrf&#39;</span><span class="p">)</span>
     <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">csrf_token</span><span class="p">)</span> <span class="o">==</span> <span class="mi">32</span><span class="p">,</span> <span class="s2">&quot;Invalid CSRF token&quot;</span>
   <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-    <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">logger</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
     <span class="n">csrf_token</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
   <span class="n">ftaa</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">choice</span><span class="p">(</span><span class="s1">&#39;abcdefghijklmnopqrstuvwxyz0123456789&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">18</span><span class="p">)])</span>
   <span class="c1"># bfaa : Fingerprint2.x64hash128</span>
@@ -296,7 +296,8 @@
 <div class="viewcode-block" id="async_login"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.account.async_login">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_login</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span>
                       <span class="n">handle</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
                       <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                      <span class="n">login_url</span><span class="o">=</span><span class="n">default_login_url</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LoginResult</span><span class="p">:</span>
+                      <span class="n">login_url</span><span class="o">=</span><span class="n">default_login_url</span><span class="p">,</span>
+                      <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LoginResult</span><span class="p">:</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This method will use ``http`` for login request, and  :py:func:`is_user_logged_in()` for login check</span>
 
@@ -327,8 +328,9 @@
 
 <span class="sd">        asyncio.run(demo())</span>
 <span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">logger</span> <span class="o">=</span> <span class="n">extract_common_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">logger</span>
   <span class="n">html_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="n">login_url</span><span class="p">)</span>
-  <span class="n">csrf_token</span><span class="p">,</span> <span class="n">ftaa</span><span class="p">,</span> <span class="n">bfaa</span> <span class="o">=</span> <span class="n">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">)[</span><span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
+  <span class="n">csrf_token</span><span class="p">,</span> <span class="n">ftaa</span><span class="p">,</span> <span class="n">bfaa</span> <span class="o">=</span> <span class="n">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)[</span><span class="mi">4</span><span class="p">:</span><span class="mi">7</span><span class="p">]</span>
   <span class="n">login_data</span> <span class="o">=</span> <span class="p">{</span>
       <span class="s1">&#39;csrf_token&#39;</span><span class="p">:</span> <span class="n">csrf_token</span><span class="p">,</span>
       <span class="s1">&#39;action&#39;</span><span class="p">:</span> <span class="s1">&#39;enter&#39;</span><span class="p">,</span>
@@ -340,7 +342,7 @@
   <span class="p">}</span>
   <span class="n">html_data</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_post</span><span class="p">(</span><span class="n">login_url</span><span class="p">,</span> <span class="n">login_data</span><span class="p">)</span>
   <span class="c1"># uc, usmc, cc, pc, csrf_token, ftaa, bfaa = extract_channel(html_data)</span>
-  <span class="n">uc</span><span class="p">,</span> <span class="n">usmc</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">pc</span> <span class="o">=</span> <span class="n">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
+  <span class="n">uc</span><span class="p">,</span> <span class="n">usmc</span><span class="p">,</span> <span class="n">cc</span><span class="p">,</span> <span class="n">pc</span> <span class="o">=</span> <span class="n">extract_channel</span><span class="p">(</span><span class="n">html_data</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span>
 
   <span class="n">success</span> <span class="o">=</span> <span class="kc">False</span>
   <span class="c1"># if check_login(result.html):</span>

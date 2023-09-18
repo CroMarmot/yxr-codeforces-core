@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>codeforces_core.httphelper - yxr-codeforces-core 0.0.2 documentation</title>
+        <title>codeforces_core.httphelper - yxr-codeforces-core 0.0.2.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -122,7 +122,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.2 documentation</div></a>
+      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.2.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +145,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2 documentation</span>
+  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2.3 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -224,6 +224,7 @@
 
 <span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">CF_HOST</span>
 <span class="kn">from</span> <span class="nn">.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
+<span class="kn">from</span> <span class="nn">.kwargs</span> <span class="kn">import</span> <span class="n">extract_common_kwargs</span>
 
 <span class="n">default_headers</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s1">&#39;Accept&#39;</span><span class="p">:</span> <span class="s1">&#39;*/*&#39;</span><span class="p">,</span>
@@ -232,12 +233,6 @@
     <span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span>
     <span class="s1">&#39;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36&#39;</span>
 <span class="p">}</span>
-
-<span class="c1"># session: aiohttp.ClientSession = None</span>
-<span class="c1"># tokens = {}</span>
-<span class="c1"># cookie_jar = None</span>
-
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="RCPCRedirectionError"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.RCPCRedirectionError">[docs]</a><span class="k">class</span> <span class="nc">RCPCRedirectionError</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
@@ -263,8 +258,14 @@
   <span class="n">token_path</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
   <span class="n">tokens</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
   <span class="n">headers</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>  <span class="c1"># TODO</span>
+  <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span>
 
-  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cookie_jar_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">token_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">default_headers</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="n">CF_HOST</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+  <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+               <span class="n">cookie_jar_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+               <span class="n">token_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">,</span>
+               <span class="n">headers</span><span class="o">=</span><span class="n">default_headers</span><span class="p">,</span>
+               <span class="n">host</span><span class="o">=</span><span class="n">CF_HOST</span><span class="p">,</span>
+               <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
     <span class="c1"># if path is empty string then won&#39;t save to any file, just store in memory</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span> <span class="o">=</span> <span class="n">cookie_jar_path</span>
     <span class="c1"># if path is empty string then won&#39;t save to any file, just store in memory</span>
@@ -272,6 +273,7 @@
     <span class="bp">self</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="n">headers</span>
     <span class="c1"># TODO support cf mirror site?</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="n">host</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">extract_common_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">logger</span>
 
 <div class="viewcode-block" id="HttpHelper.load_tokens"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.load_tokens">[docs]</a>  <span class="nd">@staticmethod</span>
   <span class="k">def</span> <span class="nf">load_tokens</span><span class="p">(</span><span class="n">token_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
@@ -331,7 +333,7 @@
           <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-      <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+      <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HttpHelper.async_post"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.async_post">[docs]</a>  <span class="k">async</span> <span class="k">def</span> <span class="nf">async_post</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">default_headers</span><span class="p">,</span> <span class="n">csrf</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -356,7 +358,7 @@
           <span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">file_path</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cookie_jar_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-      <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
+      <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="HttpHelper.get_tokens"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.httphelper.HttpHelper.get_tokens">[docs]</a>  <span class="k">def</span> <span class="nf">get_tokens</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">tokens</span></div>
@@ -405,11 +407,11 @@
               <span class="k">return</span>
 
           <span class="k">else</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;wrong msg type?&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s1">&#39;wrong msg type?&#39;</span><span class="p">,</span> <span class="n">msg</span><span class="o">.</span><span class="n">type</span><span class="p">)</span>
             <span class="k">break</span>
         <span class="k">return</span>
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-      <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
       <span class="k">return</span></div></div>
 </pre></div>
         </article>

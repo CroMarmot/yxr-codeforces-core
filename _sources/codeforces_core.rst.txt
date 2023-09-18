@@ -68,10 +68,26 @@ codeforces\_core.httphelper module
    :undoc-members:
    :show-inheritance:
 
+codeforces\_core.kwargs module
+------------------------------
+
+.. automodule:: codeforces_core.kwargs
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 codeforces\_core.language module
 --------------------------------
 
 .. automodule:: codeforces_core.language
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
+codeforces\_core.logging module
+-------------------------------
+
+.. automodule:: codeforces_core.logging
    :members:
    :undoc-members:
    :show-inheritance:

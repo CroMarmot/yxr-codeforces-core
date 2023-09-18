@@ -5,7 +5,7 @@
     <meta name="color-scheme" content="light dark"><link rel="index" title="Index" href="../../genindex.html" /><link rel="search" title="Search" href="../../search.html" />
 
     <!-- Generated with Sphinx 5.3.0 and Furo 2023.03.27 -->
-        <title>codeforces_core.submit - yxr-codeforces-core 0.0.2 documentation</title>
+        <title>codeforces_core.submit - yxr-codeforces-core 0.0.2.3 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
@@ -122,7 +122,7 @@
       </label>
     </div>
     <div class="header-center">
-      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.2 documentation</div></a>
+      <a href="../../index.html"><div class="brand">yxr-codeforces-core 0.0.2.3 documentation</div></a>
     </div>
     <div class="header-right">
       <div class="theme-toggle-container theme-toggle-header">
@@ -145,7 +145,7 @@
       <div class="sidebar-sticky"><a class="sidebar-brand" href="../../index.html">
   
   
-  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2 documentation</span>
+  <span class="sidebar-brand-text">yxr-codeforces-core 0.0.2.3 documentation</span>
   
 </a><form class="sidebar-search-container" method="get" action="../../search.html" role="search">
   <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
@@ -213,23 +213,20 @@
           <h1>Source code for codeforces_core.submit</h1><div class="highlight"><pre>
 <span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">defaultdict</span>
 <span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span><span class="p">,</span> <span class="n">field</span>
-<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">from</span> <span class="nn">os</span> <span class="kn">import</span> <span class="n">path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Tuple</span>
 <span class="kn">from</span> <span class="nn">lxml</span> <span class="kn">import</span> <span class="n">html</span>
 
-<span class="kn">from</span> <span class="nn">codeforces_core.util</span> <span class="kn">import</span> <span class="n">typedxpath</span>
-
 <span class="c1"># from .ui import BLUE, GREEN, RED, redraw</span>
+<span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">typedxpath</span>
 <span class="kn">from</span> <span class="nn">.account</span> <span class="kn">import</span> <span class="n">is_user_logged_in</span>
 <span class="kn">from</span> <span class="nn">.interfaces.AioHttpHelper</span> <span class="kn">import</span> <span class="n">AioHttpHelperInterface</span>
+<span class="kn">from</span> <span class="nn">.kwargs</span> <span class="kn">import</span> <span class="n">extract_common_kwargs</span>
 <span class="kn">from</span> <span class="nn">.url</span> <span class="kn">import</span> <span class="n">problem_url_parse</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-
-<div class="viewcode-block" id="async_submit"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.submit.async_submit">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_submit</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-                       <span class="n">lang_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+<div class="viewcode-block" id="async_submit"><a class="viewcode-back" href="../../user/01_examples.html#codeforces_core.submit.async_submit">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_submit</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">contest_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">level</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">file_path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">lang_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                       <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">  </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This method will use ``http`` to post submit</span>
 
@@ -273,6 +270,7 @@
 <span class="sd">        asyncio.run(demo())</span>
 
 <span class="sd">  &quot;&quot;&quot;</span>
+  <span class="n">logger</span> <span class="o">=</span> <span class="n">extract_common_kwargs</span><span class="p">(</span><span class="o">**</span><span class="n">kw</span><span class="p">)</span><span class="o">.</span><span class="n">logger</span>
 
   <span class="k">if</span> <span class="ow">not</span> <span class="n">contest_id</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">level</span><span class="p">:</span>
     <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;[!] Invalid contestID or level&quot;</span><span class="p">)</span>
@@ -336,7 +334,8 @@
   <span class="k">return</span> <span class="n">ret</span></div>
 
 
-<div class="viewcode-block" id="async_fetch_submission_page"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.submit.async_fetch_submission_page">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_fetch_submission_page</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">problem_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SubmissionPageResult</span><span class="p">]:</span>
+<div class="viewcode-block" id="async_fetch_submission_page"><a class="viewcode-back" href="../../codeforces_core.html#codeforces_core.submit.async_fetch_submission_page">[docs]</a><span class="k">async</span> <span class="k">def</span> <span class="nf">async_fetch_submission_page</span><span class="p">(</span><span class="n">http</span><span class="p">:</span> <span class="n">AioHttpHelperInterface</span><span class="p">,</span> <span class="n">problem_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                                      <span class="o">**</span><span class="n">kw</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">SubmissionPageResult</span><span class="p">]:</span>
   <span class="n">contest_id</span><span class="p">,</span> <span class="n">problem_key</span> <span class="o">=</span> <span class="n">problem_url_parse</span><span class="p">(</span><span class="n">problem_url</span><span class="p">)</span>
   <span class="c1"># 正常是 302 -&gt; https://codeforces.com/contest/&lt;contest id&gt;/my</span>
   <span class="n">html_page</span> <span class="o">=</span> <span class="k">await</span> <span class="n">http</span><span class="o">.</span><span class="n">async_get</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;/contest/</span><span class="si">{</span><span class="n">contest_id</span><span class="si">}</span><span class="s1">/my&#39;</span><span class="p">)</span>
