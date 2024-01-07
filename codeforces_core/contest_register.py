@@ -62,11 +62,11 @@ async def async_register(http: AioHttpHelperInterface, contest_id: str, **kw) ->
   msg = util.show_message(resp)  # AlreadyRegistered
   if msg:
     return RegisterResult(title=title, msg=msg)
-  token = http.get_tokens()
+  tokens = http.get_tokens()
   resp = await http.async_post(
       url,
       data=http.create_form({
-          'csrf_token': token['csrf'],
+          'csrf_token': tokens['csrf'],
           'action': 'formSubmitted',
           'takePartAs': 'personal',  # Take part as individual participant
           'backUrl': '',

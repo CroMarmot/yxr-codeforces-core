@@ -133,7 +133,7 @@ async def async_fetch_submission_page(http: AioHttpHelperInterface, problem_url:
 @dataclass
 class SubmissionWSResult:
   source: Any = field(default_factory=lambda: defaultdict(dict))
-  submit_id: int = 0
+  submit_id: int = 0 # 注意 这个ws返回的是int不是str
   contest_id: int = 0
   title: str = ''
   msg: str = ''

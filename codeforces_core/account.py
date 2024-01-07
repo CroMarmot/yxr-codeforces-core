@@ -5,8 +5,10 @@ from lxml import html
 from lxml.html import HtmlElement
 import logging
 
+from codeforces_core.constants import CF_HOST
+
 from .kwargs import extract_common_kwargs
-from .util import typedxpath
+from .util import calc_tta, typedxpath
 from .interfaces.AioHttpHelper import AioHttpHelperInterface
 
 default_login_url = "/enter?back=%2F"
@@ -118,6 +120,9 @@ async def async_login(http: AioHttpHelperInterface,
   logger = extract_common_kwargs(**kw).logger
   html_data = await http.async_get(login_url)
   csrf_token, ftaa, bfaa = extract_channel(html_data, logger=logger)[4:7]
+
+  _39ce7 = http.get_cookie(CF_HOST,'39ce7')
+  _tta = calc_tta(_39ce7)
   login_data = {
       'csrf_token': csrf_token,
       'action': 'enter',
@@ -126,6 +131,7 @@ async def async_login(http: AioHttpHelperInterface,
       'handleOrEmail': handle,
       'password': password,
       'remember': 'on',
+      '_tta':_tta,
   }
   html_data = await http.async_post(login_url, login_data)
   # uc, usmc, cc, pc, csrf_token, ftaa, bfaa = extract_channel(html_data)

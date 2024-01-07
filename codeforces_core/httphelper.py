@@ -1,5 +1,5 @@
 import logging
-from typing import Any, AsyncIterator, Callable, Dict, List, Optional, Tuple, cast
+from typing import Any, AsyncIterator, Callable, Dict, List, Optional, Tuple, Union, cast
 from lxml import html
 from lxml.etree import _Element
 from os import path
@@ -18,7 +18,7 @@ default_headers = {
     'Accept-Encoding': 'gzip',
     # 'User-Agent': config.conf['user_agent'], TODO
     'User-Agent':
-    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36'
+    'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
 }
 
 
@@ -34,8 +34,13 @@ def add_header(newhdr, headers: Dict[str, str]) -> Dict[str, str]:
 
 
 async def on_request_end(session, trace_request_ctx, params):
-  elapsed = asyncio.get_event_loop().time() - trace_request_ctx.start
-  print("[*] Request end : {}".format(elapsed))
+  # https://stackoverflow.com/questions/54185775/dumping-the-request-headers-with-aiohttp
+  # print("Ending %s request for %s. I sent: %s" % (params.method, params.url, params.headers))
+  # print('Sent headers: %s' % params.response.request_info.headers)
+
+  # elapsed = asyncio.get_event_loop().time() - trace_request_ctx.start
+  # print("[*] Request end : {}".format(elapsed))
+  pass
 
 
 class HttpHelper(AioHttpHelperInterface):
@@ -82,7 +87,11 @@ class HttpHelper(AioHttpHelperInterface):
   async def open_session(self) -> aiohttp.ClientSession:
     self.cookie_jar = HttpHelper.load_cookie_jar(self.cookie_jar_path)
     self.tokens = HttpHelper.load_tokens(self.token_path)
-    self.session = await aiohttp.ClientSession(cookie_jar=self.cookie_jar).__aenter__()
+
+    trace_config = aiohttp.TraceConfig()
+    trace_config.on_request_end.append(on_request_end)
+
+    self.session = await aiohttp.ClientSession(cookie_jar=self.cookie_jar,trace_configs=[trace_config]).__aenter__()
     return self.session
 
   async def close_session(self) -> None:
@@ -125,14 +134,16 @@ class HttpHelper(AioHttpHelperInterface):
   async def async_post(self, url, data, headers=default_headers, csrf=False, **kwargs: Any):
     if self.session is None:
       raise Exception('Please open_session() before async_get()')
-    if headers == None: headers = default_headers
+    if headers is None: headers = default_headers
     if csrf and 'csrf' in self.tokens:
       headers = add_header({'X-Csrf-Token': self.tokens['csrf']}, headers=headers)
-
+      
     # TODO remove the feature
     if url.startswith('/'): url = self.host + url
     try:
       async with self.session.post(url, headers=headers, data=data, **kwargs) as response:
+        if response.status != 200:
+          self.logger.error('resp:' + str(response))
         assert response.status == 200
         self.check_rcpc(await response.text())
         if self.cookie_jar_path:
@@ -147,8 +158,21 @@ class HttpHelper(AioHttpHelperInterface):
     except Exception as e:
       self.logger.error(e)
 
-  def get_tokens(self):
+  def get_tokens(self) -> Dict[str,str]:
     return self.tokens
+
+  def get_cookie(self,host:str,key:str)-> Optional[str]:
+    d = self.cookie_jar.filter_cookies(host)
+    if self.cookie_jar:
+      try:
+        if not d:
+          return None
+        if key in d:
+          return d[key].value
+      except Exception as e:
+        self.logger.exception(e)
+        return None
+    return None
 
   def check_rcpc(self, html_data: str):
     doc = html.fromstring(html_data)
@@ -169,8 +193,9 @@ class HttpHelper(AioHttpHelperInterface):
       c = pyaes.AESModeOfOperationCBC(key, iv=iv)
       plaintext = c.decrypt(ciphertext)
       rcpc = plaintext.hex()
-      self.cookie_jar.update_cookies({'RCPC': rcpc})
-      self.cookie_jar.save(file_path=self.cookie_jar_path)
+      if self.cookie_jar:
+        self.cookie_jar.update_cookies({'RCPC': rcpc})
+        self.cookie_jar.save(file_path=self.cookie_jar_path)
       raise RCPCRedirectionError()
 
   def create_form(self, form_data) -> aiohttp.FormData:

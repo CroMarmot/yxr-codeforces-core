@@ -24,6 +24,7 @@ dependencies = [
   "beautifulsoup4",
   "lxml",
   "dataclasses-json",
+  "Brotli",
 ]
 [project.urls]
 "Homepage" = "https://github.com/CroMarmot/yxr-codeforces-core"

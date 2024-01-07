@@ -2,7 +2,7 @@ import asyncio
 import os
 import re
 import aiohttp
-from typing import Any, AsyncIterator, Callable, Dict, Tuple
+from typing import Any, AsyncIterator, Callable, Dict, Optional, Tuple
 
 from codeforces_core.interfaces.AioHttpHelper import AioHttpHelperInterface
 from ..constant import test_dir
@@ -100,11 +100,12 @@ class MockAioHttpHelper(AioHttpHelperInterface):
   def get(self, url: str) -> str:
     return asyncio.run(self.async_get(url))
 
-  def get_tokens(self) -> Any:
+  def get_tokens(self) -> Dict[str,str]:
     if BEFORE_GET_TOKENS in self.listeners:
       for fn in self.listeners[BEFORE_GET_TOKENS]:
         fn()
     return self.tokens
+
 
   # TODO remove_listener
   def add_listener(self, event: str, fn: Callable[[Any], None]) -> None:
@@ -117,6 +118,10 @@ class MockAioHttpHelper(AioHttpHelperInterface):
     for k, v in form_data.items():
       form.add_field(k, v)
     return form
+
+  def get_cookie(self,host:str,key:str)-> Optional[str]:
+    pass 
+    return ''
 
   async def websockets(self, url: str, callback: Callable[[Any], Tuple[bool, Any]]) -> AsyncIterator[Any]:
     try:

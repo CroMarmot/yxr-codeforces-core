@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from typing import Any, Callable, Dict, Protocol, Tuple, AsyncIterator
+from typing import Any, Callable, Dict, Optional, Protocol, Tuple, AsyncIterator
 import aiohttp
 
 
@@ -26,7 +26,11 @@ class AioHttpHelperInterface(Protocol):
     raise NotImplementedError
 
   @abstractmethod
-  def get_tokens(self) -> Any:
+  def get_tokens(self) -> Dict[str,str]:
+    raise NotImplementedError
+
+  @abstractmethod
+  def get_cookie(self,host:str,key:str)-> Optional[str]:
     raise NotImplementedError
 
   @abstractmethod

@@ -87,8 +87,8 @@ async def create_contest_ws_task_yield(http: AioHttpHelperInterface, contest_id:
   cc, pc = extract_channel(html_data, logger)[2:4]
   assert cc and pc
   ws_url = f"wss://pubsub.codeforces.com/ws/s_{pc}/s_{cc}?_={epoch}&tag=&time=&eventid="
-  logger.debug(f"pc = {pc}")  # 似乎和场次有关, 可能包含别人的?
-  logger.debug(f"cc = {cc}")  # 似乎只会包含自己的
+  logger.debug(f"pc = {pc}")  # 似乎只会包含自己的
+  logger.debug(f"cc = {cc}")  # 似乎和场次有关, 可能包含别人的?
   logger.debug(f"ws_url = {ws_url}")
   async for data in http.websockets(ws_url, ws_handler):
     yield data
