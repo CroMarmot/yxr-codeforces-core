@@ -17,8 +17,8 @@ async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str
   """
     This method will use ``http`` to post submit
 
-    :param http: AioHttpHelperInterface 
-    :param ws_handler: function to handler messages 
+    :param http: AioHttpHelperInterface
+    :param ws_handler: function to handler messages
 
     :returns: (submission_id, html_text of contest/<contest id>/my )
 
@@ -76,19 +76,42 @@ async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str
       'programTypeId': lang_id,
   }
   url = '/contest/{}/problem/{}?csrf_token={}'.format(contest_id, level.upper(), token['csrf'])
+  # url = '/contest/{}/submit?csrf_token={}'.format(contest_id, token['csrf'])
   form = http.create_form(submit_form)
   form.add_field('sourceFile', open(file_path, 'rb'), filename=file_path)
+  logger.debug(f"{url},{submit_form}")
   resp = await http.async_post(url, form)  # 正常是 302 -> https://codeforces.com/contest/<contest id>/my
   if not is_user_logged_in(resp):
     logger.error("Login required")
     return '', resp
   doc = html.fromstring(resp)
+  # 重复提交
   for e in typedxpath(doc, './/span[@class="error for__sourceFile"]'):
     if e.text == 'You have submitted exactly the same code before':
       logger.error("[!] " + e.text)
       return '', resp
+  # 可能是 langid 不对!!
+  for e in typedxpath(doc, './/span[@class="error for__programTypeId"]'):
+    logger.error("[!] " + e.text)
+    if e.text == 'Choose valid language':
+        help_text = """
+            Language ID error:
+            Use `oi lang Codeforces` to check newest language id list
+            Use `oi config template list --detail` to check current <template name>
+            Use `oi config template modify Codeforces <template name> --langid <new lang id>` to update langid
+            Modify `lang_id` also in `state.json`: `sed -ie 's/"up_lang": "<old lang id>"/"up_lang": "<new lang id>"/g' state.json`
+        """
+        # TODO remove lang_id in state.json
+        logger.info(help_text)
+    return '', resp
 
-  status = parse_submit_status(resp)[0]
+  submit_result_resp_analysed_arr = parse_submit_status(resp)
+  if len(submit_result_resp_analysed_arr) > 0:
+      status = parse_submit_status(resp)[0]
+  else:
+      logger.error("parse_submit_status error")
+      return '',''
+
   assert status.url.split('/')[-1] == level.upper()
   return status.id, resp
 
