@@ -91,7 +91,7 @@ class HttpHelper(AioHttpHelperInterface):
     trace_config = aiohttp.TraceConfig()
     trace_config.on_request_end.append(on_request_end)
 
-    self.session = await aiohttp.ClientSession(cookie_jar=self.cookie_jar,trace_configs=[trace_config]).__aenter__()
+    self.session = await aiohttp.ClientSession(cookie_jar=self.cookie_jar, trace_configs=[trace_config]).__aenter__()
     return self.session
 
   async def close_session(self) -> None:
@@ -137,7 +137,7 @@ class HttpHelper(AioHttpHelperInterface):
     if headers is None: headers = default_headers
     if csrf and 'csrf' in self.tokens:
       headers = add_header({'X-Csrf-Token': self.tokens['csrf']}, headers=headers)
-      
+
     # TODO remove the feature
     if url.startswith('/'): url = self.host + url
     try:
@@ -158,10 +158,10 @@ class HttpHelper(AioHttpHelperInterface):
     except Exception as e:
       self.logger.error(e)
 
-  def get_tokens(self) -> Dict[str,str]:
+  def get_tokens(self) -> Dict[str, str]:
     return self.tokens
 
-  def get_cookie(self,host:str,key:str)-> Optional[str]:
+  def get_cookie(self, host: str, key: str) -> Optional[str]:
     d = self.cookie_jar.filter_cookies(host)
     if self.cookie_jar:
       try:

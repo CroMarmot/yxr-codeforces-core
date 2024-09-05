@@ -94,23 +94,23 @@ async def async_submit(http: AioHttpHelperInterface, contest_id: str, level: str
   for e in typedxpath(doc, './/span[@class="error for__programTypeId"]'):
     logger.error("[!] " + e.text)
     if e.text == 'Choose valid language':
-        help_text = """
+      help_text = """
             Language ID error:
             Use `oi lang Codeforces` to check newest language id list
             Use `oi config template list --detail` to check current <template name>
             Use `oi config template modify Codeforces <template name> --langid <new lang id>` to update langid
             Modify `lang_id` also in `state.json`: `sed -ie 's/"up_lang": "<old lang id>"/"up_lang": "<new lang id>"/g' state.json`
         """
-        # TODO remove lang_id in state.json
-        logger.info(help_text)
+      # TODO remove lang_id in state.json
+      logger.info(help_text)
     return '', resp
 
   submit_result_resp_analysed_arr = parse_submit_status(resp)
   if len(submit_result_resp_analysed_arr) > 0:
-      status = parse_submit_status(resp)[0]
+    status = parse_submit_status(resp)[0]
   else:
-      logger.error("parse_submit_status error")
-      return '',''
+    logger.error("parse_submit_status error")
+    return '', ''
 
   assert status.url.split('/')[-1] == level.upper()
   return status.id, resp
@@ -156,7 +156,7 @@ async def async_fetch_submission_page(http: AioHttpHelperInterface, problem_url:
 @dataclass
 class SubmissionWSResult:
   source: Any = field(default_factory=lambda: defaultdict(dict))
-  submit_id: int = 0 # 注意 这个ws返回的是int不是str
+  submit_id: int = 0  # 注意 这个ws返回的是int不是str
   contest_id: int = 0
   title: str = ''
   msg: str = ''

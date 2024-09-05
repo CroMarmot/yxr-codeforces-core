@@ -14,7 +14,7 @@ pytest_plugins = ('pytest_asyncio', )
 
 @pytest.mark.asyncio
 async def test_e2e_settings_rank():
-  from codeforces_core.account import async_login,is_user_logged_in
+  from codeforces_core.account import async_login, is_user_logged_in
   if not os.path.exists(E2E_CONFIG_FILE):
     raise Exception('e2e config file [e2e_test_config.py] not found')
 
@@ -26,8 +26,8 @@ async def test_e2e_settings_rank():
   http = HttpHelper(token_path='', cookie_jar_path='')
   await http.open_session()
   result = await async_login(http=http, handle=handle, password=password)
-  assert(result.success)
+  assert (result.success)
   assert is_user_logged_in(result.html)
-  html_data = await async_settings_rank(http=http,rank=RankEnum.NEWBIE,password=password)
+  html_data = await async_settings_rank(http=http, rank=RankEnum.NEWBIE, password=password)
   await http.close_session()
   assert False

@@ -26,11 +26,11 @@ class AioHttpHelperInterface(Protocol):
     raise NotImplementedError
 
   @abstractmethod
-  def get_tokens(self) -> Dict[str,str]:
+  def get_tokens(self) -> Dict[str, str]:
     raise NotImplementedError
 
   @abstractmethod
-  def get_cookie(self,host:str,key:str)-> Optional[str]:
+  def get_cookie(self, host: str, key: str) -> Optional[str]:
     raise NotImplementedError
 
   @abstractmethod

@@ -100,12 +100,11 @@ class MockAioHttpHelper(AioHttpHelperInterface):
   def get(self, url: str) -> str:
     return asyncio.run(self.async_get(url))
 
-  def get_tokens(self) -> Dict[str,str]:
+  def get_tokens(self) -> Dict[str, str]:
     if BEFORE_GET_TOKENS in self.listeners:
       for fn in self.listeners[BEFORE_GET_TOKENS]:
         fn()
     return self.tokens
-
 
   # TODO remove_listener
   def add_listener(self, event: str, fn: Callable[[Any], None]) -> None:
@@ -119,8 +118,8 @@ class MockAioHttpHelper(AioHttpHelperInterface):
       form.add_field(k, v)
     return form
 
-  def get_cookie(self,host:str,key:str)-> Optional[str]:
-    pass 
+  def get_cookie(self, host: str, key: str) -> Optional[str]:
+    pass
     return ''
 
   async def websockets(self, url: str, callback: Callable[[Any], Tuple[bool, Any]]) -> AsyncIterator[Any]:
